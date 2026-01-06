@@ -2,18 +2,17 @@ import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import * as pdfjs from 'pdfjs-dist';
+import pdfWorkerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-// CRITICAL: Set worker source to empty string BEFORE any PDF operations
-// This forces pdf.js to use the main thread instead of trying to load external worker
-pdfjs.GlobalWorkerOptions.workerSrc = '';
+// CRITICAL: Point pdf.js to a bundled local worker (prevents CDN 404 / "No workerSrc specified")
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
 // Singleton to track initialization
 let pdfjsInitialized = false;
 
 export const initPdfJs = async () => {
   if (!pdfjsInitialized) {
-    // Ensure worker is completely disabled
-    pdfjs.GlobalWorkerOptions.workerSrc = '';
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
     pdfjsInitialized = true;
   }
   return pdfjs;
@@ -211,9 +210,9 @@ export const imagesToPDF = async (files: File[]): Promise<Uint8Array> => {
 // Convert PDF to images
 export const pdfToImages = async (file: File): Promise<string[]> => {
   try {
-    // Ensure worker is disabled
-    pdfjs.GlobalWorkerOptions.workerSrc = '';
-    
+    // Ensure pdf.js worker is configured (can be reset during HMR)
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
+
     const arrayBuffer = await readFileAsArrayBuffer(file);
     
     // Load PDF with worker completely disabled

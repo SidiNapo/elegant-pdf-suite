@@ -1,20 +1,21 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import * as pdfjs from 'pdfjs-dist';
 
-// Initialize PDF.js with inline worker (fixes CDN 404 errors)
-let pdfjsLib: typeof import('pdfjs-dist') | null = null;
+// CRITICAL: Set worker source to empty string BEFORE any PDF operations
+// This forces pdf.js to use the main thread instead of trying to load external worker
+pdfjs.GlobalWorkerOptions.workerSrc = '';
+
+// Singleton to track initialization
+let pdfjsInitialized = false;
 
 export const initPdfJs = async () => {
-  if (pdfjsLib) return pdfjsLib;
-  
-  const pdfjs = await import('pdfjs-dist');
-  
-  // Disable worker to avoid CDN loading issues - use main thread instead
-  // This is slower but more reliable in browser environments
-  pdfjs.GlobalWorkerOptions.workerSrc = '';
-  
-  pdfjsLib = pdfjs;
+  if (!pdfjsInitialized) {
+    // Ensure worker is completely disabled
+    pdfjs.GlobalWorkerOptions.workerSrc = '';
+    pdfjsInitialized = true;
+  }
   return pdfjs;
 };
 
@@ -210,15 +211,16 @@ export const imagesToPDF = async (files: File[]): Promise<Uint8Array> => {
 // Convert PDF to images
 export const pdfToImages = async (file: File): Promise<string[]> => {
   try {
-    const pdfjs = await initPdfJs();
+    // Ensure worker is disabled
+    pdfjs.GlobalWorkerOptions.workerSrc = '';
+    
     const arrayBuffer = await readFileAsArrayBuffer(file);
     
-    // Load PDF with explicit configuration to avoid worker issues
+    // Load PDF with worker completely disabled
     const loadingTask = pdfjs.getDocument({
-      data: arrayBuffer,
-      useWorkerFetch: false,
-      isEvalSupported: false,
-      useSystemFonts: true,
+      data: new Uint8Array(arrayBuffer),
+      disableAutoFetch: true,
+      disableStream: true,
     });
     
     const pdf = await loadingTask.promise;

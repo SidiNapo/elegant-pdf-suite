@@ -2,10 +2,19 @@ import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
-// Initialize PDF.js worker
+// Initialize PDF.js with inline worker (fixes CDN 404 errors)
+let pdfjsLib: typeof import('pdfjs-dist') | null = null;
+
 export const initPdfJs = async () => {
+  if (pdfjsLib) return pdfjsLib;
+  
   const pdfjs = await import('pdfjs-dist');
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+  
+  // Disable worker to avoid CDN loading issues - use main thread instead
+  // This is slower but more reliable in browser environments
+  pdfjs.GlobalWorkerOptions.workerSrc = '';
+  
+  pdfjsLib = pdfjs;
   return pdfjs;
 };
 
@@ -200,33 +209,45 @@ export const imagesToPDF = async (files: File[]): Promise<Uint8Array> => {
 
 // Convert PDF to images
 export const pdfToImages = async (file: File): Promise<string[]> => {
-  const pdfjs = await initPdfJs();
-  const arrayBuffer = await readFileAsArrayBuffer(file);
-  const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-  const images: string[] = [];
-  
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const scale = 2;
-    const viewport = page.getViewport({ scale });
+  try {
+    const pdfjs = await initPdfJs();
+    const arrayBuffer = await readFileAsArrayBuffer(file);
     
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d')!;
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+    // Load PDF with explicit configuration to avoid worker issues
+    const loadingTask = pdfjs.getDocument({
+      data: arrayBuffer,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true,
+    });
     
-    // Use type assertion to handle pdfjs-dist typing issues
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport,
-    } as Parameters<typeof page.render>[0];
+    const pdf = await loadingTask.promise;
+    const images: string[] = [];
     
-    await page.render(renderContext).promise;
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const scale = 2;
+      const viewport = page.getViewport({ scale });
+      
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d')!;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      
+      await page.render({
+        canvasContext: context,
+        viewport: viewport,
+        canvas: canvas,
+      } as any).promise;
+      
+      images.push(canvas.toDataURL('image/jpeg', 0.9));
+    }
     
-    images.push(canvas.toDataURL('image/jpeg', 0.9));
+    return images;
+  } catch (error) {
+    console.error('PDF to images error:', error);
+    throw new Error('Impossible de convertir le PDF. Le fichier est peut-être corrompu.');
   }
-  
-  return images;
 };
 
 // Get PDF page count
@@ -269,50 +290,100 @@ export const downloadImagesAsZip = async (images: string[], baseName: string) =>
 
 // ==================== CONVERSION UTILITIES ====================
 
-// Convert Word (DOCX) to PDF using mammoth and jspdf
+// Convert Word (DOCX) to PDF using mammoth and jspdf - improved text rendering
 export const wordToPDF = async (file: File): Promise<Uint8Array> => {
   const mammoth = await import('mammoth');
   const { jsPDF } = await import('jspdf');
   
   const arrayBuffer = await readFileAsArrayBuffer(file);
-  const result = await mammoth.convertToHtml({ arrayBuffer });
-  const html = result.value;
   
-  // Create a temporary container for rendering
-  const container = document.createElement('div');
-  container.innerHTML = html;
-  container.style.cssText = 'position: absolute; left: -9999px; width: 595px; padding: 40px; font-family: Arial, sans-serif; font-size: 12px; line-height: 1.6;';
-  document.body.appendChild(container);
+  // Extract as plain text with better structure preservation
+  const textResult = await mammoth.extractRawText({ arrayBuffer });
+  const htmlResult = await mammoth.convertToHtml({ arrayBuffer });
   
-  const html2canvas = (await import('html2canvas')).default;
-  const canvas = await html2canvas(container, { 
-    useCORS: true,
-  } as any);
-  
-  document.body.removeChild(container);
-  
-  const imgData = canvas.toDataURL('image/jpeg', 0.95);
   const pdf = new jsPDF('p', 'mm', 'a4');
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
-  const imgWidth = canvas.width;
-  const imgHeight = canvas.height;
-  const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-  const imgX = (pdfWidth - imgWidth * ratio) / 2;
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 20;
+  const maxWidth = pageWidth - margin * 2;
+  const lineHeight = 7;
   
-  // Handle multi-page content
-  const pageHeight = pdfHeight * (imgWidth / pdfWidth);
-  let heightLeft = imgHeight;
-  let position = 0;
+  // Parse HTML for basic formatting
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlResult.value;
   
-  pdf.addImage(imgData, 'JPEG', imgX, 0, imgWidth * ratio, imgHeight * ratio);
-  heightLeft -= pageHeight;
+  let yPos = margin;
   
-  while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
-    pdf.addPage();
-    pdf.addImage(imgData, 'JPEG', imgX, position * ratio, imgWidth * ratio, imgHeight * ratio);
-    heightLeft -= pageHeight;
+  // Process each element
+  const processElement = (element: Element) => {
+    const tagName = element.tagName?.toLowerCase() || '';
+    const text = element.textContent?.trim() || '';
+    
+    if (!text) return;
+    
+    // Set font based on element type
+    if (tagName === 'h1') {
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+    } else if (tagName === 'h2') {
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+    } else if (tagName === 'h3') {
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+    } else if (tagName === 'strong' || tagName === 'b') {
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'bold');
+    } else {
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+    }
+    
+    const lines = pdf.splitTextToSize(text, maxWidth);
+    
+    for (const line of lines) {
+      if (yPos + lineHeight > pageHeight - margin) {
+        pdf.addPage();
+        yPos = margin;
+      }
+      pdf.text(line, margin, yPos);
+      yPos += lineHeight;
+    }
+    
+    // Add extra space after headings
+    if (tagName.startsWith('h')) {
+      yPos += lineHeight / 2;
+    }
+  };
+  
+  // Get all text-containing elements
+  const elements = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, td, th, span, div');
+  
+  if (elements.length > 0) {
+    elements.forEach(processElement);
+  } else {
+    // Fallback to raw text if no structured elements
+    const text = textResult.value;
+    const paragraphs = text.split(/\n\n+/);
+    
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    
+    for (const para of paragraphs) {
+      if (!para.trim()) continue;
+      
+      const lines = pdf.splitTextToSize(para.trim(), maxWidth);
+      
+      for (const line of lines) {
+        if (yPos + lineHeight > pageHeight - margin) {
+          pdf.addPage();
+          yPos = margin;
+        }
+        pdf.text(line, margin, yPos);
+        yPos += lineHeight;
+      }
+      yPos += lineHeight / 2; // Paragraph spacing
+    }
   }
   
   return new Uint8Array(pdf.output('arraybuffer'));
@@ -377,16 +448,18 @@ export const excelToPDF = async (file: File): Promise<Uint8Array> => {
   return new Uint8Array(pdf.output('arraybuffer'));
 };
 
-// Convert PowerPoint to PDF (extracts text and images)
+// Convert PowerPoint to PDF (improved with image extraction)
 export const pptToPDF = async (file: File): Promise<Uint8Array> => {
   const { jsPDF } = await import('jspdf');
   const arrayBuffer = await readFileAsArrayBuffer(file);
   const zip = await JSZip.loadAsync(arrayBuffer);
   
   const pdf = new jsPDF('l', 'mm', 'a4'); // landscape for slides
-  const slideFiles: string[] = [];
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
   
-  // Find all slide XML files
+  // Collect all slide files
+  const slideFiles: string[] = [];
   zip.forEach((relativePath) => {
     if (relativePath.match(/ppt\/slides\/slide\d+\.xml$/)) {
       slideFiles.push(relativePath);
@@ -400,6 +473,31 @@ export const pptToPDF = async (file: File): Promise<Uint8Array> => {
     return numA - numB;
   });
   
+  // Extract images from media folder
+  const mediaImages: Map<string, string> = new Map();
+  const mediaFolder = zip.folder('ppt/media');
+  if (mediaFolder) {
+    const imageFiles: string[] = [];
+    zip.forEach((path) => {
+      if (path.startsWith('ppt/media/') && /\.(png|jpg|jpeg|gif)$/i.test(path)) {
+        imageFiles.push(path);
+      }
+    });
+    
+    for (const imgPath of imageFiles) {
+      try {
+        const imgData = await zip.file(imgPath)?.async('base64');
+        if (imgData) {
+          const ext = imgPath.split('.').pop()?.toLowerCase() || 'png';
+          const imgName = imgPath.split('/').pop() || '';
+          mediaImages.set(imgName, `data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,${imgData}`);
+        }
+      } catch (e) {
+        console.warn('Failed to load image:', imgPath);
+      }
+    }
+  }
+  
   let isFirstPage = true;
   
   for (const slideFile of slideFiles) {
@@ -411,60 +509,96 @@ export const pptToPDF = async (file: File): Promise<Uint8Array> => {
     const slideXml = await zip.file(slideFile)?.async('string');
     if (!slideXml) continue;
     
-    // Extract text from XML
-    const textMatches = slideXml.match(/<a:t>([^<]*)<\/a:t>/g) || [];
-    const texts = textMatches.map(match => match.replace(/<\/?a:t>/g, ''));
-    
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-    
     // Draw slide background
-    pdf.setFillColor(255, 255, 255);
+    pdf.setFillColor(250, 250, 252);
     pdf.rect(0, 0, pdfWidth, pdfHeight, 'F');
     
-    // Draw slide border
-    pdf.setDrawColor(200, 200, 200);
-    pdf.rect(10, 10, pdfWidth - 20, pdfHeight - 20);
+    // Draw slide border with rounded effect
+    pdf.setDrawColor(220, 220, 225);
+    pdf.setLineWidth(0.5);
+    pdf.rect(8, 8, pdfWidth - 16, pdfHeight - 16);
+    
+    // Extract all text blocks
+    const textMatches = slideXml.match(/<a:t>([^<]*)<\/a:t>/g) || [];
+    const texts = textMatches.map(match => 
+      match.replace(/<\/?a:t>/g, '')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+    ).filter(t => t.trim());
     
     // Add slide number
     const slideNum = slideFile.match(/slide(\d+)\.xml/)?.[1] || '?';
-    pdf.setFontSize(10);
-    pdf.setTextColor(150, 150, 150);
-    pdf.text(`Slide ${slideNum}`, pdfWidth - 30, pdfHeight - 5);
+    pdf.setFontSize(9);
+    pdf.setTextColor(150, 150, 155);
+    pdf.text(`${slideNum}`, pdfWidth - 15, pdfHeight - 8);
     
-    // Add text content
-    pdf.setTextColor(0, 0, 0);
-    let yPos = 30;
-    let isTitle = true;
+    // Render text content with better layout
+    pdf.setTextColor(30, 30, 35);
+    let yPos = 25;
     
-    for (const text of texts) {
-      if (text.trim()) {
-        if (isTitle) {
-          pdf.setFontSize(24);
-          isTitle = false;
-        } else {
-          pdf.setFontSize(14);
-        }
-        
-        const lines = pdf.splitTextToSize(text, pdfWidth - 40);
+    for (let i = 0; i < texts.length; i++) {
+      const text = texts[i].trim();
+      if (!text) continue;
+      
+      // First text is usually title
+      if (i === 0) {
+        pdf.setFontSize(22);
+        pdf.setFont('helvetica', 'bold');
+        const lines = pdf.splitTextToSize(text, pdfWidth - 50);
         for (const line of lines) {
-          if (yPos > pdfHeight - 20) {
-            pdf.addPage();
-            yPos = 30;
+          if (yPos < pdfHeight - 20) {
+            pdf.text(line, 25, yPos);
+            yPos += 12;
           }
-          pdf.text(line, 20, yPos);
-          yPos += isTitle ? 15 : 10;
         }
-        yPos += 5;
+        yPos += 8;
+      } else {
+        pdf.setFontSize(13);
+        pdf.setFont('helvetica', 'normal');
+        const lines = pdf.splitTextToSize(text, pdfWidth - 50);
+        for (const line of lines) {
+          if (yPos < pdfHeight - 20) {
+            pdf.text('• ' + line, 25, yPos);
+            yPos += 8;
+          }
+        }
+      }
+    }
+    
+    // Try to add images from relationships
+    const slideNum2 = slideFile.match(/slide(\d+)\.xml/)?.[1];
+    const relsPath = `ppt/slides/_rels/slide${slideNum2}.xml.rels`;
+    const relsXml = await zip.file(relsPath)?.async('string');
+    
+    if (relsXml && mediaImages.size > 0) {
+      const imageRefs = relsXml.match(/Target="\.\.\/media\/([^"]+)"/g) || [];
+      let imgX = pdfWidth - 90;
+      let imgY = 30;
+      
+      for (const ref of imageRefs.slice(0, 2)) { // Max 2 images per slide
+        const imgName = ref.match(/media\/([^"]+)/)?.[1];
+        if (imgName && mediaImages.has(imgName)) {
+          try {
+            const imgData = mediaImages.get(imgName)!;
+            pdf.addImage(imgData, 'JPEG', imgX, imgY, 60, 45);
+            imgY += 50;
+          } catch (e) {
+            console.warn('Failed to add image to PDF');
+          }
+        }
       }
     }
   }
   
   if (slideFiles.length === 0) {
     pdf.setFontSize(16);
-    pdf.text('Unable to extract content from this PowerPoint file.', 20, 40);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Impossible d\'extraire le contenu de ce fichier PowerPoint.', 20, 40);
     pdf.setFontSize(12);
-    pdf.text('The file may be in an unsupported format.', 20, 55);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Le fichier est peut-être dans un format non supporté.', 20, 55);
   }
   
   return new Uint8Array(pdf.output('arraybuffer'));
@@ -517,22 +651,35 @@ export const htmlToPDF = async (htmlContent: string): Promise<Uint8Array> => {
 
 // Extract text from PDF (for PDF to Word/Excel/PPT)
 export const extractTextFromPDF = async (file: File): Promise<string[]> => {
-  const pdfjs = await initPdfJs();
-  const arrayBuffer = await readFileAsArrayBuffer(file);
-  const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-  const pages: string[] = [];
-  
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const textContent = await page.getTextContent();
-    const pageText = textContent.items
-      .filter((item: any) => 'str' in item)
-      .map((item: any) => item.str || '')
-      .join(' ');
-    pages.push(pageText);
+  try {
+    const pdfjs = await initPdfJs();
+    const arrayBuffer = await readFileAsArrayBuffer(file);
+    
+    const loadingTask = pdfjs.getDocument({
+      data: arrayBuffer,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true,
+    });
+    
+    const pdf = await loadingTask.promise;
+    const pages: string[] = [];
+    
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .filter((item: unknown) => item && typeof item === 'object' && 'str' in item)
+        .map((item: unknown) => (item as { str: string }).str || '')
+        .join(' ');
+      pages.push(pageText);
+    }
+    
+    return pages;
+  } catch (error) {
+    console.error('Extract text error:', error);
+    throw new Error('Impossible d\'extraire le texte du PDF.');
   }
-  
-  return pages;
 };
 
 // Create Word document from text

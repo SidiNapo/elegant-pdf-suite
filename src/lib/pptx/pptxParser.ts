@@ -614,8 +614,19 @@ export async function parsePPTX(file: File): Promise<ParsedPresentation> {
   }
   
   // Load ZIP
-  const arrayBuffer = await file.arrayBuffer();
-  const zip = await JSZip.loadAsync(arrayBuffer);
+  let arrayBuffer: ArrayBuffer;
+  try {
+    arrayBuffer = await file.arrayBuffer();
+  } catch (error) {
+    throw new Error('Impossible de lire le fichier. Veuillez réessayer.');
+  }
+  
+  let zip: JSZip;
+  try {
+    zip = await JSZip.loadAsync(arrayBuffer);
+  } catch (error) {
+    throw new Error('Le fichier n\'est pas un fichier PPTX valide.');
+  }
   
   // Get presentation size
   let slideSize: SlideSize = { width: 9144000, height: 6858000 }; // Default 16:9

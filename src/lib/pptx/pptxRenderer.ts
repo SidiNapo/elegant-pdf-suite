@@ -268,8 +268,14 @@ export function renderPresentationToPDF(
   presentation: ParsedPresentation,
   options?: Partial<RenderOptions>
 ): jsPDF {
+  if (!presentation || !presentation.slides || presentation.slides.length === 0) {
+    throw new Error('Présentation invalide ou vide');
+  }
+
   // Calculate aspect ratio from slide size
-  const aspectRatio = presentation.slideSize.width / presentation.slideSize.height;
+  const slideWidth = presentation.slideSize?.width || 9144000;
+  const slideHeight = presentation.slideSize?.height || 6858000;
+  const aspectRatio = slideWidth / slideHeight;
   
   // Default to A4 landscape if wider than tall, portrait otherwise
   let pageWidth: number;
@@ -306,18 +312,23 @@ export function renderPresentationToPDF(
   
   // Render each slide
   presentation.slides.forEach((slide, index) => {
-    if (index > 0) {
-      pdf.addPage([pageWidth, pageHeight]);
+    try {
+      if (index > 0) {
+        pdf.addPage([pageWidth, pageHeight]);
+      }
+      
+      renderSlide(
+        pdf,
+        slide,
+        slideWidth,
+        slideHeight,
+        pageWidth,
+        pageHeight
+      );
+    } catch (error) {
+      console.warn(`Failed to render slide ${index + 1}:`, error);
+      // Continue with next slide
     }
-    
-    renderSlide(
-      pdf,
-      slide,
-      presentation.slideSize.width,
-      presentation.slideSize.height,
-      pageWidth,
-      pageHeight
-    );
   });
   
   return pdf;
@@ -328,6 +339,12 @@ export function renderPresentationToBytes(
   presentation: ParsedPresentation,
   options?: Partial<RenderOptions>
 ): Uint8Array {
-  const pdf = renderPresentationToPDF(presentation, options);
-  return pdf.output('arraybuffer') as unknown as Uint8Array;
+  try {
+    const pdf = renderPresentationToPDF(presentation, options);
+    const arrayBuffer = pdf.output('arraybuffer');
+    return new Uint8Array(arrayBuffer);
+  } catch (error) {
+    console.error('Failed to render presentation to bytes:', error);
+    throw new Error('Échec de la génération du PDF. Veuillez réessayer.');
+  }
 }

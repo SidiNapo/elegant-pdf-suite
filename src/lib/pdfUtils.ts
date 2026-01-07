@@ -449,17 +449,140 @@ export const excelToPDF = async (file: File): Promise<Uint8Array> => {
   return new Uint8Array(pdf.output('arraybuffer'));
 };
 
-// Convert PowerPoint to PDF (improved with image extraction)
+// ==================== PPTX TO PDF - COMPLETE REWRITE ====================
+
+// Helper: decode XML entities
+const decodeXmlEntities = (text: string): string => {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
+};
+
+// Helper: extract paragraphs from a text frame (a:txBody)
+const extractParagraphsFromTextBody = (txBody: Element): { text: string; isTitle: boolean; isBullet: boolean }[] => {
+  const paragraphs: { text: string; isTitle: boolean; isBullet: boolean }[] = [];
+  const pNodes = txBody.querySelectorAll('a\\:p, p');
+  
+  pNodes.forEach((pNode) => {
+    // Get all text runs (a:t) and join them
+    const textNodes = pNode.querySelectorAll('a\\:t, t');
+    let paragraphText = '';
+    textNodes.forEach((tNode) => {
+      paragraphText += tNode.textContent || '';
+    });
+    
+    // Handle line breaks
+    const brNodes = pNode.querySelectorAll('a\\:br, br');
+    if (brNodes.length > 0) {
+      paragraphText = paragraphText.replace(/\s+/g, ' ');
+    }
+    
+    paragraphText = decodeXmlEntities(paragraphText.trim());
+    
+    if (!paragraphText) return;
+    
+    // Check for bullets
+    const pPr = pNode.querySelector('a\\:pPr, pPr');
+    let isBullet = false;
+    if (pPr) {
+      const hasBuChar = pPr.querySelector('a\\:buChar, buChar');
+      const hasBuAutoNum = pPr.querySelector('a\\:buAutoNum, buAutoNum');
+      const hasBuNone = pPr.querySelector('a\\:buNone, buNone');
+      isBullet = (hasBuChar !== null || hasBuAutoNum !== null) && hasBuNone === null;
+    }
+    
+    paragraphs.push({ text: paragraphText, isTitle: false, isBullet });
+  });
+  
+  return paragraphs;
+};
+
+// Helper: parse shape properties (position, size)
+interface ShapeTransform {
+  x: number;
+  y: number;
+  cx: number;
+  cy: number;
+}
+
+const parseShapeTransform = (spPr: Element | null): ShapeTransform | null => {
+  if (!spPr) return null;
+  
+  const xfrm = spPr.querySelector('a\\:xfrm, xfrm');
+  if (!xfrm) return null;
+  
+  const off = xfrm.querySelector('a\\:off, off');
+  const ext = xfrm.querySelector('a\\:ext, ext');
+  
+  if (!off || !ext) return null;
+  
+  return {
+    x: parseInt(off.getAttribute('x') || '0'),
+    y: parseInt(off.getAttribute('y') || '0'),
+    cx: parseInt(ext.getAttribute('cx') || '0'),
+    cy: parseInt(ext.getAttribute('cy') || '0'),
+  };
+};
+
+// Helper: detect placeholder type
+const getPlaceholderType = (nvSpPr: Element | null): string | null => {
+  if (!nvSpPr) return null;
+  const ph = nvSpPr.querySelector('p\\:ph, ph');
+  if (!ph) return null;
+  return ph.getAttribute('type') || 'body';
+};
+
+// Convert PowerPoint to PDF - COMPLETELY REBUILT
 export const pptToPDF = async (file: File): Promise<Uint8Array> => {
   const { jsPDF } = await import('jspdf');
+  
+  // Check if it's a .ppt (binary) file
+  const fileName = file.name.toLowerCase();
+  if (fileName.endsWith('.ppt') && !fileName.endsWith('.pptx')) {
+    const pdf = new jsPDF('l', 'mm', 'a4');
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Format non supporté', 20, 40);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Les fichiers .ppt (ancienne version) ne sont pas supportés.', 20, 55);
+    pdf.text('Veuillez convertir votre fichier en .pptx (PowerPoint 2007+).', 20, 65);
+    return new Uint8Array(pdf.output('arraybuffer'));
+  }
+  
   const arrayBuffer = await readFileAsArrayBuffer(file);
   const zip = await JSZip.loadAsync(arrayBuffer);
   
-  const pdf = new jsPDF('l', 'mm', 'a4'); // landscape for slides
+  // Get slide size from presentation.xml
+  let slideCx = 9144000; // default 10 inches in EMU
+  let slideCy = 6858000; // default 7.5 inches in EMU
+  
+  const presentationXml = await zip.file('ppt/presentation.xml')?.async('string');
+  if (presentationXml) {
+    const parser = new DOMParser();
+    const presDoc = parser.parseFromString(presentationXml, 'application/xml');
+    const sldSz = presDoc.querySelector('p\\:sldSz, sldSz');
+    if (sldSz) {
+      slideCx = parseInt(sldSz.getAttribute('cx') || '9144000');
+      slideCy = parseInt(sldSz.getAttribute('cy') || '6858000');
+    }
+  }
+  
+  const pdf = new jsPDF('l', 'mm', 'a4');
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = pdf.internal.pageSize.getHeight();
+  const margin = 15;
   
-  // Collect all slide files
+  // EMU to PDF mm conversion
+  const emuToMmX = (emu: number) => (emu / slideCx) * (pdfWidth - margin * 2);
+  const emuToMmY = (emu: number) => (emu / slideCy) * (pdfHeight - margin * 2);
+  
+  // Collect slide files
   const slideFiles: string[] = [];
   zip.forEach((relativePath) => {
     if (relativePath.match(/ppt\/slides\/slide\d+\.xml$/)) {
@@ -467,38 +590,35 @@ export const pptToPDF = async (file: File): Promise<Uint8Array> => {
     }
   });
   
-  // Sort slides by number
   slideFiles.sort((a, b) => {
     const numA = parseInt(a.match(/slide(\d+)\.xml/)?.[1] || '0');
     const numB = parseInt(b.match(/slide(\d+)\.xml/)?.[1] || '0');
     return numA - numB;
   });
   
-  // Extract images from media folder
+  // Load all media images
   const mediaImages: Map<string, string> = new Map();
-  const mediaFolder = zip.folder('ppt/media');
-  if (mediaFolder) {
-    const imageFiles: string[] = [];
-    zip.forEach((path) => {
-      if (path.startsWith('ppt/media/') && /\.(png|jpg|jpeg|gif)$/i.test(path)) {
-        imageFiles.push(path);
+  const imageFiles: string[] = [];
+  zip.forEach((path) => {
+    if (path.startsWith('ppt/media/') && /\.(png|jpg|jpeg|gif|bmp)$/i.test(path)) {
+      imageFiles.push(path);
+    }
+  });
+  
+  for (const imgPath of imageFiles) {
+    try {
+      const imgData = await zip.file(imgPath)?.async('base64');
+      if (imgData) {
+        const ext = imgPath.split('.').pop()?.toLowerCase() || 'png';
+        const imgName = imgPath.split('/').pop() || '';
+        mediaImages.set(imgName, `data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,${imgData}`);
       }
-    });
-    
-    for (const imgPath of imageFiles) {
-      try {
-        const imgData = await zip.file(imgPath)?.async('base64');
-        if (imgData) {
-          const ext = imgPath.split('.').pop()?.toLowerCase() || 'png';
-          const imgName = imgPath.split('/').pop() || '';
-          mediaImages.set(imgName, `data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,${imgData}`);
-        }
-      } catch (e) {
-        console.warn('Failed to load image:', imgPath);
-      }
+    } catch (e) {
+      console.warn('Failed to load image:', imgPath);
     }
   }
   
+  const parser = new DOMParser();
   let isFirstPage = true;
   
   for (const slideFile of slideFiles) {
@@ -507,99 +627,178 @@ export const pptToPDF = async (file: File): Promise<Uint8Array> => {
     }
     isFirstPage = false;
     
-    const slideXml = await zip.file(slideFile)?.async('string');
-    if (!slideXml) continue;
+    const slideXmlStr = await zip.file(slideFile)?.async('string');
+    if (!slideXmlStr) continue;
+    
+    const slideDoc = parser.parseFromString(slideXmlStr, 'application/xml');
     
     // Draw slide background
-    pdf.setFillColor(250, 250, 252);
+    pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pdfWidth, pdfHeight, 'F');
+    pdf.setDrawColor(230, 230, 235);
+    pdf.setLineWidth(0.3);
+    pdf.rect(5, 5, pdfWidth - 10, pdfHeight - 10);
     
-    // Draw slide border with rounded effect
-    pdf.setDrawColor(220, 220, 225);
-    pdf.setLineWidth(0.5);
-    pdf.rect(8, 8, pdfWidth - 16, pdfHeight - 16);
+    // Load relationships for this slide (for images)
+    const slideNum = slideFile.match(/slide(\d+)\.xml/)?.[1] || '1';
+    const relsPath = `ppt/slides/_rels/slide${slideNum}.xml.rels`;
+    const relsXmlStr = await zip.file(relsPath)?.async('string');
+    const imageRelMap: Map<string, string> = new Map();
     
-    // Extract all text blocks
-    const textMatches = slideXml.match(/<a:t>([^<]*)<\/a:t>/g) || [];
-    const texts = textMatches.map(match => 
-      match.replace(/<\/?a:t>/g, '')
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-    ).filter(t => t.trim());
-    
-    // Add slide number
-    const slideNum = slideFile.match(/slide(\d+)\.xml/)?.[1] || '?';
-    pdf.setFontSize(9);
-    pdf.setTextColor(150, 150, 155);
-    pdf.text(`${slideNum}`, pdfWidth - 15, pdfHeight - 8);
-    
-    // Render text content with better layout
-    pdf.setTextColor(30, 30, 35);
-    let yPos = 25;
-    
-    for (let i = 0; i < texts.length; i++) {
-      const text = texts[i].trim();
-      if (!text) continue;
-      
-      // First text is usually title
-      if (i === 0) {
-        pdf.setFontSize(22);
-        pdf.setFont('helvetica', 'bold');
-        const lines = pdf.splitTextToSize(text, pdfWidth - 50);
-        for (const line of lines) {
-          if (yPos < pdfHeight - 20) {
-            pdf.text(line, 25, yPos);
-            yPos += 12;
-          }
+    if (relsXmlStr) {
+      const relsDoc = parser.parseFromString(relsXmlStr, 'application/xml');
+      const relationships = relsDoc.querySelectorAll('Relationship');
+      relationships.forEach((rel) => {
+        const rId = rel.getAttribute('Id') || '';
+        const target = rel.getAttribute('Target') || '';
+        if (target.includes('/media/') || target.includes('../media/')) {
+          const imgName = target.split('/').pop() || '';
+          imageRelMap.set(rId, imgName);
         }
-        yPos += 8;
-      } else {
-        pdf.setFontSize(13);
-        pdf.setFont('helvetica', 'normal');
-        const lines = pdf.splitTextToSize(text, pdfWidth - 50);
-        for (const line of lines) {
-          if (yPos < pdfHeight - 20) {
-            pdf.text('• ' + line, 25, yPos);
-            yPos += 8;
-          }
-        }
-      }
+      });
     }
     
-    // Try to add images from relationships
-    const slideNum2 = slideFile.match(/slide(\d+)\.xml/)?.[1];
-    const relsPath = `ppt/slides/_rels/slide${slideNum2}.xml.rels`;
-    const relsXml = await zip.file(relsPath)?.async('string');
+    // Collect all shapes with their positions
+    interface TextShape {
+      type: 'text';
+      transform: ShapeTransform;
+      placeholderType: string | null;
+      paragraphs: { text: string; isTitle: boolean; isBullet: boolean }[];
+    }
     
-    if (relsXml && mediaImages.size > 0) {
-      const imageRefs = relsXml.match(/Target="\.\.\/media\/([^"]+)"/g) || [];
-      let imgX = pdfWidth - 90;
-      let imgY = 30;
+    interface ImageShape {
+      type: 'image';
+      transform: ShapeTransform;
+      rId: string;
+    }
+    
+    type SlideShape = TextShape | ImageShape;
+    const shapes: SlideShape[] = [];
+    
+    // Parse text shapes (p:sp)
+    const spNodes = slideDoc.querySelectorAll('p\\:sp, sp');
+    spNodes.forEach((sp) => {
+      const nvSpPr = sp.querySelector('p\\:nvSpPr, nvSpPr');
+      const spPr = sp.querySelector('p\\:spPr, spPr');
+      const txBody = sp.querySelector('p\\:txBody, txBody');
       
-      for (const ref of imageRefs.slice(0, 2)) { // Max 2 images per slide
-        const imgName = ref.match(/media\/([^"]+)/)?.[1];
+      const transform = parseShapeTransform(spPr);
+      const placeholderType = getPlaceholderType(nvSpPr);
+      
+      if (txBody) {
+        const paragraphs = extractParagraphsFromTextBody(txBody);
+        if (paragraphs.length > 0 && transform) {
+          // Mark title paragraphs
+          if (placeholderType === 'title' || placeholderType === 'ctrTitle') {
+            paragraphs.forEach(p => p.isTitle = true);
+          }
+          shapes.push({
+            type: 'text',
+            transform,
+            placeholderType,
+            paragraphs,
+          });
+        }
+      }
+    });
+    
+    // Parse image shapes (p:pic)
+    const picNodes = slideDoc.querySelectorAll('p\\:pic, pic');
+    picNodes.forEach((pic) => {
+      const spPr = pic.querySelector('p\\:spPr, spPr');
+      const blip = pic.querySelector('a\\:blip, blip');
+      
+      const transform = parseShapeTransform(spPr);
+      const rEmbed = blip?.getAttribute('r:embed') || blip?.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'embed');
+      
+      if (transform && rEmbed) {
+        shapes.push({
+          type: 'image',
+          transform,
+          rId: rEmbed,
+        });
+      }
+    });
+    
+    // Sort shapes by Y position (top to bottom), then X (left to right)
+    shapes.sort((a, b) => {
+      if (Math.abs(a.transform.y - b.transform.y) < 100000) {
+        return a.transform.x - b.transform.x;
+      }
+      return a.transform.y - b.transform.y;
+    });
+    
+    // Render shapes
+    for (const shape of shapes) {
+      if (shape.type === 'text') {
+        const x = margin + emuToMmX(shape.transform.x);
+        const y = margin + emuToMmY(shape.transform.y);
+        const boxWidth = emuToMmX(shape.transform.cx);
+        
+        let yPos = y;
+        
+        for (const para of shape.paragraphs) {
+          if (para.isTitle) {
+            pdf.setFontSize(20);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(30, 30, 40);
+          } else {
+            pdf.setFontSize(12);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setTextColor(50, 50, 60);
+          }
+          
+          const textToRender = para.isBullet ? `• ${para.text}` : para.text;
+          const effectiveWidth = Math.max(boxWidth, 50);
+          const lines = pdf.splitTextToSize(textToRender, effectiveWidth);
+          
+          for (const line of lines) {
+            if (yPos < pdfHeight - margin) {
+              pdf.text(line, x, yPos);
+              yPos += para.isTitle ? 10 : 6;
+            }
+          }
+          
+          yPos += para.isTitle ? 4 : 2;
+        }
+      } else if (shape.type === 'image') {
+        const imgName = imageRelMap.get(shape.rId);
         if (imgName && mediaImages.has(imgName)) {
           try {
             const imgData = mediaImages.get(imgName)!;
-            pdf.addImage(imgData, 'JPEG', imgX, imgY, 60, 45);
-            imgY += 50;
+            const x = margin + emuToMmX(shape.transform.x);
+            const y = margin + emuToMmY(shape.transform.y);
+            const w = emuToMmX(shape.transform.cx);
+            const h = emuToMmY(shape.transform.cy);
+            
+            // Clamp dimensions
+            const maxW = pdfWidth - margin * 2;
+            const maxH = pdfHeight - margin * 2;
+            const finalW = Math.min(w, maxW);
+            const finalH = Math.min(h, maxH);
+            
+            pdf.addImage(imgData, 'JPEG', x, y, finalW, finalH);
           } catch (e) {
-            console.warn('Failed to add image to PDF');
+            console.warn('Failed to add image:', imgName);
           }
         }
       }
     }
+    
+    // Add slide number
+    pdf.setFontSize(9);
+    pdf.setTextColor(150, 150, 155);
+    pdf.text(slideNum, pdfWidth - 12, pdfHeight - 8);
   }
   
+  // Handle empty presentation
   if (slideFiles.length === 0) {
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Impossible d\'extraire le contenu de ce fichier PowerPoint.', 20, 40);
+    pdf.text('Aucune diapositive trouvée', 20, 40);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'normal');
-    pdf.text('Le fichier est peut-être dans un format non supporté.', 20, 55);
+    pdf.text('Le fichier PowerPoint ne contient pas de diapositives lisibles.', 20, 55);
   }
   
   return new Uint8Array(pdf.output('arraybuffer'));

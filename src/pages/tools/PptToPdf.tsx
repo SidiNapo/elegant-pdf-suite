@@ -6,14 +6,30 @@ import { Button } from '@/components/ui/button';
 import ProcessingLoader from '@/components/ProcessingLoader';
 import { pptToPDF, downloadPDF } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
+import { useToast } from '@/hooks/use-toast';
 
 const PptToPdf = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [pdfData, setPdfData] = useState<Uint8Array | null>(null);
+  const { toast } = useToast();
 
   const handleFilesSelected = (newFiles: File[]) => {
+    // Validate file type
+    if (newFiles.length > 0) {
+      const file = newFiles[0];
+      const fileName = file.name.toLowerCase();
+      
+      if (fileName.endsWith('.ppt') && !fileName.endsWith('.pptx')) {
+        toast({
+          title: "Format non recommandé",
+          description: "Les fichiers .ppt peuvent avoir des résultats limités. Utilisez .pptx pour de meilleurs résultats.",
+          variant: "destructive",
+        });
+      }
+    }
+    
     setFiles(newFiles);
     setIsComplete(false);
     setPdfData(null);
@@ -27,8 +43,17 @@ const PptToPdf = () => {
       const result = await pptToPDF(files[0]);
       setPdfData(result);
       setIsComplete(true);
+      toast({
+        title: "Conversion réussie",
+        description: "Votre présentation a été convertie en PDF.",
+      });
     } catch (error) {
       console.error('Conversion error:', error);
+      toast({
+        title: "Erreur de conversion",
+        description: error instanceof Error ? error.message : "Une erreur est survenue lors de la conversion.",
+        variant: "destructive",
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -50,7 +75,7 @@ const PptToPdf = () => {
   return (
     <ToolLayout
       title="PowerPoint en PDF"
-      description="Convertissez vos présentations PowerPoint en fichiers PDF"
+      description="Convertissez vos présentations PowerPoint (.pptx) en fichiers PDF"
       icon={Presentation}
       color="cyan"
     >
@@ -87,7 +112,7 @@ const PptToPdf = () => {
             maxFiles={1}
             files={files}
             title="Déposez votre fichier PowerPoint ici"
-            description="ou cliquez pour sélectionner (PPT, PPTX)"
+            description="ou cliquez pour sélectionner (.pptx recommandé)"
           />
           
           {files.length > 0 && (

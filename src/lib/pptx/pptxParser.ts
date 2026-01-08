@@ -9,10 +9,12 @@ import {
   SlideBackground,
   ParsedSlide,
   ParsedPresentation,
-  EMU_PER_POINT,
 } from './pptxTypes';
 
-// Decode XML entities
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
 function decodeXmlEntities(text: string): string {
   if (!text) return '';
   return text
@@ -25,44 +27,45 @@ function decodeXmlEntities(text: string): string {
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
 }
 
-// Get image format from filename or content type
 function getImageFormat(filename: string, data?: ArrayBuffer): 'PNG' | 'JPEG' | 'GIF' {
   const ext = filename.toLowerCase().split('.').pop();
   if (ext === 'png') return 'PNG';
   if (ext === 'gif') return 'GIF';
   if (ext === 'jpg' || ext === 'jpeg') return 'JPEG';
   
-  // Check magic bytes if we have data
   if (data && data.byteLength >= 4) {
     const arr = new Uint8Array(data);
-    // PNG: 89 50 4E 47
-    if (arr[0] === 0x89 && arr[1] === 0x50 && arr[2] === 0x4E && arr[3] === 0x47) {
-      return 'PNG';
-    }
-    // JPEG: FF D8 FF
-    if (arr[0] === 0xFF && arr[1] === 0xD8 && arr[2] === 0xFF) {
-      return 'JPEG';
-    }
-    // GIF: 47 49 46
-    if (arr[0] === 0x47 && arr[1] === 0x49 && arr[2] === 0x46) {
-      return 'GIF';
-    }
+    if (arr[0] === 0x89 && arr[1] === 0x50 && arr[2] === 0x4E && arr[3] === 0x47) return 'PNG';
+    if (arr[0] === 0xFF && arr[1] === 0xD8 && arr[2] === 0xFF) return 'JPEG';
+    if (arr[0] === 0x47 && arr[1] === 0x49 && arr[2] === 0x46) return 'GIF';
   }
   
-  return 'JPEG'; // Default
+  return 'JPEG';
 }
 
-// Parse transform from shape
-function parseTransform(shapeEl: Element): Transform | null {
-  // Check direct xfrm
-  let xfrm = shapeEl.querySelector('xfrm');
-  
-  // Also check in spPr
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+// ============================================================================
+// TRANSFORM PARSING
+// ============================================================================
+
+function parseTransform(el: Element): Transform | null {
+  // Try different locations for xfrm
+  let xfrm = el.querySelector('xfrm');
   if (!xfrm) {
-    const spPr = shapeEl.querySelector('spPr');
-    if (spPr) {
-      xfrm = spPr.querySelector('xfrm');
-    }
+    const spPr = el.querySelector('spPr');
+    if (spPr) xfrm = spPr.querySelector('xfrm');
+  }
+  if (!xfrm) {
+    const grpSpPr = el.querySelector('grpSpPr');
+    if (grpSpPr) xfrm = grpSpPr.querySelector('xfrm');
   }
   
   if (!xfrm) return null;
@@ -80,39 +83,67 @@ function parseTransform(shapeEl: Element): Transform | null {
   };
 }
 
-// Parse text runs from a paragraph
+function parseGroupTransformOffset(grpSpPr: Element): { x: number; y: number } {
+  const xfrm = grpSpPr.querySelector('xfrm');
+  if (!xfrm) return { x: 0, y: 0 };
+  
+  const chOff = xfrm.querySelector('chOff');
+  if (!chOff) return { x: 0, y: 0 };
+  
+  return {
+    x: parseInt(chOff.getAttribute('x') || '0', 10),
+    y: parseInt(chOff.getAttribute('y') || '0', 10),
+  };
+}
+
+// ============================================================================
+// TEXT PARSING
+// ============================================================================
+
 function parseTextRuns(pEl: Element): TextRun[] {
   const runs: TextRun[] = [];
   
-  // Get all 'r' (run) elements
+  // Process all 'r' elements
   const rElements = pEl.querySelectorAll('r');
-  
   rElements.forEach((r) => {
     const tEl = r.querySelector('t');
-    if (!tEl || !tEl.textContent) return;
+    if (!tEl?.textContent) return;
     
     const text = decodeXmlEntities(tEl.textContent);
     if (!text) return;
     
     const run: TextRun = { text };
     
-    // Check run properties
     const rPr = r.querySelector('rPr');
     if (rPr) {
-      run.bold = rPr.getAttribute('b') === '1';
-      run.italic = rPr.getAttribute('i') === '1';
+      run.bold = rPr.getAttribute('b') === '1' || rPr.querySelector('b') !== null;
+      run.italic = rPr.getAttribute('i') === '1' || rPr.querySelector('i') !== null;
       
       const sz = rPr.getAttribute('sz');
-      if (sz) {
-        run.fontSize = parseInt(sz, 10) / 100; // Convert from hundredths of pt
-      }
+      if (sz) run.fontSize = parseInt(sz, 10) / 100;
       
-      // Get color
+      // Color from solidFill
       const solidFill = rPr.querySelector('solidFill');
       if (solidFill) {
         const srgbClr = solidFill.querySelector('srgbClr');
         if (srgbClr) {
           run.color = '#' + (srgbClr.getAttribute('val') || '000000');
+        }
+        const schemeClr = solidFill.querySelector('schemeClr');
+        if (schemeClr && !run.color) {
+          // Default scheme colors mapping
+          const schemeVal = schemeClr.getAttribute('val');
+          const schemeColors: Record<string, string> = {
+            'tx1': '#000000',
+            'tx2': '#44546A',
+            'bg1': '#FFFFFF',
+            'bg2': '#E7E6E6',
+            'accent1': '#4472C4',
+            'accent2': '#ED7D31',
+            'dk1': '#000000',
+            'lt1': '#FFFFFF',
+          };
+          run.color = schemeColors[schemeVal || ''] || '#000000';
         }
       }
     }
@@ -120,14 +151,12 @@ function parseTextRuns(pEl: Element): TextRun[] {
     runs.push(run);
   });
   
-  // Also check for direct text (field elements, etc.)
+  // Fallback: collect all text if no runs found
   if (runs.length === 0) {
-    const allText: string[] = [];
     const textNodes = pEl.querySelectorAll('t');
+    const allText: string[] = [];
     textNodes.forEach((t) => {
-      if (t.textContent) {
-        allText.push(decodeXmlEntities(t.textContent));
-      }
+      if (t.textContent) allText.push(decodeXmlEntities(t.textContent));
     });
     if (allText.length > 0) {
       runs.push({ text: allText.join('') });
@@ -137,10 +166,8 @@ function parseTextRuns(pEl: Element): TextRun[] {
   return runs;
 }
 
-// Parse paragraphs from text body
 function parseParagraphs(txBody: Element): TextParagraph[] {
   const paragraphs: TextParagraph[] = [];
-  
   const pElements = txBody.querySelectorAll('p');
   
   pElements.forEach((pEl) => {
@@ -149,7 +176,6 @@ function parseParagraphs(txBody: Element): TextParagraph[] {
     
     const para: TextParagraph = { runs };
     
-    // Check paragraph properties
     const pPr = pEl.querySelector('pPr');
     if (pPr) {
       const algn = pPr.getAttribute('algn');
@@ -159,26 +185,17 @@ function parseParagraphs(txBody: Element): TextParagraph[] {
       else para.alignment = 'left';
       
       const lvl = pPr.getAttribute('lvl');
-      if (lvl) {
-        para.bulletLevel = parseInt(lvl, 10);
-      }
+      if (lvl) para.bulletLevel = parseInt(lvl, 10);
       
-      // Check for bullet
       const buChar = pPr.querySelector('buChar');
-      if (buChar) {
-        para.bulletChar = buChar.getAttribute('char') || '•';
-      }
+      if (buChar) para.bulletChar = buChar.getAttribute('char') || '•';
       
       const buAutoNum = pPr.querySelector('buAutoNum');
-      if (buAutoNum) {
-        para.isNumbered = true;
-      }
+      if (buAutoNum) para.isNumbered = true;
       
-      const buNone = pPr.querySelector('buNone');
-      if (!buNone && (para.bulletLevel !== undefined || buChar || buAutoNum)) {
-        if (!para.bulletChar && !para.isNumbered) {
-          para.bulletChar = '•';
-        }
+      // If has level but no explicit bullet, add default
+      if (!pPr.querySelector('buNone') && para.bulletLevel !== undefined && !para.bulletChar && !para.isNumbered) {
+        para.bulletChar = '•';
       }
     }
     
@@ -188,7 +205,6 @@ function parseParagraphs(txBody: Element): TextParagraph[] {
   return paragraphs;
 }
 
-// Get placeholder type
 function getPlaceholderType(spEl: Element): ShapeElement['placeholderType'] {
   const nvSpPr = spEl.querySelector('nvSpPr');
   if (!nvSpPr) return undefined;
@@ -207,16 +223,10 @@ function getPlaceholderType(spEl: Element): ShapeElement['placeholderType'] {
   return 'other';
 }
 
-// Parse image reference from blip
-function getBlipEmbed(el: Element): string | null {
-  const blip = el.querySelector('blip');
-  if (!blip) return null;
-  
-  // Check both r:embed and embed
-  return blip.getAttribute('r:embed') || blip.getAttribute('embed') || null;
-}
+// ============================================================================
+// RELATIONSHIPS & MEDIA
+// ============================================================================
 
-// Parse relationships file
 async function parseRelationships(zip: JSZip, relsPath: string): Promise<Map<string, string>> {
   const rels = new Map<string, string>();
   
@@ -227,74 +237,53 @@ async function parseRelationships(zip: JSZip, relsPath: string): Promise<Map<str
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'application/xml');
   
-  const relationships = doc.querySelectorAll('Relationship');
-  relationships.forEach((rel) => {
+  doc.querySelectorAll('Relationship').forEach((rel) => {
     const id = rel.getAttribute('Id');
     const target = rel.getAttribute('Target');
-    if (id && target) {
-      rels.set(id, target);
-    }
+    if (id && target) rels.set(id, target);
   });
   
   return rels;
 }
 
-// Load all media files from the archive
 async function loadMediaFiles(zip: JSZip): Promise<Map<string, ImageData>> {
   const mediaFiles = new Map<string, ImageData>();
   
-  const mediaFolder = zip.folder('ppt/media');
-  if (!mediaFolder) return mediaFiles;
-  
-  const mediaEntries: string[] = [];
+  const mediaPaths: string[] = [];
   zip.forEach((path, file) => {
     if (path.startsWith('ppt/media/') && !file.dir) {
-      mediaEntries.push(path);
+      mediaPaths.push(path);
     }
   });
   
   await Promise.all(
-    mediaEntries.map(async (path) => {
+    mediaPaths.map(async (path) => {
       const file = zip.file(path);
       if (!file) return;
       
       try {
-        const data = await file.async('arraybuffer');
         const filename = path.split('/').pop() || '';
+        const ext = filename.toLowerCase().split('.').pop() || '';
+        
+        // Skip vector formats
+        if (['emf', 'wmf', 'svg'].includes(ext)) return;
+        
+        const data = await file.async('arraybuffer');
         const format = getImageFormat(filename, data);
-        
-        // Skip unsupported formats
-        if (filename.toLowerCase().endsWith('.emf') || 
-            filename.toLowerCase().endsWith('.wmf') ||
-            filename.toLowerCase().endsWith('.svg')) {
-          return;
-        }
-        
-        const base64 = btoa(
-          new Uint8Array(data).reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
-        
+        const base64 = arrayBufferToBase64(data);
         const mimeType = format === 'PNG' ? 'image/png' : format === 'GIF' ? 'image/gif' : 'image/jpeg';
         
-        mediaFiles.set(path, {
+        const imageData: ImageData = {
           data: `data:${mimeType};base64,${base64}`,
           format,
-        });
+        };
         
-        // Also store by relative path
-        const relativePath = '../media/' + filename;
-        mediaFiles.set(relativePath, {
-          data: `data:${mimeType};base64,${base64}`,
-          format,
-        });
-        
-        // Store by just filename too
-        mediaFiles.set(filename, {
-          data: `data:${mimeType};base64,${base64}`,
-          format,
-        });
+        // Store with multiple key variations
+        mediaFiles.set(path, imageData);
+        mediaFiles.set('../media/' + filename, imageData);
+        mediaFiles.set(filename, imageData);
       } catch (e) {
-        console.warn('Failed to load media file:', path, e);
+        console.warn('Failed to load media:', path, e);
       }
     })
   );
@@ -302,7 +291,6 @@ async function loadMediaFiles(zip: JSZip): Promise<Map<string, ImageData>> {
   return mediaFiles;
 }
 
-// Resolve image reference to actual image data
 function resolveImageRef(
   ref: string,
   rels: Map<string, string>,
@@ -311,12 +299,12 @@ function resolveImageRef(
   const target = rels.get(ref);
   if (!target) return null;
   
-  // Try different path variations
+  const filename = target.split('/').pop() || '';
   const variations = [
     target,
-    'ppt/media/' + target.split('/').pop(),
-    '../media/' + target.split('/').pop(),
-    target.split('/').pop() || '',
+    'ppt/media/' + filename,
+    '../media/' + filename,
+    filename,
   ];
   
   for (const path of variations) {
@@ -327,7 +315,16 @@ function resolveImageRef(
   return null;
 }
 
-// Parse text shape
+function getBlipEmbed(el: Element): string | null {
+  const blip = el.querySelector('blip');
+  if (!blip) return null;
+  return blip.getAttribute('r:embed') || blip.getAttribute('embed') || null;
+}
+
+// ============================================================================
+// SHAPE PARSING
+// ============================================================================
+
 function parseTextShape(
   spEl: Element,
   zIndex: number,
@@ -359,6 +356,15 @@ function parseTextShape(
         }
       }
     }
+    
+    // Check for solid fill (shape background)
+    const solidFill = spPr.querySelector('solidFill');
+    if (solidFill) {
+      const srgbClr = solidFill.querySelector('srgbClr');
+      if (srgbClr) {
+        element.fillColor = '#' + (srgbClr.getAttribute('val') || 'FFFFFF');
+      }
+    }
   }
   
   // Parse text body
@@ -367,15 +373,14 @@ function parseTextShape(
     element.paragraphs = parseParagraphs(txBody);
   }
   
-  // If no text and not an image, skip
-  if (element.type === 'text' && (!element.paragraphs || element.paragraphs.length === 0)) {
+  // Skip if no content
+  if (element.type === 'text' && (!element.paragraphs || element.paragraphs.length === 0) && !element.fillColor) {
     return null;
   }
   
   return element;
 }
 
-// Parse picture shape
 function parsePictureShape(
   picEl: Element,
   zIndex: number,
@@ -385,7 +390,6 @@ function parsePictureShape(
   const transform = parseTransform(picEl);
   if (!transform) return null;
   
-  // Get blip reference
   const blipFill = picEl.querySelector('blipFill');
   if (!blipFill) return null;
   
@@ -404,13 +408,11 @@ function parsePictureShape(
   };
 }
 
-// Parse group shape recursively
 function parseGroupShape(
   grpSpEl: Element,
   baseZIndex: number,
   rels: Map<string, string>,
-  mediaFiles: Map<string, ImageData>,
-  parentTransform?: Transform
+  mediaFiles: Map<string, ImageData>
 ): ShapeElement[] {
   const elements: ShapeElement[] = [];
   
@@ -420,35 +422,13 @@ function parseGroupShape(
   let childOffset = { x: 0, y: 0 };
   
   if (grpSpPr) {
-    const xfrm = grpSpPr.querySelector('xfrm');
-    if (xfrm) {
-      const off = xfrm.querySelector('off');
-      const ext = xfrm.querySelector('ext');
-      const chOff = xfrm.querySelector('chOff');
-      const chExt = xfrm.querySelector('chExt');
-      
-      if (off && ext) {
-        groupTransform = {
-          x: parseInt(off.getAttribute('x') || '0', 10),
-          y: parseInt(off.getAttribute('y') || '0', 10),
-          width: parseInt(ext.getAttribute('cx') || '0', 10),
-          height: parseInt(ext.getAttribute('cy') || '0', 10),
-        };
-      }
-      
-      if (chOff) {
-        childOffset = {
-          x: parseInt(chOff.getAttribute('x') || '0', 10),
-          y: parseInt(chOff.getAttribute('y') || '0', 10),
-        };
-      }
-    }
+    groupTransform = parseTransform(grpSpPr);
+    childOffset = parseGroupTransformOffset(grpSpPr);
   }
   
   let zIndex = baseZIndex;
-  
-  // Process children in order
   const children = grpSpEl.children;
+  
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
     const tagName = child.tagName.split(':').pop();
@@ -456,7 +436,6 @@ function parseGroupShape(
     if (tagName === 'sp') {
       const el = parseTextShape(child, zIndex++, rels, mediaFiles);
       if (el) {
-        // Apply group offset
         if (groupTransform) {
           el.transform.x = el.transform.x - childOffset.x + groupTransform.x;
           el.transform.y = el.transform.y - childOffset.y + groupTransform.y;
@@ -473,76 +452,86 @@ function parseGroupShape(
         elements.push(el);
       }
     } else if (tagName === 'grpSp') {
-      const groupElements = parseGroupShape(child, zIndex, rels, mediaFiles, groupTransform || undefined);
-      groupElements.forEach((el) => {
+      const nested = parseGroupShape(child, zIndex, rels, mediaFiles);
+      nested.forEach((el) => {
         if (groupTransform) {
           el.transform.x = el.transform.x - childOffset.x + groupTransform.x;
           el.transform.y = el.transform.y - childOffset.y + groupTransform.y;
         }
         elements.push(el);
       });
-      zIndex += groupElements.length;
+      zIndex += nested.length;
     }
   }
   
   return elements;
 }
 
-// Parse slide background
+// ============================================================================
+// BACKGROUND PARSING
+// ============================================================================
+
 function parseSlideBackground(
   slideDoc: Document,
   rels: Map<string, string>,
   mediaFiles: Map<string, ImageData>
 ): SlideBackground {
-  // Check for background in cSld/bg
   const bg = slideDoc.querySelector('cSld > bg');
-  if (!bg) {
-    return { type: 'none' };
-  }
+  if (!bg) return { type: 'none' };
   
-  // Check for background properties
   const bgPr = bg.querySelector('bgPr');
   if (bgPr) {
-    // Check for image fill
+    // Image fill
     const blipFill = bgPr.querySelector('blipFill');
     if (blipFill) {
       const ref = getBlipEmbed(blipFill);
       if (ref) {
         const imgData = resolveImageRef(ref, rels, mediaFiles);
         if (imgData) {
-          return {
-            type: 'image',
-            imageData: imgData,
-            imageRef: ref,
-          };
+          return { type: 'image', imageData: imgData, imageRef: ref };
         }
       }
     }
     
-    // Check for solid fill
+    // Solid fill
     const solidFill = bgPr.querySelector('solidFill');
     if (solidFill) {
       const srgbClr = solidFill.querySelector('srgbClr');
       if (srgbClr) {
-        return {
-          type: 'solid',
-          color: '#' + (srgbClr.getAttribute('val') || 'FFFFFF'),
-        };
+        return { type: 'solid', color: '#' + (srgbClr.getAttribute('val') || 'FFFFFF') };
       }
+    }
+    
+    // Gradient fill
+    const gradFill = bgPr.querySelector('gradFill');
+    if (gradFill) {
+      const gsLst = gradFill.querySelector('gsLst');
+      if (gsLst) {
+        const firstGs = gsLst.querySelector('gs');
+        if (firstGs) {
+          const srgbClr = firstGs.querySelector('srgbClr');
+          if (srgbClr) {
+            return { type: 'solid', color: '#' + (srgbClr.getAttribute('val') || 'FFFFFF') };
+          }
+        }
+      }
+      return { type: 'solid', color: '#FFFFFF' };
     }
   }
   
-  // Check for background reference (bgRef) pointing to theme
+  // Background reference (theme)
   const bgRef = bg.querySelector('bgRef');
   if (bgRef) {
-    // For now, just return solid white for theme references
     return { type: 'solid', color: '#FFFFFF' };
   }
   
   return { type: 'none' };
 }
 
-// Parse a single slide
+// ============================================================================
+// SLIDE PARSING
+// ============================================================================
+
 async function parseSlide(
   zip: JSZip,
   slideNumber: number,
@@ -555,10 +544,8 @@ async function parseSlide(
   const elements: ShapeElement[] = [];
   let background: SlideBackground = { type: 'none' };
   
-  // Load relationships
   const rels = await parseRelationships(zip, relsPath);
   
-  // Load slide XML
   const slideFile = zip.file(slidePath);
   if (!slideFile) {
     warnings.push(`Slide ${slideNumber} not found`);
@@ -569,17 +556,14 @@ async function parseSlide(
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'application/xml');
   
-  // Parse background
   background = parseSlideBackground(doc, rels, mediaFiles);
   
-  // Find spTree (shape tree)
   const spTree = doc.querySelector('cSld > spTree');
   if (!spTree) {
-    warnings.push(`Slide ${slideNumber}: No shape tree found`);
+    warnings.push(`Slide ${slideNumber}: No shape tree`);
     return { slideNumber, background, elements };
   }
   
-  // Process children in document order (preserves z-order)
   let zIndex = 0;
   const children = spTree.children;
   
@@ -594,73 +578,79 @@ async function parseSlide(
       const el = parsePictureShape(child, zIndex++, rels, mediaFiles);
       if (el) elements.push(el);
     } else if (tagName === 'grpSp') {
-      const groupElements = parseGroupShape(child, zIndex, rels, mediaFiles);
-      groupElements.forEach((el) => elements.push(el));
-      zIndex += groupElements.length;
+      const groupEls = parseGroupShape(child, zIndex, rels, mediaFiles);
+      groupEls.forEach((el) => elements.push(el));
+      zIndex += groupEls.length;
     }
   }
   
   return { slideNumber, background, elements };
 }
 
-// Main parser function
+// ============================================================================
+// MAIN PARSER
+// ============================================================================
+
 export async function parsePPTX(file: File): Promise<ParsedPresentation> {
   const warnings: string[] = [];
   
-  // Check file type
+  // Validate file type
   const fileName = file.name.toLowerCase();
   if (fileName.endsWith('.ppt') && !fileName.endsWith('.pptx')) {
-    throw new Error('Le format .ppt (PowerPoint 97-2003) n\'est pas supporté. Veuillez utiliser un fichier .pptx.');
+    throw new Error('Le format .ppt n\'est pas supporté. Veuillez utiliser un fichier .pptx.');
   }
   
-  // Load ZIP
+  // Read file
   let arrayBuffer: ArrayBuffer;
   try {
     arrayBuffer = await file.arrayBuffer();
-  } catch (error) {
-    throw new Error('Impossible de lire le fichier. Veuillez réessayer.');
+  } catch {
+    throw new Error('Impossible de lire le fichier.');
   }
   
+  // Load as ZIP
   let zip: JSZip;
   try {
     zip = await JSZip.loadAsync(arrayBuffer);
-  } catch (error) {
-    throw new Error('Le fichier n\'est pas un fichier PPTX valide.');
+  } catch {
+    throw new Error('Fichier PPTX invalide.');
   }
   
-  // Get presentation size
-  let slideSize: SlideSize = { width: 9144000, height: 6858000 }; // Default 16:9
+  // Get slide size
+  let slideSize: SlideSize = { width: 9144000, height: 6858000 };
   
   const presentationFile = zip.file('ppt/presentation.xml');
   if (presentationFile) {
-    const content = await presentationFile.async('text');
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'application/xml');
-    
-    const sldSz = doc.querySelector('sldSz');
-    if (sldSz) {
-      slideSize = {
-        width: parseInt(sldSz.getAttribute('cx') || '9144000', 10),
-        height: parseInt(sldSz.getAttribute('cy') || '6858000', 10),
-      };
+    try {
+      const content = await presentationFile.async('text');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, 'application/xml');
+      
+      const sldSz = doc.querySelector('sldSz');
+      if (sldSz) {
+        slideSize = {
+          width: parseInt(sldSz.getAttribute('cx') || '9144000', 10),
+          height: parseInt(sldSz.getAttribute('cy') || '6858000', 10),
+        };
+      }
+    } catch {
+      warnings.push('Could not parse presentation.xml');
     }
   }
   
-  // Load all media files first
+  // Load media
   const mediaFiles = await loadMediaFiles(zip);
   
-  // Find all slides
+  // Find slides
   const slideNumbers: number[] = [];
   zip.forEach((path) => {
     const match = path.match(/^ppt\/slides\/slide(\d+)\.xml$/);
-    if (match) {
-      slideNumbers.push(parseInt(match[1], 10));
-    }
+    if (match) slideNumbers.push(parseInt(match[1], 10));
   });
   slideNumbers.sort((a, b) => a - b);
   
   if (slideNumbers.length === 0) {
-    throw new Error('Aucune diapositive trouvée dans le fichier PPTX.');
+    throw new Error('Aucune diapositive trouvée.');
   }
   
   // Parse all slides
@@ -670,10 +660,5 @@ export async function parsePPTX(file: File): Promise<ParsedPresentation> {
     slides.push(slide);
   }
   
-  return {
-    slideSize,
-    slides,
-    mediaFiles,
-    warnings,
-  };
+  return { slideSize, slides, mediaFiles, warnings };
 }

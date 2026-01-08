@@ -6,51 +6,60 @@ import {
   SlideBackground,
   TextParagraph,
   RenderOptions,
-  emuToMm,
 } from './pptxTypes';
 
-// Convert EMU to PDF coordinates
-function emuToPdf(
-  emu: number,
-  slideEmu: number,
-  pdfMm: number
-): number {
-  return (emu / slideEmu) * pdfMm;
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const EMU_PER_POINT = 12700;
+
+// ============================================================================
+// COORDINATE CONVERSION
+// ============================================================================
+
+function emuToPdf(emu: number, slideEmu: number, pdfSize: number): number {
+  return (emu / slideEmu) * pdfSize;
 }
 
-// Render background
+function emuToPoints(emu: number): number {
+  return emu / EMU_PER_POINT;
+}
+
+// ============================================================================
+// BACKGROUND RENDERING
+// ============================================================================
+
 function renderBackground(
   pdf: jsPDF,
-  background: SlideBackground,
+  bg: SlideBackground,
   pageWidth: number,
   pageHeight: number
 ): void {
-  if (background.type === 'solid' && background.color) {
-    // Parse hex color
-    const hex = background.color.replace('#', '');
+  if (bg.type === 'solid' && bg.color) {
+    const hex = bg.color.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-    
     pdf.setFillColor(r, g, b);
     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-  } else if (background.type === 'image' && background.imageData) {
+  } else if (bg.type === 'image' && bg.imageData) {
     try {
-      pdf.addImage(
-        background.imageData.data,
-        background.imageData.format,
-        0,
-        0,
-        pageWidth,
-        pageHeight
-      );
+      pdf.addImage(bg.imageData.data, bg.imageData.format, 0, 0, pageWidth, pageHeight);
     } catch (e) {
-      console.warn('Failed to render background image:', e);
+      console.warn('Background image failed:', e);
     }
+  } else {
+    // Default white background
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
   }
 }
 
-// Render image element
+// ============================================================================
+// IMAGE RENDERING
+// ============================================================================
+
 function renderImage(
   pdf: jsPDF,
   element: ShapeElement,
@@ -67,83 +76,78 @@ function renderImage(
   const h = emuToPdf(element.transform.height, slideHeight, pageHeight);
   
   try {
-    pdf.addImage(
-      element.imageData.data,
-      element.imageData.format,
-      x,
-      y,
-      w,
-      h
-    );
+    pdf.addImage(element.imageData.data, element.imageData.format, x, y, w, h);
   } catch (e) {
-    console.warn('Failed to render image:', e);
+    console.warn('Image render failed:', e);
   }
 }
 
-// Get font size based on placeholder type and box size
-function getFontSize(
+// ============================================================================
+// TEXT RENDERING
+// ============================================================================
+
+function calculateFontSize(
   element: ShapeElement,
-  boxHeightMm: number
+  boxHeightMm: number,
+  paragraphs: TextParagraph[]
 ): number {
-  // Check if we have explicit font size in paragraphs
-  if (element.paragraphs && element.paragraphs.length > 0) {
-    const firstRun = element.paragraphs[0].runs[0];
-    if (firstRun?.fontSize && firstRun.fontSize > 0) {
-      // Convert points to appropriate size for PDF
-      // Scale down if too large for box
-      let size = firstRun.fontSize * 0.35; // Convert pt to mm-ish scale
-      const maxSize = boxHeightMm * 0.8;
-      return Math.min(size, maxSize, 28);
+  // Check for explicit font size
+  for (const para of paragraphs) {
+    for (const run of para.runs) {
+      if (run.fontSize && run.fontSize > 0) {
+        // Scale font size appropriately (convert from points to mm-scale)
+        const scaledSize = run.fontSize * 0.4;
+        return Math.min(Math.max(scaledSize, 6), 32);
+      }
     }
   }
   
   // Default sizes based on placeholder type
   switch (element.placeholderType) {
     case 'title':
-      return Math.min(24, boxHeightMm * 0.6);
     case 'ctrTitle':
-      return Math.min(28, boxHeightMm * 0.6);
+      return Math.min(24, boxHeightMm * 0.5);
     case 'subTitle':
-      return Math.min(16, boxHeightMm * 0.5);
+      return Math.min(16, boxHeightMm * 0.4);
     case 'body':
-      return Math.min(12, boxHeightMm * 0.3);
+      return Math.min(12, boxHeightMm * 0.25);
     default:
-      return Math.min(11, boxHeightMm * 0.3);
+      return Math.min(10, boxHeightMm * 0.2);
   }
 }
 
-// Render text paragraph
-function renderParagraph(
+function renderTextParagraph(
   pdf: jsPDF,
   para: TextParagraph,
   x: number,
   y: number,
   maxWidth: number,
   fontSize: number,
-  bulletNumber?: number
+  bulletNum: number
 ): number {
-  // Build full text
+  // Build full text with bullet/number prefix
   let text = '';
   
-  // Add bullet/number prefix
+  const indent = para.bulletLevel ? para.bulletLevel * 4 : 0;
+  const indentMm = indent * 0.5;
+  
   if (para.bulletChar) {
-    const indent = '  '.repeat(para.bulletLevel || 0);
-    text = indent + para.bulletChar + ' ';
-  } else if (para.isNumbered && bulletNumber !== undefined) {
-    const indent = '  '.repeat(para.bulletLevel || 0);
-    text = indent + bulletNumber + '. ';
+    text = para.bulletChar + ' ';
+  } else if (para.isNumbered) {
+    text = bulletNum + '. ';
   }
   
-  // Concatenate all runs
   para.runs.forEach((run) => {
     text += run.text;
   });
   
-  if (!text.trim()) return 0;
+  text = text.trim();
+  if (!text) return 0;
   
-  // Set font style based on first run
+  // Get styling from first run
   const firstRun = para.runs[0];
-  let fontStyle = 'normal';
+  let fontStyle: 'normal' | 'bold' | 'italic' | 'bolditalic' = 'normal';
+  
   if (firstRun?.bold && firstRun?.italic) {
     fontStyle = 'bolditalic';
   } else if (firstRun?.bold) {
@@ -155,10 +159,11 @@ function renderParagraph(
   // Set color
   if (firstRun?.color) {
     const hex = firstRun.color.replace('#', '');
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    pdf.setTextColor(r, g, b);
+    pdf.setTextColor(
+      parseInt(hex.substring(0, 2), 16),
+      parseInt(hex.substring(2, 4), 16),
+      parseInt(hex.substring(4, 6), 16)
+    );
   } else {
     pdf.setTextColor(0, 0, 0);
   }
@@ -166,33 +171,30 @@ function renderParagraph(
   pdf.setFont('helvetica', fontStyle);
   pdf.setFontSize(fontSize);
   
-  // Wrap text to fit width
-  const lines = pdf.splitTextToSize(text, maxWidth);
-  const lineHeight = fontSize * 0.4; // mm per line
+  const effectiveWidth = maxWidth - indentMm;
+  const lines: string[] = pdf.splitTextToSize(text, effectiveWidth);
+  const lineHeight = fontSize * 0.45;
   
-  // Handle alignment
-  let textX = x;
-  if (para.alignment === 'center') {
-    // Center each line
-    lines.forEach((line: string, i: number) => {
+  // Render each line with alignment
+  const startX = x + indentMm;
+  
+  lines.forEach((line: string, i: number) => {
+    let lineX = startX;
+    
+    if (para.alignment === 'center') {
       const lineWidth = pdf.getTextWidth(line);
-      const centeredX = x + (maxWidth - lineWidth) / 2;
-      pdf.text(line, centeredX, y + i * lineHeight);
-    });
-  } else if (para.alignment === 'right') {
-    lines.forEach((line: string, i: number) => {
+      lineX = x + (maxWidth - lineWidth) / 2;
+    } else if (para.alignment === 'right') {
       const lineWidth = pdf.getTextWidth(line);
-      const rightX = x + maxWidth - lineWidth;
-      pdf.text(line, rightX, y + i * lineHeight);
-    });
-  } else {
-    pdf.text(lines, textX, y);
-  }
+      lineX = x + maxWidth - lineWidth;
+    }
+    
+    pdf.text(line, lineX, y + i * lineHeight);
+  });
   
   return lines.length * lineHeight;
 }
 
-// Render text element
 function renderText(
   pdf: jsPDF,
   element: ShapeElement,
@@ -208,32 +210,47 @@ function renderText(
   const w = emuToPdf(element.transform.width, slideWidth, pageWidth);
   const h = emuToPdf(element.transform.height, slideHeight, pageHeight);
   
-  const fontSize = getFontSize(element, h);
-  const padding = 2; // mm
+  // Draw fill color if present
+  if (element.fillColor) {
+    const hex = element.fillColor.replace('#', '');
+    pdf.setFillColor(
+      parseInt(hex.substring(0, 2), 16),
+      parseInt(hex.substring(2, 4), 16),
+      parseInt(hex.substring(4, 6), 16)
+    );
+    pdf.rect(x, y, w, h, 'F');
+  }
   
-  let currentY = y + fontSize * 0.4 + padding;
-  let bulletNumber = 1;
+  const fontSize = calculateFontSize(element, h, element.paragraphs);
+  const padding = 2;
   
-  element.paragraphs.forEach((para) => {
-    const heightUsed = renderParagraph(
+  let currentY = y + fontSize * 0.5 + padding;
+  let bulletNum = 1;
+  
+  for (const para of element.paragraphs) {
+    // Don't render past the box
+    if (currentY > y + h) break;
+    
+    const usedHeight = renderTextParagraph(
       pdf,
       para,
       x + padding,
       currentY,
       w - padding * 2,
       fontSize,
-      bulletNumber
+      bulletNum
     );
     
-    currentY += heightUsed + fontSize * 0.2; // Add spacing between paragraphs
+    currentY += usedHeight + fontSize * 0.3;
     
-    if (para.isNumbered) {
-      bulletNumber++;
-    }
-  });
+    if (para.isNumbered) bulletNum++;
+  }
 }
 
-// Render a single slide
+// ============================================================================
+// SLIDE RENDERING
+// ============================================================================
+
 function renderSlide(
   pdf: jsPDF,
   slide: ParsedSlide,
@@ -242,48 +259,55 @@ function renderSlide(
   pageWidth: number,
   pageHeight: number
 ): void {
-  // Render background first
+  // Background
   renderBackground(pdf, slide.background, pageWidth, pageHeight);
   
-  // Sort elements by z-index to maintain layering
+  // Sort by z-index
   const sortedElements = [...slide.elements].sort((a, b) => a.zIndex - b.zIndex);
   
-  // Render each element
-  sortedElements.forEach((element) => {
-    if (element.type === 'image') {
-      renderImage(pdf, element, slideWidth, slideHeight, pageWidth, pageHeight);
-    } else if (element.type === 'text') {
-      renderText(pdf, element, slideWidth, slideHeight, pageWidth, pageHeight);
+  // Render elements
+  for (const element of sortedElements) {
+    try {
+      if (element.type === 'image') {
+        renderImage(pdf, element, slideWidth, slideHeight, pageWidth, pageHeight);
+      } else if (element.type === 'text') {
+        renderText(pdf, element, slideWidth, slideHeight, pageWidth, pageHeight);
+      }
+    } catch (e) {
+      console.warn('Element render failed:', e);
     }
-  });
+  }
   
-  // Add slide number
+  // Slide number
   pdf.setFontSize(8);
   pdf.setTextColor(128, 128, 128);
-  pdf.text(`${slide.slideNumber}`, pageWidth - 10, pageHeight - 5);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(String(slide.slideNumber), pageWidth - 8, pageHeight - 4);
 }
 
-// Main render function
+// ============================================================================
+// MAIN EXPORT FUNCTIONS
+// ============================================================================
+
 export function renderPresentationToPDF(
   presentation: ParsedPresentation,
   options?: Partial<RenderOptions>
 ): jsPDF {
-  if (!presentation || !presentation.slides || presentation.slides.length === 0) {
-    throw new Error('Présentation invalide ou vide');
+  if (!presentation?.slides?.length) {
+    throw new Error('Présentation vide ou invalide');
   }
-
-  // Calculate aspect ratio from slide size
+  
   const slideWidth = presentation.slideSize?.width || 9144000;
   const slideHeight = presentation.slideSize?.height || 6858000;
   const aspectRatio = slideWidth / slideHeight;
   
-  // Default to A4 landscape if wider than tall, portrait otherwise
+  // Calculate page dimensions
   let pageWidth: number;
   let pageHeight: number;
   
   if (aspectRatio > 1) {
     // Landscape
-    pageWidth = 297; // A4 landscape width
+    pageWidth = 297;
     pageHeight = pageWidth / aspectRatio;
     if (pageHeight > 210) {
       pageHeight = 210;
@@ -299,52 +323,34 @@ export function renderPresentationToPDF(
     }
   }
   
-  // Override with options if provided
   if (options?.pageWidth) pageWidth = options.pageWidth;
   if (options?.pageHeight) pageHeight = options.pageHeight;
   
-  // Create PDF
   const pdf = new jsPDF({
     orientation: pageWidth > pageHeight ? 'landscape' : 'portrait',
     unit: 'mm',
     format: [pageWidth, pageHeight],
   });
   
-  // Render each slide
   presentation.slides.forEach((slide, index) => {
     try {
       if (index > 0) {
         pdf.addPage([pageWidth, pageHeight]);
       }
-      
-      renderSlide(
-        pdf,
-        slide,
-        slideWidth,
-        slideHeight,
-        pageWidth,
-        pageHeight
-      );
-    } catch (error) {
-      console.warn(`Failed to render slide ${index + 1}:`, error);
-      // Continue with next slide
+      renderSlide(pdf, slide, slideWidth, slideHeight, pageWidth, pageHeight);
+    } catch (e) {
+      console.warn(`Slide ${index + 1} failed:`, e);
     }
   });
   
   return pdf;
 }
 
-// Export as Uint8Array
 export function renderPresentationToBytes(
   presentation: ParsedPresentation,
   options?: Partial<RenderOptions>
 ): Uint8Array {
-  try {
-    const pdf = renderPresentationToPDF(presentation, options);
-    const arrayBuffer = pdf.output('arraybuffer');
-    return new Uint8Array(arrayBuffer);
-  } catch (error) {
-    console.error('Failed to render presentation to bytes:', error);
-    throw new Error('Échec de la génération du PDF. Veuillez réessayer.');
-  }
+  const pdf = renderPresentationToPDF(presentation, options);
+  const arrayBuffer = pdf.output('arraybuffer');
+  return new Uint8Array(arrayBuffer);
 }

@@ -10,8 +10,8 @@ const Header = () => {
     { name: 'Fusionner', href: '/merge' },
     { name: 'Diviser', href: '/split' },
     { name: 'Compresser', href: '/compress' },
-    { name: 'Convertir', href: '/convert' },
     { name: 'Tous les outils', href: '/tools' },
+    { name: 'Blog', href: '/blog' },
   ];
 
   return (

@@ -18,6 +18,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { compressImage } from '@/lib/imageUtils';
 
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();
@@ -93,30 +94,41 @@ const AdminPostEditor = () => {
     if (!file) return;
 
     setIsUploading(true);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `posts/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('blog-images')
-      .upload(filePath, file);
-
-    if (uploadError) {
-      toast.error('Erreur lors du téléchargement');
-      setIsUploading(false);
-      return;
-    }
-
-    const { data } = supabase.storage.from('blog-images').getPublicUrl(filePath);
-
-    setFormData((prev) => ({
-      ...prev,
-      featured_image: data.publicUrl,
-      og_image: data.publicUrl,
-    }));
     
-    setIsUploading(false);
-    toast.success('Image téléchargée');
+    try {
+      // Compress the image before upload
+      const compressedBlob = await compressImage(file, 1200, 0.7);
+      const fileName = `${Date.now()}.jpg`;
+      const filePath = `posts/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, compressedBlob, {
+          contentType: 'image/jpeg',
+        });
+
+      if (uploadError) {
+        toast.error('Erreur lors du téléchargement');
+        setIsUploading(false);
+        return;
+      }
+
+      const { data } = supabase.storage.from('blog-images').getPublicUrl(filePath);
+
+      setFormData((prev) => ({
+        ...prev,
+        featured_image: data.publicUrl,
+        og_image: data.publicUrl,
+      }));
+      
+      const originalSize = (file.size / 1024).toFixed(1);
+      const compressedSize = (compressedBlob.size / 1024).toFixed(1);
+      toast.success(`Image optimisée: ${originalSize}KB → ${compressedSize}KB`);
+    } catch (error) {
+      toast.error('Erreur lors de la compression');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

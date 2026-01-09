@@ -16,17 +16,18 @@ const loginSchema = z.object({
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, loading, signIn } = useAuth();
+  const { user, isAdmin, loading, adminChecked, signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
+  // Redirect if already logged in as admin
   useEffect(() => {
-    if (!loading && user && isAdmin) {
-      navigate('/admin/dashboard');
+    if (!loading && adminChecked && user && isAdmin) {
+      navigate('/admin/dashboard', { replace: true });
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isAdmin, loading, adminChecked, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,23 +50,38 @@ const AdminLogin = () => {
     const { error } = await signIn(email, password);
 
     if (error) {
+      setIsSubmitting(false);
       if (error.message.includes('Invalid login credentials')) {
         toast.error('Email ou mot de passe incorrect');
       } else {
         toast.error(error.message);
       }
-      setIsSubmitting(false);
       return;
     }
 
-    // Auth state listener will handle redirect
     toast.success('Connexion réussie');
+    // Navigation will happen via useEffect when isAdmin becomes true
   };
 
-  if (loading) {
+  // Show loading while checking auth state
+  if (loading || !adminChecked) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // If user is logged in but not admin, show message
+  if (user && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">Vous n'avez pas les droits d'administrateur.</p>
+          <Button onClick={() => navigate('/')} variant="outline">
+            Retour à l'accueil
+          </Button>
+        </div>
       </div>
     );
   }

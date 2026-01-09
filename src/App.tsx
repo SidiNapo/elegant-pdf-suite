@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminPosts from "./pages/admin/AdminPosts";
 import AdminPostEditor from "./pages/admin/AdminPostEditor";
 import AdminCategories from "./pages/admin/AdminCategories";
+import AdminGuard from "./components/admin/AdminGuard";
 import MergePDF from "./pages/tools/MergePDF";
 import SplitPDF from "./pages/tools/SplitPDF";
 import DeletePages from "./pages/tools/DeletePages";
@@ -57,11 +58,11 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/posts" element={<AdminPosts />} />
-          <Route path="/admin/posts/new" element={<AdminPostEditor />} />
-          <Route path="/admin/posts/:id/edit" element={<AdminPostEditor />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+          <Route path="/admin/posts" element={<AdminGuard><AdminPosts /></AdminGuard>} />
+          <Route path="/admin/posts/new" element={<AdminGuard><AdminPostEditor /></AdminGuard>} />
+          <Route path="/admin/posts/:id/edit" element={<AdminGuard><AdminPostEditor /></AdminGuard>} />
+          <Route path="/admin/categories" element={<AdminGuard><AdminCategories /></AdminGuard>} />
           <Route path="/merge" element={<MergePDF />} />
           <Route path="/split" element={<SplitPDF />} />
           <Route path="/delete-pages" element={<DeletePages />} />

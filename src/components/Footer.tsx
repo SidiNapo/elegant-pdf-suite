@@ -1,7 +1,8 @@
+import { forwardRef } from 'react';
 import { FileText, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const Footer = forwardRef<HTMLElement>((_, ref) => {
   const toolCategories = [
     {
       title: 'Organiser',
@@ -33,7 +34,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="border-t border-border mt-24">
+    <footer ref={ref} className="border-t border-border mt-24">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -82,6 +83,8 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
+});
+
+Footer.displayName = 'Footer';
 
 export default Footer;

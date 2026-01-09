@@ -22,12 +22,12 @@ const Footer = () => {
       ],
     },
     {
-      title: 'Modifier',
+      title: 'Ressources',
       links: [
-        { name: 'Faire pivoter PDF', href: '/rotate' },
-        { name: 'Ajouter un filigrane', href: '/watermark' },
-        { name: 'Numéros de pages', href: '/page-numbers' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'Tous les outils', href: '/tools' },
         { name: 'Compresser PDF', href: '/compress' },
+        { name: 'Faire pivoter PDF', href: '/rotate' },
       ],
     },
   ];

@@ -6,6 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AllTools from "./pages/AllTools";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminPosts from "./pages/admin/AdminPosts";
+import AdminPostEditor from "./pages/admin/AdminPostEditor";
+import AdminCategories from "./pages/admin/AdminCategories";
 import MergePDF from "./pages/tools/MergePDF";
 import SplitPDF from "./pages/tools/SplitPDF";
 import DeletePages from "./pages/tools/DeletePages";
@@ -47,6 +54,14 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/tools" element={<AllTools />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/posts" element={<AdminPosts />} />
+          <Route path="/admin/posts/new" element={<AdminPostEditor />} />
+          <Route path="/admin/posts/:id/edit" element={<AdminPostEditor />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/merge" element={<MergePDF />} />
           <Route path="/split" element={<SplitPDF />} />
           <Route path="/delete-pages" element={<DeletePages />} />

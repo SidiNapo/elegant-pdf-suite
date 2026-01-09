@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FileText, LayoutDashboard, FileEdit, LogOut, Loader2, Plus, FolderOpen } from 'lucide-react';
+import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -12,33 +12,15 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children, title }: AdminLayoutProps) => {
-  const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAdmin, loading, signOut } = useAuth();
-
-  useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
-      navigate('/admin');
-    }
-  }, [user, isAdmin, loading, navigate]);
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
     toast.success('Déconnexion réussie');
     navigate('/admin');
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!user || !isAdmin) {
-    return null;
-  }
 
   const navItems = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },

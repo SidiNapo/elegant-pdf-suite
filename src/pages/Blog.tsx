@@ -7,6 +7,9 @@ import { usePublishedPosts, useCategories } from '@/hooks/useBlogPosts';
 import { Loader2, BookOpen } from 'lucide-react';
 import { useState } from 'react';
 
+// Import images
+import heroPdf from '@/assets/hero-pdf.jpg';
+
 const Blog = () => {
   const { data: posts, isLoading } = usePublishedPosts();
   const { data: categories } = useCategories();
@@ -29,6 +32,12 @@ const Blog = () => {
         <Header />
 
         <main className="pt-24 pb-16">
+          {/* Hero Background */}
+          <div className="absolute top-0 left-0 right-0 h-96 overflow-hidden -z-10">
+            <img src={heroPdf} alt="Blog E-PDF's - Guides et tutoriels PDF" className="w-full h-full object-cover opacity-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-background" />
+          </div>
+          
           <div className="container mx-auto px-4">
             {/* Hero Section */}
             <motion.div

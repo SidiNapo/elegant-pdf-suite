@@ -1,8 +1,8 @@
-import { FileText, Heart, Shield, Zap, Globe, Mail, MapPin } from 'lucide-react';
+import { Shield, Zap, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// Import images
+import logo from '@/assets/logo.png';
 import heroPdf from '@/assets/hero-pdf.jpg';
+
 const Footer = () => {
   const toolCategories = [{
     title: 'Organiser',
@@ -50,6 +50,7 @@ const Footer = () => {
       href: '/rotate'
     }]
   }];
+  
   const features = [{
     icon: Shield,
     text: 'Sécurisé'
@@ -60,7 +61,9 @@ const Footer = () => {
     icon: Globe,
     text: 'Gratuit'
   }];
-  return <footer className="border-t border-border mt-24 relative overflow-hidden">
+  
+  return (
+    <footer className="border-t border-border mt-24 relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits" className="w-full h-full object-cover opacity-5" />
@@ -71,11 +74,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2 space-y-6">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-2xl font-bold gradient-text">E-Pdf's</span>
+            <Link to="/" className="inline-block">
+              <img 
+                src={logo} 
+                alt="E-Pdfs - Outils PDF en ligne gratuits" 
+                className="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(236,72,153,0.5)]" 
+              />
             </Link>
             <p className="text-muted-foreground leading-relaxed max-w-md">
               E-PDF's est votre solution complète pour la gestion de documents PDF. 
@@ -85,28 +89,31 @@ const Footer = () => {
             
             {/* Feature Pills */}
             <div className="flex flex-wrap gap-3">
-              {features.map(feature => <div key={feature.text} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border">
+              {features.map(feature => (
+                <div key={feature.text} className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 transition-colors">
                   <feature.icon className="w-4 h-4 text-primary" />
-                  <span className="text-sm">{feature.text}</span>
-                </div>)}
+                  <span className="text-sm font-medium">{feature.text}</span>
+                </div>
+              ))}
             </div>
-
-            {/* Contact Info */}
-            
           </div>
 
           {/* Tool Categories */}
-          {toolCategories.map(category => <div key={category.title}>
-              <h3 className="font-semibold mb-4 text-lg">{category.title}</h3>
+          {toolCategories.map(category => (
+            <div key={category.title}>
+              <h3 className="font-bold mb-4 text-lg text-foreground">{category.title}</h3>
               <ul className="space-y-3">
-                {category.links.map(link => <li key={link.name}>
+                {category.links.map(link => (
+                  <li key={link.name}>
                     <Link to={link.href} className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
                       {link.name}
                     </Link>
-                  </li>)}
+                  </li>
+                ))}
               </ul>
-            </div>)}
+            </div>
+          ))}
         </div>
 
         {/* SEO Keywords */}
@@ -124,9 +131,18 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © 2024 E-Pdf's. Tous droits réservés. Outils PDF gratuits en ligne.
           </p>
-          
+          <div className="flex items-center gap-4">
+            <Link to="/tools" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Tous les outils
+            </Link>
+            <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Blog
+            </Link>
+          </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;

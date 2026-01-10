@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { FileText, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '@/assets/logo.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,16 +17,19 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-card">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2">
             <motion.div
-              whileHover={{ rotate: 10, scale: 1.1 }}
-              className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center"
+              whileHover={{ scale: 1.05 }}
+              className="relative"
             >
-              <FileText className="w-5 h-5 text-white" />
+              <img 
+                src={logo} 
+                alt="E-Pdfs - Outils PDF en ligne gratuits" 
+                className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]" 
+              />
             </motion.div>
-            <span className="text-xl font-bold gradient-text">E-Pdf's</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -34,9 +38,10 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors relative group"
               >
                 {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-rose group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
           </nav>
@@ -64,7 +69,7 @@ const Header = () => {
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors"
                 >
                   {item.name}
                 </Link>

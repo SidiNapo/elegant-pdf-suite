@@ -23,26 +23,19 @@ import OrganizePDF from "./pages/tools/OrganizePDF";
 import ScanToPdf from "./pages/tools/ScanToPdf";
 import CompressPDF from "./pages/tools/CompressPDF";
 import RepairPDF from "./pages/tools/RepairPDF";
-import OcrPDF from "./pages/tools/OcrPDF";
 import JpgToPdf from "./pages/tools/JpgToPdf";
 import WordToPdf from "./pages/tools/WordToPdf";
 import PptToPdf from "./pages/tools/PptToPdf";
 import ExcelToPdf from "./pages/tools/ExcelToPdf";
-import HtmlToPdf from "./pages/tools/HtmlToPdf";
 import PdfToJpg from "./pages/tools/PdfToJpg";
 import PdfToWord from "./pages/tools/PdfToWord";
 import PdfToPpt from "./pages/tools/PdfToPpt";
 import PdfToExcel from "./pages/tools/PdfToExcel";
-import PdfToPdfa from "./pages/tools/PdfToPdfa";
 import RotatePDF from "./pages/tools/RotatePDF";
 import PageNumbers from "./pages/tools/PageNumbers";
 import Watermark from "./pages/tools/Watermark";
 import CropPDF from "./pages/tools/CropPDF";
 import EditPDF from "./pages/tools/EditPDF";
-import UnlockPDF from "./pages/tools/UnlockPDF";
-import ProtectPDF from "./pages/tools/ProtectPDF";
-import SignPDF from "./pages/tools/SignPDF";
-import RedactPDF from "./pages/tools/RedactPDF";
 import ComparePDF from "./pages/tools/ComparePDF";
 
 const queryClient = new QueryClient();
@@ -73,26 +66,19 @@ const App = () => (
           <Route path="/scan-to-pdf" element={<ScanToPdf />} />
           <Route path="/compress" element={<CompressPDF />} />
           <Route path="/repair" element={<RepairPDF />} />
-          <Route path="/ocr" element={<OcrPDF />} />
           <Route path="/jpg-to-pdf" element={<JpgToPdf />} />
           <Route path="/word-to-pdf" element={<WordToPdf />} />
           <Route path="/ppt-to-pdf" element={<PptToPdf />} />
           <Route path="/excel-to-pdf" element={<ExcelToPdf />} />
-          <Route path="/html-to-pdf" element={<HtmlToPdf />} />
           <Route path="/pdf-to-jpg" element={<PdfToJpg />} />
           <Route path="/pdf-to-word" element={<PdfToWord />} />
           <Route path="/pdf-to-ppt" element={<PdfToPpt />} />
           <Route path="/pdf-to-excel" element={<PdfToExcel />} />
-          <Route path="/pdf-to-pdfa" element={<PdfToPdfa />} />
           <Route path="/rotate" element={<RotatePDF />} />
           <Route path="/page-numbers" element={<PageNumbers />} />
           <Route path="/watermark" element={<Watermark />} />
           <Route path="/crop" element={<CropPDF />} />
           <Route path="/edit" element={<EditPDF />} />
-          <Route path="/unlock" element={<UnlockPDF />} />
-          <Route path="/protect" element={<ProtectPDF />} />
-          <Route path="/sign" element={<SignPDF />} />
-          <Route path="/redact" element={<RedactPDF />} />
           <Route path="/compare" element={<ComparePDF />} />
           <Route path="/convert" element={<AllTools />} />
           <Route path="*" element={<NotFound />} />

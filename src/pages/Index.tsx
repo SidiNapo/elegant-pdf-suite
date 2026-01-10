@@ -136,7 +136,7 @@ const Index = () => {
       <Header />
       
       {/* Hero Section with Background Image */}
-      <section className="pt-24 pb-20 relative overflow-hidden min-h-[90vh] flex items-center">
+      <section className="pt-32 md:pt-40 pb-20 relative overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits pour fusionner, diviser et compresser vos documents" className="w-full h-full object-cover" />

@@ -3,53 +3,67 @@ import { Link } from 'react-router-dom';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';
-
 const Footer = () => {
-  const toolCategories = [
-    {
-      title: 'Organiser',
-      links: [
-        { name: 'Fusionner PDF', href: '/merge' },
-        { name: 'Diviser PDF', href: '/split' },
-        { name: 'Supprimer des pages', href: '/delete-pages' },
-        { name: 'Extraire des pages', href: '/extract-pages' },
-      ],
-    },
-    {
-      title: 'Convertir',
-      links: [
-        { name: 'JPG en PDF', href: '/jpg-to-pdf' },
-        { name: 'PDF en JPG', href: '/pdf-to-jpg' },
-        { name: 'Word en PDF', href: '/word-to-pdf' },
-        { name: 'PDF en Word', href: '/pdf-to-word' },
-      ],
-    },
-    {
-      title: 'Ressources',
-      links: [
-        { name: 'Blog', href: '/blog' },
-        { name: 'Tous les outils', href: '/tools' },
-        { name: 'Compresser PDF', href: '/compress' },
-        { name: 'Faire pivoter PDF', href: '/rotate' },
-      ],
-    },
-  ];
-
-  const features = [
-    { icon: Shield, text: 'Sécurisé' },
-    { icon: Zap, text: 'Rapide' },
-    { icon: Globe, text: 'Gratuit' },
-  ];
-
-  return (
-    <footer className="border-t border-border mt-24 relative overflow-hidden">
+  const toolCategories = [{
+    title: 'Organiser',
+    links: [{
+      name: 'Fusionner PDF',
+      href: '/merge'
+    }, {
+      name: 'Diviser PDF',
+      href: '/split'
+    }, {
+      name: 'Supprimer des pages',
+      href: '/delete-pages'
+    }, {
+      name: 'Extraire des pages',
+      href: '/extract-pages'
+    }]
+  }, {
+    title: 'Convertir',
+    links: [{
+      name: 'JPG en PDF',
+      href: '/jpg-to-pdf'
+    }, {
+      name: 'PDF en JPG',
+      href: '/pdf-to-jpg'
+    }, {
+      name: 'Word en PDF',
+      href: '/word-to-pdf'
+    }, {
+      name: 'PDF en Word',
+      href: '/pdf-to-word'
+    }]
+  }, {
+    title: 'Ressources',
+    links: [{
+      name: 'Blog',
+      href: '/blog'
+    }, {
+      name: 'Tous les outils',
+      href: '/tools'
+    }, {
+      name: 'Compresser PDF',
+      href: '/compress'
+    }, {
+      name: 'Faire pivoter PDF',
+      href: '/rotate'
+    }]
+  }];
+  const features = [{
+    icon: Shield,
+    text: 'Sécurisé'
+  }, {
+    icon: Zap,
+    text: 'Rapide'
+  }, {
+    icon: Globe,
+    text: 'Gratuit'
+  }];
+  return <footer className="border-t border-border mt-24 relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img 
-          src={heroPdf} 
-          alt="E-PDF's - Outils PDF en ligne gratuits" 
-          className="w-full h-full object-cover opacity-5"
-        />
+        <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits" className="w-full h-full object-cover opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background to-background/95" />
       </div>
       
@@ -71,46 +85,28 @@ const Footer = () => {
             
             {/* Feature Pills */}
             <div className="flex flex-wrap gap-3">
-              {features.map((feature) => (
-                <div key={feature.text} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border">
+              {features.map(feature => <div key={feature.text} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border">
                   <feature.icon className="w-4 h-4 text-primary" />
                   <span className="text-sm">{feature.text}</span>
-                </div>
-              ))}
+                </div>)}
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary" />
-                <span>contact@e-pdfs.com</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-primary" />
-                <span>Paris, France</span>
-              </div>
-            </div>
+            
           </div>
 
           {/* Tool Categories */}
-          {toolCategories.map((category) => (
-            <div key={category.title}>
+          {toolCategories.map(category => <div key={category.title}>
               <h3 className="font-semibold mb-4 text-lg">{category.title}</h3>
               <ul className="space-y-3">
-                {category.links.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
-                    >
+                {category.links.map(link => <li key={link.name}>
+                    <Link to={link.href} className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
                       {link.name}
                     </Link>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
-            </div>
-          ))}
+            </div>)}
         </div>
 
         {/* SEO Keywords */}
@@ -128,13 +124,9 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © 2024 E-Pdf's. Tous droits réservés. Outils PDF gratuits en ligne.
           </p>
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Fait avec <Heart className="w-4 h-4 text-rose fill-rose" /> pour simplifier votre travail avec les PDF
-          </p>
+          
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

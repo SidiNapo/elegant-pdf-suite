@@ -14,93 +14,140 @@ import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 import speedIllustration from '@/assets/speed-illustration.jpg';
 import globalIllustration from '@/assets/global-illustration.jpg';
-
-const popularTools = [
-  { title: 'Fusionner PDF', description: 'Combinez plusieurs PDF en un', icon: Merge, href: '/merge', color: 'coral' as const },
-  { title: 'Diviser PDF', description: 'Divisez un PDF en plusieurs fichiers', icon: Split, href: '/split', color: 'rose' as const },
-  { title: 'Compresser PDF', description: 'Réduisez la taille de vos PDF', icon: Minimize2, href: '/compress', color: 'violet' as const },
-  { title: 'JPG en PDF', description: 'Convertissez vos images en PDF', icon: Image, href: '/jpg-to-pdf', color: 'cyan' as const },
-  { title: 'PDF en JPG', description: 'Convertissez PDF en images', icon: Image, href: '/pdf-to-jpg', color: 'coral' as const },
-  { title: 'Faire pivoter', description: 'Faites pivoter vos pages PDF', icon: RotateCw, href: '/rotate', color: 'rose' as const },
-  { title: 'Filigrane', description: 'Ajoutez un filigrane texte', icon: Droplets, href: '/watermark', color: 'violet' as const },
-];
-
-const features = [
-  { icon: Zap, title: 'Ultra rapide', description: 'Traitement instantané directement dans votre navigateur', image: speedIllustration },
-  { icon: Shield, title: '100% Sécurisé', description: 'Vos fichiers ne quittent jamais votre appareil', image: securityIllustration },
-  { icon: Globe, title: 'Gratuit', description: 'Tous les outils sont gratuits et sans limite', image: globalIllustration },
-];
-
-const showcaseTools = [
-  {
-    title: 'Fusionner vos PDF',
-    description: 'Combinez facilement plusieurs documents PDF en un seul fichier. Idéal pour créer des rapports complets, des portfolios ou des dossiers organisés.',
-    image: mergePdfIllustration,
-    href: '/merge',
-    features: ['Glisser-déposer simple', 'Réorganiser les pages', 'Prévisualisation instantanée'],
-  },
-  {
-    title: 'Diviser vos documents',
-    description: 'Séparez un PDF volumineux en plusieurs fichiers distincts. Extrayez des pages spécifiques ou divisez par plages de pages.',
-    image: splitPdfIllustration,
-    href: '/split',
-    features: ['Division par pages', 'Extraction sélective', 'Export multiple'],
-  },
-  {
-    title: 'Compresser sans perte',
-    description: 'Réduisez la taille de vos PDF jusqu\'à 90% tout en préservant la qualité. Parfait pour les envois par email.',
-    image: compressPdfIllustration,
-    href: '/compress',
-    features: ['Compression intelligente', 'Qualité préservée', 'Taille réduite'],
-  },
-  {
-    title: 'Convertir facilement',
-    description: 'Transformez vos images, documents Word, PowerPoint et Excel en PDF de haute qualité en quelques secondes.',
-    image: convertPdfIllustration,
-    href: '/jpg-to-pdf',
-    features: ['Multi-formats', 'Conversion rapide', 'Qualité optimale'],
-  },
-];
-
-const stats = [
-  { value: '10M+', label: 'Fichiers traités' },
-  { value: '500K+', label: 'Utilisateurs satisfaits' },
-  { value: '20+', label: 'Outils disponibles' },
-  { value: '100%', label: 'Gratuit' },
-];
-
-const testimonials = [
-  { name: 'Marie L.', role: 'Designer', text: 'E-PDF\'s m\'a fait gagner des heures de travail. Les outils sont intuitifs et rapides.' },
-  { name: 'Thomas B.', role: 'Entrepreneur', text: 'Enfin un outil PDF gratuit et sans publicités intrusives. Je recommande vivement!' },
-  { name: 'Sophie M.', role: 'Étudiante', text: 'Parfait pour mes cours. Je peux fusionner mes notes PDF en quelques clics.' },
-];
-
+const popularTools = [{
+  title: 'Fusionner PDF',
+  description: 'Combinez plusieurs PDF en un',
+  icon: Merge,
+  href: '/merge',
+  color: 'coral' as const
+}, {
+  title: 'Diviser PDF',
+  description: 'Divisez un PDF en plusieurs fichiers',
+  icon: Split,
+  href: '/split',
+  color: 'rose' as const
+}, {
+  title: 'Compresser PDF',
+  description: 'Réduisez la taille de vos PDF',
+  icon: Minimize2,
+  href: '/compress',
+  color: 'violet' as const
+}, {
+  title: 'JPG en PDF',
+  description: 'Convertissez vos images en PDF',
+  icon: Image,
+  href: '/jpg-to-pdf',
+  color: 'cyan' as const
+}, {
+  title: 'PDF en JPG',
+  description: 'Convertissez PDF en images',
+  icon: Image,
+  href: '/pdf-to-jpg',
+  color: 'coral' as const
+}, {
+  title: 'Faire pivoter',
+  description: 'Faites pivoter vos pages PDF',
+  icon: RotateCw,
+  href: '/rotate',
+  color: 'rose' as const
+}, {
+  title: 'Filigrane',
+  description: 'Ajoutez un filigrane texte',
+  icon: Droplets,
+  href: '/watermark',
+  color: 'violet' as const
+}];
+const features = [{
+  icon: Zap,
+  title: 'Ultra rapide',
+  description: 'Traitement instantané directement dans votre navigateur',
+  image: speedIllustration
+}, {
+  icon: Shield,
+  title: '100% Sécurisé',
+  description: 'Vos fichiers ne quittent jamais votre appareil',
+  image: securityIllustration
+}, {
+  icon: Globe,
+  title: 'Gratuit',
+  description: 'Tous les outils sont gratuits et sans limite',
+  image: globalIllustration
+}];
+const showcaseTools = [{
+  title: 'Fusionner vos PDF',
+  description: 'Combinez facilement plusieurs documents PDF en un seul fichier. Idéal pour créer des rapports complets, des portfolios ou des dossiers organisés.',
+  image: mergePdfIllustration,
+  href: '/merge',
+  features: ['Glisser-déposer simple', 'Réorganiser les pages', 'Prévisualisation instantanée']
+}, {
+  title: 'Diviser vos documents',
+  description: 'Séparez un PDF volumineux en plusieurs fichiers distincts. Extrayez des pages spécifiques ou divisez par plages de pages.',
+  image: splitPdfIllustration,
+  href: '/split',
+  features: ['Division par pages', 'Extraction sélective', 'Export multiple']
+}, {
+  title: 'Compresser sans perte',
+  description: 'Réduisez la taille de vos PDF jusqu\'à 90% tout en préservant la qualité. Parfait pour les envois par email.',
+  image: compressPdfIllustration,
+  href: '/compress',
+  features: ['Compression intelligente', 'Qualité préservée', 'Taille réduite']
+}, {
+  title: 'Convertir facilement',
+  description: 'Transformez vos images, documents Word, PowerPoint et Excel en PDF de haute qualité en quelques secondes.',
+  image: convertPdfIllustration,
+  href: '/jpg-to-pdf',
+  features: ['Multi-formats', 'Conversion rapide', 'Qualité optimale']
+}];
+const stats = [{
+  value: '10M+',
+  label: 'Fichiers traités'
+}, {
+  value: '500K+',
+  label: 'Utilisateurs satisfaits'
+}, {
+  value: '20+',
+  label: 'Outils disponibles'
+}, {
+  value: '100%',
+  label: 'Gratuit'
+}];
+const testimonials = [{
+  name: 'Marie L.',
+  role: 'Designer',
+  text: 'E-PDF\'s m\'a fait gagner des heures de travail. Les outils sont intuitifs et rapides.'
+}, {
+  name: 'Thomas B.',
+  role: 'Entrepreneur',
+  text: 'Enfin un outil PDF gratuit et sans publicités intrusives. Je recommande vivement!'
+}, {
+  name: 'Sophie M.',
+  role: 'Étudiante',
+  text: 'Parfait pour mes cours. Je peux fusionner mes notes PDF en quelques clics.'
+}];
 const Index = () => {
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       {/* Hero Section with Background Image */}
       <section className="pt-24 pb-20 relative overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
-          <img 
-            src={heroPdf} 
-            alt="E-PDF's - Outils PDF en ligne gratuits pour fusionner, diviser et compresser vos documents" 
-            className="w-full h-full object-cover"
-          />
+          <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits pour fusionner, diviser et compresser vos documents" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/70" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              transition={{ duration: 0.8 }}
-              className="text-left"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: -50
+          }} animate={{
+            opacity: 1,
+            x: 0
+          }} transition={{
+            duration: 0.8
+          }} className="text-left">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6">
                 <Star className="w-4 h-4 fill-primary" />
                 #1 Outil PDF en ligne gratuit
@@ -137,19 +184,19 @@ const Index = () => {
               </div>
             </motion.div>
             
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:block"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            scale: 0.8
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} transition={{
+            duration: 0.8,
+            delay: 0.2
+          }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-rose/20 rounded-3xl blur-3xl" />
-                <img 
-                  src={heroPdf} 
-                  alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" 
-                  className="relative rounded-2xl shadow-2xl border border-white/10"
-                />
+                <img src={heroPdf} alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" className="relative rounded-2xl shadow-2xl border border-white/10" />
               </div>
             </motion.div>
           </div>
@@ -160,19 +207,20 @@ const Index = () => {
       <section className="py-16 bg-gradient-to-b from-background to-card/50 border-y border-border">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <motion.div 
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="text-center"
-              >
+            {stats.map((stat, i) => <motion.div key={stat.label} initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.1
+          }} className="text-center">
                 <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
                 <div className="text-muted-foreground">{stat.label}</div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -180,12 +228,13 @@ const Index = () => {
       {/* Features with Images */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            viewport={{ once: true }} 
-            className="text-center mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               Pourquoi choisir <span className="gradient-text">E-PDF's</span> ?
             </h2>
@@ -195,21 +244,19 @@ const Index = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, i) => (
-              <motion.div 
-                key={feature.title} 
-                initial={{ opacity: 0, y: 30 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true }} 
-                transition={{ delay: i * 0.15 }} 
-                className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500"
-              >
+            {features.map((feature, i) => <motion.div key={feature.title} initial={{
+            opacity: 0,
+            y: 30
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.15
+          }} className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
                 <div className="aspect-square overflow-hidden">
-                  <img 
-                    src={feature.image} 
-                    alt={`${feature.title} - ${feature.description}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
+                  <img src={feature.image} alt={`${feature.title} - ${feature.description}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/80 to-transparent" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -219,8 +266,7 @@ const Index = () => {
                   <h3 className="font-bold text-2xl mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -228,12 +274,13 @@ const Index = () => {
       {/* Showcase Tools with Images - Alternating Layout */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            viewport={{ once: true }} 
-            className="text-center mb-20"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               Outils <span className="gradient-text">puissants</span> et intuitifs
             </h2>
@@ -243,47 +290,40 @@ const Index = () => {
           </motion.div>
           
           <div className="space-y-32">
-            {showcaseTools.map((tool, i) => (
-              <motion.div
-                key={tool.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6 }}
-                className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
-              >
+            {showcaseTools.map((tool, i) => <motion.div key={tool.title} initial={{
+            opacity: 0,
+            y: 50
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true,
+            margin: "-100px"
+          }} transition={{
+            duration: 0.6
+          }} className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
                 <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <div className="relative group">
                     <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-rose/30 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <img 
-                      src={tool.image} 
-                      alt={`${tool.title} - ${tool.description} - Outil PDF en ligne gratuit`}
-                      className="relative rounded-2xl shadow-2xl border border-white/10 w-full"
-                    />
+                    <img src={tool.image} alt={`${tool.title} - ${tool.description} - Outil PDF en ligne gratuit`} className="relative rounded-2xl shadow-2xl border border-white/10 w-full" />
                   </div>
                 </div>
                 <div className={`${i % 2 === 1 ? 'lg:order-1' : ''}`}>
                   <h3 className="text-3xl md:text-4xl font-bold mb-4">{tool.title}</h3>
                   <p className="text-lg text-muted-foreground mb-8">{tool.description}</p>
                   <ul className="space-y-4 mb-8">
-                    {tool.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3">
+                    {tool.features.map(feature => <li key={feature} className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
                           <CheckCircle2 className="w-4 h-4 text-primary" />
                         </div>
                         <span>{feature}</span>
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
-                  <Link 
-                    to={tool.href} 
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
+                  <Link to={tool.href} className="btn-primary inline-flex items-center gap-2">
                     Essayer maintenant <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -291,12 +331,18 @@ const Index = () => {
       {/* Popular Tools */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-12">
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Outils <span className="gradient-text">populaires</span></h2>
             <p className="text-xl text-muted-foreground">Les outils les plus utilisés pour gérer vos documents PDF</p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {popularTools.map((tool) => <ToolCard key={tool.title} {...tool} />)}
+            {popularTools.map(tool => <ToolCard key={tool.title} {...tool} />)}
           </div>
           <div className="text-center mt-12">
             <Link to="/tools" className="btn-secondary inline-flex items-center gap-2 text-lg px-8 py-4">
@@ -309,12 +355,13 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            viewport={{ once: true }} 
-            className="text-center mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               Ce que disent nos <span className="gradient-text">utilisateurs</span>
             </h2>
@@ -322,20 +369,18 @@ const Index = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card p-8 rounded-2xl"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-5 h-5 fill-primary text-primary" />
-                  ))}
-                </div>
+            {testimonials.map((testimonial, i) => <motion.div key={testimonial.name} initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.1
+          }} className="glass-card p-8 rounded-2xl">
+                
                 <p className="text-lg mb-6">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-rose flex items-center justify-center text-white font-bold">
@@ -346,8 +391,7 @@ const Index = () => {
                     <div className="text-sm text-muted-foreground">{testimonial.role}</div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -355,20 +399,19 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={heroPdf} 
-            alt="Commencez à utiliser E-PDF's - Outils PDF gratuits en ligne" 
-            className="w-full h-full object-cover opacity-20"
-          />
+          <img src={heroPdf} alt="Commencez à utiliser E-PDF's - Outils PDF gratuits en ligne" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-background to-rose/20" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="text-center max-w-3xl mx-auto">
             <FileText className="w-16 h-16 text-primary mx-auto mb-6" />
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
               Prêt à simplifier votre travail avec les <span className="gradient-text">PDF</span> ?
@@ -413,8 +456,6 @@ const Index = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

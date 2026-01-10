@@ -16,7 +16,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-xl border-b border-primary/20 shadow-[0_4px_30px_rgba(236,72,153,0.15)]">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-primary/20 shadow-[0_4px_30px_rgba(236,72,153,0.15)]">
       <div className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
@@ -28,7 +28,7 @@ const Header = () => {
               <img 
                 src={logo} 
                 alt="E-Pdfs - Outils PDF en ligne gratuits" 
-                className="h-16 md:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all duration-300 hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.8)]" 
+                className="h-10 md:h-12 w-auto object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] transition-all duration-300 hover:drop-shadow-[0_0_25px_rgba(236,72,153,0.7)]" 
               />
             </motion.div>
           </Link>

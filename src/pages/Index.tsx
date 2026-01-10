@@ -148,8 +148,7 @@ const Index = () => {
           }} transition={{
             duration: 0.8
           }} className="text-left">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6">
-                <Star className="w-4 h-4 fill-primary" />
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6"> Outil PDF en ligne gratuit<Star className="w-4 h-4 fill-primary" />
                 #1 Outil PDF en ligne gratuit
               </span>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">

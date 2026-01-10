@@ -74,11 +74,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2 space-y-6">
-            <Link to="/" className="inline-block">
+            <Link to="/" className="inline-block group">
               <img 
                 src={logo} 
                 alt="E-Pdfs - Outils PDF en ligne gratuits" 
-                className="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_20px_rgba(236,72,153,0.5)]" 
+                className="h-24 md:h-28 lg:h-32 w-auto object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.8)] group-hover:scale-105" 
               />
             </Link>
             <p className="text-muted-foreground leading-relaxed max-w-md">

@@ -71,6 +71,21 @@ const BlogPost = () => {
   const wordCount = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
   const canonicalUrl = `https://e-pdfs.com/blog/${post.slug}`;
+
+  // Format content to preserve line breaks and paragraphs
+  const formatContent = (content: string) => {
+    // If content already has HTML tags, return as is
+    if (/<[^>]+>/.test(content)) {
+      return content;
+    }
+    // Otherwise, convert line breaks to paragraphs
+    return content
+      .split(/\n\n+/)
+      .map(paragraph => `<p>${paragraph.replace(/\n/g, '<br />')}</p>`)
+      .join('');
+  };
+
+  const formattedContent = formatContent(post.content);
   return <>
       <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 
@@ -206,20 +221,31 @@ const BlogPost = () => {
             y: 0
           }} transition={{
             delay: 0.2
-          }} className="prose prose-invert prose-lg max-w-none
+          }} className="prose prose-lg max-w-none
                 prose-headings:font-bold prose-headings:text-foreground
-                prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6
+                prose-h1:text-3xl prose-h1:mt-10 prose-h1:mb-6
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
-                prose-p:text-foreground/85 prose-p:leading-relaxed
-                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+                prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3
+                prose-p:text-foreground/85 prose-p:leading-relaxed prose-p:mb-4
+                prose-a:text-primary prose-a:underline hover:prose-a:no-underline
                 prose-strong:text-foreground prose-strong:font-semibold
-                prose-ul:my-6 prose-li:my-2
-                prose-blockquote:border-l-primary prose-blockquote:bg-muted/30 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-xl
-                prose-code:bg-muted prose-code:px-2 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-                prose-pre:bg-muted prose-pre:border prose-pre:border-border
-                prose-img:rounded-xl prose-img:shadow-lg" dangerouslySetInnerHTML={{
-            __html: post.content
-          }} />
+                prose-em:italic prose-em:text-foreground/90
+                prose-ul:my-6 prose-ul:pl-6 prose-ul:list-disc
+                prose-ol:my-6 prose-ol:pl-6 prose-ol:list-decimal
+                prose-li:my-2 prose-li:text-foreground/85
+                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/30 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:italic prose-blockquote:my-6
+                prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono
+                prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-pre:p-4 prose-pre:overflow-x-auto
+                prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8
+                prose-hr:border-border prose-hr:my-8
+                prose-table:border-collapse prose-table:w-full
+                prose-th:border prose-th:border-border prose-th:px-4 prose-th:py-2 prose-th:bg-muted
+                prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2
+                [&>*]:mb-4 [&>p]:whitespace-pre-wrap" 
+            dangerouslySetInnerHTML={{
+              __html: formattedContent
+            }} />
 
             {/* Tags / Keywords */}
             {post.meta_keywords && <motion.div initial={{

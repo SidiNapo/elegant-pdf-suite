@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Eye, Tag, Clock, Share2, Twitter, Facebook, Linkedin, Copy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
@@ -9,20 +10,15 @@ import { usePostBySlug } from '@/hooks/useBlogPosts';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+
 const BlogPost = () => {
-  const {
-    slug
-  } = useParams<{
-    slug: string;
-  }>();
-  const {
-    data: post,
-    isLoading,
-    error
-  } = usePostBySlug(slug || '');
+  const { t, i18n } = useTranslation();
+  const { slug } = useParams<{ slug: string }>();
+  const { data: post, isLoading, error } = usePostBySlug(slug || '');
+  
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success('Lien copié !');
+    toast.success(t('blog.linkCopied'));
   };
   const handleShare = (platform: 'twitter' | 'facebook' | 'linkedin') => {
     const url = encodeURIComponent(window.location.href);
@@ -35,33 +31,40 @@ const BlogPost = () => {
     window.open(shareUrls[platform], '_blank', 'width=600,height=400');
   };
   if (isLoading) {
-    return <div className="min-h-screen bg-background flex items-center justify-center">
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>;
+      </div>
+    );
   }
+  
   if (error || !post) {
-    return <div className="min-h-screen bg-background">
+    return (
+      <div className="min-h-screen bg-background">
         <Header />
         <main className="pt-24 pb-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl font-bold mb-4">Article non trouvé</h1>
+            <h1 className="text-4xl font-bold mb-4">{t('blog.notFound')}</h1>
             <p className="text-muted-foreground mb-8">
-              L&apos;article que vous cherchez n&apos;existe pas ou a été supprimé.
+              {t('blog.notFoundDescription')}
             </p>
             <Link to="/blog" className="btn-primary inline-block">
-              Retour au blog
+              {t('blog.backToBlog')}
             </Link>
           </div>
         </main>
         <Footer />
-      </div>;
+      </div>
+    );
   }
-  const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString('fr-FR', {
+  
+  const locale = i18n.language === 'ar' ? 'ar-SA' : i18n.language === 'en' ? 'en-US' : 'fr-FR';
+  const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
   });
-  const updatedDate = new Date(post.updated_at).toLocaleDateString('fr-FR', {
+  const updatedDate = new Date(post.updated_at).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -136,16 +139,14 @@ const BlogPost = () => {
 
           <article className="container mx-auto px-4 max-w-4xl">
             {/* Back Link */}
-            <motion.div initial={{
-            opacity: 0,
-            x: -20
-          }} animate={{
-            opacity: 1,
-            x: 0
-          }} className="mb-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="mb-8"
+            >
               <Link to="/blog" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-                <ArrowLeft className="w-4 h-4" />
-                Retour au blog
+                <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                {t('blog.backToBlog')}
               </Link>
             </motion.div>
 
@@ -183,7 +184,7 @@ const BlogPost = () => {
                 </div>
                 <div>
                   <p className="font-semibold">{post.author_name}</p>
-                  <p className="text-sm text-muted-foreground">Auteur</p>
+                  <p className="text-sm text-muted-foreground">{t('blog.author')}</p>
                 </div>
               </div>
               
@@ -248,39 +249,37 @@ const BlogPost = () => {
             }} />
 
             {/* Tags / Keywords */}
-            {post.meta_keywords && <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: 0.25
-          }} className="mt-12 pt-8 border-t border-border">
+            {post.meta_keywords && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="mt-12 pt-8 border-t border-border"
+              >
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                  Mots-clés
+                  {t('blog.keywords')}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {post.meta_keywords.split(',').map((keyword, index) => <span key={index} className="px-3 py-1.5 text-sm bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors">
+                  {post.meta_keywords.split(',').map((keyword, index) => (
+                    <span key={index} className="px-3 py-1.5 text-sm bg-muted rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors">
                       #{keyword.trim()}
-                    </span>)}
+                    </span>
+                  ))}
                 </div>
-              </motion.div>}
+              </motion.div>
+            )}
 
             {/* Share Section */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: 0.3
-          }} className="mt-12 p-6 glass-card rounded-2xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-12 p-6 glass-card rounded-2xl"
+            >
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <Share2 className="w-5 h-5 text-primary" />
-                  <span className="font-semibold">Partager cet article</span>
+                  <span className="font-semibold">{t('blog.shareArticle')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="icon" onClick={() => handleShare('twitter')} className="rounded-full hover:bg-[#1DA1F2]/10 hover:text-[#1DA1F2] hover:border-[#1DA1F2]">
@@ -300,55 +299,49 @@ const BlogPost = () => {
             </motion.div>
 
             {/* Article Info Footer */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: 0.35
-          }} className="mt-8 p-6 bg-muted/30 rounded-2xl text-sm text-muted-foreground">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="mt-8 p-6 bg-muted/30 rounded-2xl text-sm text-muted-foreground"
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <span className="font-medium text-foreground">Publié le:</span>{' '}
+                  <span className="font-medium text-foreground">{t('blog.publishedOn')}:</span>{' '}
                   {formattedDate}
                 </div>
                 <div>
-                  <span className="font-medium text-foreground">Mis à jour le:</span>{' '}
+                  <span className="font-medium text-foreground">{t('blog.updatedOn')}:</span>{' '}
                   {updatedDate}
                 </div>
                 <div>
-                  <span className="font-medium text-foreground">Temps de lecture:</span>{' '}
-                  {readingTime} minute{readingTime > 1 ? 's' : ''}
+                  <span className="font-medium text-foreground">{t('blog.readingTime')}:</span>{' '}
+                  {readingTime} {t('blog.minutes', { count: readingTime })}
                 </div>
                 <div>
-                  <span className="font-medium text-foreground">Vues:</span>{' '}
+                  <span className="font-medium text-foreground">{t('blog.views')}:</span>{' '}
                   {post.views_count.toLocaleString()}
                 </div>
               </div>
             </motion.div>
 
             {/* CTA Section */}
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: 0.4
-          }} className="mt-16 p-8 md:p-12 glass-card rounded-2xl text-center relative overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-16 p-8 md:p-12 glass-card rounded-2xl text-center relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10" />
               <div className="relative">
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Prêt à manipuler vos PDF?
+                  {t('blog.ctaTitle')}
                 </h3>
                 <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                  Utilisez nos outils gratuits pour fusionner, diviser, compresser et convertir vos fichiers PDF en quelques clics.
+                  {t('blog.ctaDescription')}
                 </p>
                 <Link to="/tools" className="btn-primary inline-block px-8 py-3 text-lg">
-                  Découvrir tous les outils
+                  {t('blog.discoverTools')}
                 </Link>
               </div>
             </motion.div>

@@ -1,72 +1,75 @@
 import { Shield, Zap, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroPdf from '@/assets/hero-pdf.jpg';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   const toolCategories = [{
-    title: 'Organiser',
+    title: t('footer.organize'),
     links: [{
-      name: 'Fusionner PDF',
+      name: t('tools.merge.title'),
       href: '/merge'
     }, {
-      name: 'Diviser PDF',
+      name: t('tools.split.title'),
       href: '/split'
     }, {
-      name: 'Supprimer des pages',
+      name: t('tools.deletePages.title'),
       href: '/delete-pages'
     }, {
-      name: 'Extraire des pages',
+      name: t('tools.extractPages.title'),
       href: '/extract-pages'
     }]
   }, {
-    title: 'Convertir',
+    title: t('footer.convert'),
     links: [{
-      name: 'JPG en PDF',
+      name: t('tools.jpgToPdf.title'),
       href: '/jpg-to-pdf'
     }, {
-      name: 'PDF en JPG',
+      name: t('tools.pdfToJpg.title'),
       href: '/pdf-to-jpg'
     }, {
-      name: 'Word en PDF',
+      name: t('tools.wordToPdf.title'),
       href: '/word-to-pdf'
     }, {
-      name: 'PDF en Word',
+      name: t('tools.pdfToWord.title'),
       href: '/pdf-to-word'
     }]
   }, {
-    title: 'Ressources',
+    title: t('footer.resources'),
     links: [{
-      name: 'Blog',
+      name: t('nav.blog'),
       href: '/blog'
     }, {
-      name: 'Tous les outils',
+      name: t('nav.allTools'),
       href: '/tools'
     }, {
-      name: 'Compresser PDF',
+      name: t('tools.compress.title'),
       href: '/compress'
     }, {
-      name: 'Faire pivoter PDF',
+      name: t('tools.rotate.title'),
       href: '/rotate'
     }]
   }];
   
   const features = [{
     icon: Shield,
-    text: 'Sécurisé'
+    text: t('footer.secure')
   }, {
     icon: Zap,
-    text: 'Rapide'
+    text: t('footer.fast')
   }, {
     icon: Globe,
-    text: 'Gratuit'
+    text: t('footer.free')
   }];
   
   return (
     <footer className="border-t border-border mt-24 relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits" className="w-full h-full object-cover opacity-5" />
+        <img src={heroPdf} alt="E-PDF's" className="w-full h-full object-cover opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background to-background/95" />
       </div>
       
@@ -77,14 +80,12 @@ const Footer = () => {
             <Link to="/" className="inline-block group">
               <img 
                 src={logo} 
-                alt="E-Pdfs - Outils PDF en ligne gratuits" 
+                alt="E-Pdfs" 
                 className="h-24 md:h-28 lg:h-32 w-auto object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.8)] group-hover:scale-105" 
               />
             </Link>
             <p className="text-muted-foreground leading-relaxed max-w-md">
-              E-PDF's est votre solution complète pour la gestion de documents PDF. 
-              Fusionnez, divisez, compressez et convertissez vos fichiers gratuitement, 
-              directement dans votre navigateur. Plus de 10 millions de fichiers traités.
+              {t('footer.description')}
             </p>
             
             {/* Feature Pills */}
@@ -104,7 +105,7 @@ const Footer = () => {
               <h3 className="font-bold mb-4 text-lg text-foreground">{category.title}</h3>
               <ul className="space-y-3">
                 {category.links.map(link => (
-                  <li key={link.name}>
+                  <li key={link.href}>
                     <Link to={link.href} className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
                       {link.name}
@@ -119,24 +120,21 @@ const Footer = () => {
         {/* SEO Keywords */}
         <div className="mt-12 pt-8 border-t border-border">
           <p className="text-xs text-muted-foreground/70 text-center max-w-4xl mx-auto">
-            <strong className="text-muted-foreground">E-PDF's</strong> - Outils PDF en ligne gratuits : 
-            fusionner PDF, diviser PDF, compresser PDF, convertir JPG en PDF, PDF en Word, 
-            Word en PDF, PDF en JPG, ajouter filigrane, numéros de page, faire pivoter PDF, 
-            extraire pages, supprimer pages, réparer PDF, Excel en PDF, PowerPoint en PDF.
+            {t('footer.seoKeywords')}
           </p>
         </div>
 
         {/* Bottom */}
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 E-Pdf's. Tous droits réservés. Outils PDF gratuits en ligne.
+            {t('footer.copyright')}
           </p>
           <div className="flex items-center gap-4">
             <Link to="/tools" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Tous les outils
+              {t('footer.allTools')}
             </Link>
             <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Blog
+              {t('nav.blog')}
             </Link>
           </div>
         </div>

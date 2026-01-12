@@ -2,12 +2,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,11 +21,11 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: 'Fusionner', href: '/merge' },
-    { name: 'Diviser', href: '/split' },
-    { name: 'Compresser', href: '/compress' },
-    { name: 'Tous les outils', href: '/tools' },
-    { name: 'Blog', href: '/blog' },
+    { name: t('nav.merge'), href: '/merge' },
+    { name: t('nav.split'), href: '/split' },
+    { name: t('nav.compress'), href: '/compress' },
+    { name: t('nav.allTools'), href: '/tools' },
+    { name: t('nav.blog'), href: '/blog' },
   ];
 
   return (
@@ -52,13 +55,13 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center">
+          <nav className="hidden md:flex items-center gap-3">
             <div className="flex items-center gap-1 p-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.href;
                 return (
                   <Link
-                    key={item.name}
+                    key={item.href}
                     to={item.href}
                     className={`relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                       isActive 
@@ -78,38 +81,42 @@ const Header = () => {
                 );
               })}
             </div>
+            <LanguageSwitcher />
           </nav>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative p-3 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
-          >
-            <AnimatePresence mode="wait">
-              {isMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-6 h-6" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-6 h-6" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="relative p-3 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
+            >
+              <AnimatePresence mode="wait">
+                {isMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -127,7 +134,7 @@ const Header = () => {
                   const isActive = location.pathname === item.href;
                   return (
                     <motion.div
-                      key={item.name}
+                      key={item.href}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}

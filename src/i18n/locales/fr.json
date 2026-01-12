@@ -1,0 +1,455 @@
+{
+  "nav": {
+    "merge": "Fusionner",
+    "split": "Diviser",
+    "compress": "Compresser",
+    "allTools": "Tous les outils",
+    "blog": "Blog"
+  },
+  "hero": {
+    "badge": "#1 Outil PDF en ligne gratuit",
+    "title": "Tous vos outils",
+    "titleHighlight": "PDF",
+    "titleEnd": "en un seul endroit",
+    "description": "Fusionnez, divisez, compressez et convertissez vos PDF gratuitement. Rapide, sécurisé et sans inscription. Plus de 10 millions de fichiers traités.",
+    "cta": "Découvrir tous les outils",
+    "ctaSecondary": "Fusionner PDF",
+    "secure": "100% Sécurisé",
+    "fast": "Traitement rapide",
+    "users": "500K+ utilisateurs"
+  },
+  "stats": {
+    "filesProcessed": "Fichiers traités",
+    "satisfiedUsers": "Utilisateurs satisfaits",
+    "availableTools": "Outils disponibles",
+    "free": "Gratuit"
+  },
+  "features": {
+    "title": "Pourquoi choisir",
+    "titleHighlight": "E-PDF's",
+    "subtitle": "Une solution complète pour tous vos besoins PDF, conçue pour être simple, rapide et sécurisée.",
+    "fast": "Ultra rapide",
+    "fastDesc": "Traitement instantané directement dans votre navigateur",
+    "secure": "100% Sécurisé",
+    "secureDesc": "Vos fichiers ne quittent jamais votre appareil",
+    "free": "Gratuit",
+    "freeDesc": "Tous les outils sont gratuits et sans limite"
+  },
+  "showcase": {
+    "title": "Outils",
+    "titleHighlight": "puissants",
+    "titleEnd": "et intuitifs",
+    "subtitle": "Découvrez nos outils les plus populaires pour gérer vos documents PDF comme un professionnel.",
+    "tryNow": "Essayer maintenant",
+    "merge": {
+      "title": "Fusionner vos PDF",
+      "description": "Combinez facilement plusieurs documents PDF en un seul fichier. Idéal pour créer des rapports complets, des portfolios ou des dossiers organisés.",
+      "feature1": "Glisser-déposer simple",
+      "feature2": "Réorganiser les pages",
+      "feature3": "Prévisualisation instantanée"
+    },
+    "split": {
+      "title": "Diviser vos documents",
+      "description": "Séparez un PDF volumineux en plusieurs fichiers distincts. Extrayez des pages spécifiques ou divisez par plages de pages.",
+      "feature1": "Division par pages",
+      "feature2": "Extraction sélective",
+      "feature3": "Export multiple"
+    },
+    "compress": {
+      "title": "Compresser sans perte",
+      "description": "Réduisez la taille de vos PDF jusqu'à 90% tout en préservant la qualité. Parfait pour les envois par email.",
+      "feature1": "Compression intelligente",
+      "feature2": "Qualité préservée",
+      "feature3": "Taille réduite"
+    },
+    "convert": {
+      "title": "Convertir facilement",
+      "description": "Transformez vos images, documents Word, PowerPoint et Excel en PDF de haute qualité en quelques secondes.",
+      "feature1": "Multi-formats",
+      "feature2": "Conversion rapide",
+      "feature3": "Qualité optimale"
+    }
+  },
+  "popularTools": {
+    "title": "Outils",
+    "titleHighlight": "populaires",
+    "subtitle": "Les outils les plus utilisés pour gérer vos documents PDF",
+    "viewAll": "Voir tous les outils"
+  },
+  "testimonials": {
+    "title": "Ce que disent nos",
+    "titleHighlight": "utilisateurs",
+    "subtitle": "Plus de 500 000 personnes font confiance à E-PDF's",
+    "testimonial1": {
+      "text": "E-PDF's m'a fait gagner des heures de travail. Les outils sont intuitifs et rapides.",
+      "name": "Marie L.",
+      "role": "Designer"
+    },
+    "testimonial2": {
+      "text": "Enfin un outil PDF gratuit et sans publicités intrusives. Je recommande vivement!",
+      "name": "Thomas B.",
+      "role": "Entrepreneur"
+    },
+    "testimonial3": {
+      "text": "Parfait pour mes cours. Je peux fusionner mes notes PDF en quelques clics.",
+      "name": "Sophie M.",
+      "role": "Étudiante"
+    }
+  },
+  "cta": {
+    "title": "Prêt à simplifier votre travail avec les",
+    "titleHighlight": "PDF",
+    "description": "Rejoignez plus de 500 000 utilisateurs qui font confiance à E-PDF's pour leurs documents PDF. Gratuit, rapide et sécurisé.",
+    "button": "Commencer maintenant"
+  },
+  "seo": {
+    "title": "E-PDF's : Votre solution complète pour la gestion de documents PDF",
+    "paragraph1": "E-PDF's est la plateforme en ligne gratuite la plus complète pour tous vos besoins en matière de gestion de fichiers PDF. Que vous ayez besoin de fusionner des PDF, diviser un document PDF, compresser des fichiers PDF pour réduire leur taille, ou convertir des images en PDF, nos outils sont conçus pour être simples, rapides et efficaces.",
+    "paragraph2": "Nos outils PDF en ligne fonctionnent directement dans votre navigateur, sans nécessiter d'installation de logiciel. Vos documents restent sur votre appareil, garantissant une confidentialité totale de vos données. Avec plus de 10 millions de fichiers traités, E-PDF's est devenu la référence pour l'édition de PDF gratuite.",
+    "paragraph3": "Découvrez nos fonctionnalités : fusionner plusieurs PDF, extraire des pages PDF, ajouter un filigrane, faire pivoter des pages, convertir Word en PDF, PDF en JPG, et bien plus encore. Tous nos outils sont 100% gratuits et sans limite d'utilisation."
+  },
+  "allTools": {
+    "title": "Tous les",
+    "titleHighlight": "outils PDF",
+    "subtitle": "Découvrez notre collection complète d'outils pour gérer, convertir et modifier vos fichiers PDF. Plus de 20 outils gratuits pour tous vos besoins en matière de documents PDF.",
+    "fastProcessing": "Traitement rapide",
+    "totalSecurity": "Sécurité totale",
+    "freeUnlimited": "Gratuit et illimité",
+    "fastDesc": "Vos fichiers sont traités instantanément",
+    "secureDesc": "Vos fichiers restent sur votre appareil",
+    "freeDesc": "Tous les outils sans restriction",
+    "toolsAvailable": "outil(s) disponible(s)",
+    "ctaTitle": "Besoin d'aide pour choisir le bon outil ?",
+    "ctaDescription": "Retournez à la page d'accueil pour découvrir nos outils les plus populaires et comment ils peuvent vous aider.",
+    "backHome": "Retour à l'accueil",
+    "guideTitle": "Guide complet des outils PDF en ligne",
+    "guideIntro": "E-PDF's offre une suite complète d'outils PDF gratuits pour répondre à tous vos besoins de gestion documentaire. Que vous soyez un professionnel, un étudiant ou un particulier, nos outils sont conçus pour être simples et efficaces.",
+    "organizeTitle": "Organiser vos PDF",
+    "organizeDesc": "Utilisez nos outils pour fusionner plusieurs PDF en un seul document, diviser un PDF volumineux en fichiers séparés, ou réorganiser les pages selon vos besoins.",
+    "convertTitle": "Convertir vos documents",
+    "convertDesc": "Transformez facilement vos fichiers avec nos convertisseurs : JPG en PDF, Word en PDF, Excel en PDF, et inversement. Tous les formats populaires sont supportés.",
+    "modifyTitle": "Modifier et personnaliser",
+    "modifyDesc": "Ajoutez un filigrane, des numéros de page, ou faites pivoter vos pages PDF. Nos outils de modification vous donnent un contrôle total sur vos documents."
+  },
+  "categories": {
+    "organize": "Organiser PDF",
+    "organizeDesc": "Organisez vos documents PDF facilement",
+    "optimize": "Optimiser le PDF",
+    "optimizeDesc": "Optimisez et réparez vos fichiers PDF",
+    "convertTo": "Convertir en PDF",
+    "convertToDesc": "Convertissez différents formats en PDF",
+    "convertFrom": "Convertir depuis PDF",
+    "convertFromDesc": "Convertissez vos PDF vers d'autres formats",
+    "modify": "Modifier PDF",
+    "modifyDesc": "Modifiez et personnalisez vos fichiers PDF",
+    "compare": "Comparer PDF",
+    "compareDesc": "Comparez vos fichiers PDF"
+  },
+  "tools": {
+    "merge": {
+      "title": "Fusionner PDF",
+      "description": "Combinez plusieurs fichiers PDF en un seul document",
+      "longDescription": "Combinez plusieurs fichiers PDF en un seul document facilement et rapidement",
+      "dropzone": "Déposez vos fichiers PDF ici",
+      "dropzoneDesc": "Glissez-déposez vos fichiers ou cliquez pour les sélectionner",
+      "processing": "Fusion des fichiers en cours...",
+      "success": "Fusion terminée !",
+      "successDesc": "Vos {{count}} fichiers ont été fusionnés avec succès.",
+      "download": "Télécharger le PDF",
+      "reset": "Fusionner d'autres fichiers",
+      "mergeButton": "Fusionner {{count}} fichiers",
+      "addMore": "Ajoutez au moins un autre fichier pour fusionner"
+    },
+    "split": {
+      "title": "Diviser PDF",
+      "description": "Divisez un PDF en plusieurs fichiers séparés",
+      "longDescription": "Divisez votre PDF en pages individuelles",
+      "dropzone": "Déposez votre fichier PDF ici",
+      "dropzoneDesc": "Le fichier sera divisé en pages individuelles",
+      "processing": "Division du fichier en cours...",
+      "success": "Division terminée !",
+      "successDesc": "Votre PDF a été divisé en {{count}} pages.",
+      "download": "Télécharger les pages (ZIP)",
+      "reset": "Diviser un autre fichier",
+      "splitButton": "Diviser le PDF"
+    },
+    "compress": {
+      "title": "Compresser PDF",
+      "description": "Réduisez la taille de vos fichiers PDF",
+      "longDescription": "Réduisez la taille de vos fichiers PDF sans perte de qualité significative",
+      "dropzone": "Déposez votre fichier PDF ici",
+      "processing": "Compression en cours...",
+      "success": "Compression terminée !",
+      "originalSize": "Taille originale",
+      "newSize": "Nouvelle taille",
+      "reduction": "Réduction",
+      "currentSize": "Taille actuelle",
+      "download": "Télécharger le PDF",
+      "reset": "Compresser un autre fichier",
+      "compressButton": "Compresser le PDF"
+    },
+    "deletePages": {
+      "title": "Supprimer des pages",
+      "description": "Supprimez les pages indésirables de votre PDF",
+      "processing": "Suppression en cours...",
+      "success": "Suppression terminée !",
+      "successDesc": "Les pages sélectionnées ont été supprimées.",
+      "selectPages": "Sélectionnez les pages à supprimer",
+      "page": "Page",
+      "deleteButton": "Supprimer les pages sélectionnées",
+      "download": "Télécharger le PDF",
+      "reset": "Modifier un autre fichier"
+    },
+    "extractPages": {
+      "title": "Extraire des pages",
+      "description": "Extrayez des pages spécifiques de votre PDF",
+      "processing": "Extraction en cours...",
+      "success": "Extraction terminée !",
+      "successDesc": "Les pages sélectionnées ont été extraites.",
+      "selectPages": "Sélectionnez les pages à extraire",
+      "page": "Page",
+      "extractButton": "Extraire les pages sélectionnées",
+      "download": "Télécharger le PDF",
+      "reset": "Extraire d'autres pages"
+    },
+    "organize": {
+      "title": "Organiser PDF",
+      "description": "Réorganisez les pages de votre PDF",
+      "processing": "Réorganisation en cours...",
+      "success": "Réorganisation terminée !",
+      "successDesc": "Les pages ont été réorganisées avec succès.",
+      "dragHint": "Glissez et déposez pour réorganiser les pages",
+      "download": "Télécharger le PDF",
+      "reset": "Réorganiser un autre fichier",
+      "organizeButton": "Appliquer les modifications"
+    },
+    "scanToPdf": {
+      "title": "Numériser au format PDF",
+      "description": "Convertissez vos images numérisées en PDF"
+    },
+    "repair": {
+      "title": "Réparer PDF",
+      "description": "Réparez les fichiers PDF corrompus",
+      "processing": "Réparation en cours...",
+      "success": "Réparation terminée !",
+      "partial": "Réparation partielle",
+      "failed": "Échec de la réparation",
+      "report": "Rapport de réparation",
+      "download": "Télécharger le PDF",
+      "reset": "Réparer un autre fichier",
+      "repairButton": "Réparer le PDF"
+    },
+    "jpgToPdf": {
+      "title": "JPG en PDF",
+      "description": "Convertissez vos images JPG en documents PDF",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le PDF",
+      "reset": "Convertir d'autres images",
+      "convertButton": "Convertir en PDF"
+    },
+    "wordToPdf": {
+      "title": "Word en PDF",
+      "description": "Convertissez vos documents Word en PDF",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le PDF",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en PDF"
+    },
+    "pptToPdf": {
+      "title": "PowerPoint en PDF",
+      "description": "Convertissez vos présentations en PDF",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le PDF",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en PDF"
+    },
+    "excelToPdf": {
+      "title": "Excel en PDF",
+      "description": "Convertissez vos feuilles de calcul en PDF",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le PDF",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en PDF"
+    },
+    "pdfToJpg": {
+      "title": "PDF en JPG",
+      "description": "Convertissez chaque page en image JPG",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "imagesExtracted": "{{count}} images extraites",
+      "download": "Télécharger les images (ZIP)",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en JPG"
+    },
+    "pdfToWord": {
+      "title": "PDF en Word",
+      "description": "Convertissez vos PDF en documents Word",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le Word",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en Word"
+    },
+    "pdfToPpt": {
+      "title": "PDF en PowerPoint",
+      "description": "Convertissez vos PDF en présentations",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "slidesCreated": "{{count}} diapositives créées",
+      "download": "Télécharger le PowerPoint",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en PowerPoint"
+    },
+    "pdfToExcel": {
+      "title": "PDF en Excel",
+      "description": "Convertissez vos PDF en feuilles de calcul",
+      "processing": "Conversion en cours...",
+      "success": "Conversion terminée !",
+      "download": "Télécharger le Excel",
+      "reset": "Convertir un autre fichier",
+      "convertButton": "Convertir en Excel"
+    },
+    "rotate": {
+      "title": "Faire pivoter PDF",
+      "description": "Faites pivoter les pages de votre PDF",
+      "processing": "Rotation en cours...",
+      "success": "Rotation terminée !",
+      "selectRotation": "Choisissez l'angle de rotation",
+      "download": "Télécharger le PDF",
+      "reset": "Pivoter un autre fichier",
+      "rotateButton": "Pivoter le PDF"
+    },
+    "pageNumbers": {
+      "title": "Numéros de pages",
+      "description": "Ajoutez des numéros aux pages de votre PDF",
+      "processing": "Ajout en cours...",
+      "success": "Numéros ajoutés !",
+      "position": "Position des numéros",
+      "top": "En haut",
+      "bottom": "En bas",
+      "format": "Format des numéros",
+      "download": "Télécharger le PDF",
+      "reset": "Modifier un autre fichier",
+      "addButton": "Ajouter les numéros"
+    },
+    "watermark": {
+      "title": "Ajouter un filigrane",
+      "description": "Ajoutez un filigrane à votre PDF",
+      "processing": "Ajout du filigrane...",
+      "success": "Filigrane ajouté !",
+      "text": "Texte du filigrane",
+      "opacity": "Opacité",
+      "presets": "Préréglages",
+      "download": "Télécharger le PDF",
+      "reset": "Modifier un autre fichier",
+      "addButton": "Ajouter le filigrane"
+    },
+    "crop": {
+      "title": "Rogner PDF",
+      "description": "Recadrez les pages de votre PDF",
+      "processing": "Recadrage en cours...",
+      "success": "Recadrage terminé !",
+      "margins": "Marges de recadrage",
+      "top": "Haut",
+      "right": "Droite",
+      "bottom": "Bas",
+      "left": "Gauche",
+      "download": "Télécharger le PDF",
+      "reset": "Recadrer un autre fichier",
+      "cropButton": "Recadrer le PDF"
+    },
+    "edit": {
+      "title": "Modifier PDF",
+      "description": "Modifiez le texte et les images de votre PDF",
+      "processing": "Application des modifications...",
+      "success": "Modifications appliquées !",
+      "addText": "Ajouter du texte",
+      "textPlaceholder": "Entrez votre texte",
+      "fontSize": "Taille",
+      "color": "Couleur",
+      "page": "Page",
+      "download": "Télécharger le PDF",
+      "reset": "Modifier un autre fichier",
+      "applyButton": "Appliquer les modifications"
+    },
+    "compare": {
+      "title": "Comparer PDF",
+      "description": "Comparez deux fichiers PDF",
+      "file1": "Premier fichier",
+      "file2": "Deuxième fichier",
+      "processing": "Comparaison en cours...",
+      "pageOf": "Page {{current}} sur {{total}}",
+      "compareButton": "Comparer les documents",
+      "reset": "Nouvelle comparaison"
+    }
+  },
+  "toolLayout": {
+    "backToTools": "Tous les outils",
+    "benefits": {
+      "instant": "Traitement instantané",
+      "secure": "100% sécurisé",
+      "free": "Gratuit et illimité"
+    },
+    "howTo": {
+      "title": "Comment utiliser l'outil",
+      "step1Title": "Téléchargez votre fichier",
+      "step1Desc": "Glissez-déposez votre fichier PDF ou cliquez pour le sélectionner depuis votre appareil.",
+      "step2Title": "Configurez les options",
+      "step2Desc": "Ajustez les paramètres selon vos besoins pour obtenir le résultat souhaité.",
+      "step3Title": "Téléchargez le résultat",
+      "step3Desc": "Récupérez votre fichier traité instantanément, prêt à être utilisé."
+    }
+  },
+  "fileUpload": {
+    "title": "Déposez vos fichiers ici",
+    "description": "ou cliquez pour sélectionner",
+    "singleFile": "Un fichier à la fois",
+    "multipleFiles": "Jusqu'à {{max}} fichiers",
+    "addMore": "Ajouter plus de fichiers"
+  },
+  "common": {
+    "download": "Télécharger",
+    "reset": "Recommencer",
+    "processing": "Traitement en cours...",
+    "success": "Succès !",
+    "error": "Une erreur est survenue",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "loading": "Chargement..."
+  },
+  "footer": {
+    "description": "E-PDF's est votre solution complète pour la gestion de documents PDF. Fusionnez, divisez, compressez et convertissez vos fichiers gratuitement, directement dans votre navigateur. Plus de 10 millions de fichiers traités.",
+    "secure": "Sécurisé",
+    "fast": "Rapide",
+    "free": "Gratuit",
+    "organize": "Organiser",
+    "convert": "Convertir",
+    "resources": "Ressources",
+    "allTools": "Tous les outils",
+    "copyright": "© 2024 E-Pdf's. Tous droits réservés. Outils PDF gratuits en ligne.",
+    "seoKeywords": "E-PDF's - Outils PDF en ligne gratuits : fusionner PDF, diviser PDF, compresser PDF, convertir JPG en PDF, PDF en Word, Word en PDF, PDF en JPG, ajouter filigrane, numéros de page, faire pivoter PDF, extraire pages, supprimer pages, réparer PDF, Excel en PDF, PowerPoint en PDF."
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Découvrez nos articles, tutoriels et conseils pour mieux gérer vos documents PDF",
+    "allCategories": "Toutes les catégories",
+    "readMore": "Lire la suite",
+    "noPostsFound": "Aucun article trouvé",
+    "loading": "Chargement des articles..."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops ! Page non trouvée",
+    "backHome": "Retour à l'accueil"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "ar": "العربية"
+  }
+}

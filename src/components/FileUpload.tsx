@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Upload, File, X, Plus } from 'lucide-react';
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FileUploadProps {
   onFilesSelected: (files: File[]) => void;
@@ -18,10 +19,14 @@ const FileUpload = ({
   multiple = false,
   maxFiles = 10,
   files = [],
-  title = 'Déposez vos fichiers ici',
-  description = 'ou cliquez pour sélectionner',
+  title,
+  description,
 }: FileUploadProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
+  const { t } = useTranslation();
+
+  const displayTitle = title || t('fileUpload.title');
+  const displayDescription = description || t('fileUpload.description');
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -103,12 +108,12 @@ const FileUpload = ({
           >
             <Upload className="w-10 h-10 text-white" />
           </motion.div>
-          <h3 className="text-xl font-semibold mb-2">{title}</h3>
+          <h3 className="text-xl font-semibold mb-2">{displayTitle}</h3>
           <p className="text-muted-foreground text-center">
-            {description}
+            {displayDescription}
           </p>
           <p className="text-sm text-muted-foreground/60 mt-4">
-            {multiple ? `Jusqu'à ${maxFiles} fichiers` : 'Un fichier à la fois'}
+            {multiple ? t('fileUpload.multipleFiles', { max: maxFiles }) : t('fileUpload.singleFile')}
           </p>
         </motion.label>
       ) : (
@@ -153,7 +158,7 @@ const FileUpload = ({
                 className="hidden"
               />
               <Plus className="w-5 h-5 text-muted-foreground" />
-              <span className="text-muted-foreground">Ajouter plus de fichiers</span>
+              <span className="text-muted-foreground">{t('fileUpload.addMore')}</span>
             </label>
           )}
         </div>

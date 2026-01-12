@@ -1,0 +1,455 @@
+{
+  "nav": {
+    "merge": "دمج",
+    "split": "تقسيم",
+    "compress": "ضغط",
+    "allTools": "جميع الأدوات",
+    "blog": "المدونة"
+  },
+  "hero": {
+    "badge": "أداة PDF المجانية الأولى عبر الإنترنت",
+    "title": "جميع أدوات",
+    "titleHighlight": "PDF",
+    "titleEnd": "في مكان واحد",
+    "description": "ادمج وقسم واضغط وحوّل ملفات PDF مجاناً. سريع وآمن وبدون تسجيل. تم معالجة أكثر من 10 ملايين ملف.",
+    "cta": "اكتشف جميع الأدوات",
+    "ctaSecondary": "دمج PDF",
+    "secure": "آمن 100%",
+    "fast": "معالجة سريعة",
+    "users": "+500 ألف مستخدم"
+  },
+  "stats": {
+    "filesProcessed": "ملفات تمت معالجتها",
+    "satisfiedUsers": "مستخدمون راضون",
+    "availableTools": "أدوات متاحة",
+    "free": "مجاني"
+  },
+  "features": {
+    "title": "لماذا تختار",
+    "titleHighlight": "E-PDF's",
+    "subtitle": "حل شامل لجميع احتياجات PDF الخاصة بك، مصمم ليكون بسيطاً وسريعاً وآمناً.",
+    "fast": "سريع للغاية",
+    "fastDesc": "معالجة فورية مباشرة في متصفحك",
+    "secure": "آمن 100%",
+    "secureDesc": "ملفاتك لا تغادر جهازك أبداً",
+    "free": "مجاني",
+    "freeDesc": "جميع الأدوات مجانية وبلا حدود"
+  },
+  "showcase": {
+    "title": "أدوات",
+    "titleHighlight": "قوية",
+    "titleEnd": "وسهلة الاستخدام",
+    "subtitle": "اكتشف أدواتنا الأكثر شعبية لإدارة مستندات PDF بشكل احترافي.",
+    "tryNow": "جرب الآن",
+    "merge": {
+      "title": "ادمج ملفات PDF",
+      "description": "ادمج عدة مستندات PDF في ملف واحد بسهولة. مثالي لإنشاء تقارير كاملة أو ملفات منظمة.",
+      "feature1": "سحب وإفلات بسيط",
+      "feature2": "إعادة ترتيب الصفحات",
+      "feature3": "معاينة فورية"
+    },
+    "split": {
+      "title": "قسّم مستنداتك",
+      "description": "افصل ملف PDF كبير إلى عدة ملفات منفصلة. استخرج صفحات محددة أو قسّم حسب نطاقات الصفحات.",
+      "feature1": "التقسيم حسب الصفحات",
+      "feature2": "استخراج انتقائي",
+      "feature3": "تصدير متعدد"
+    },
+    "compress": {
+      "title": "ضغط بدون فقدان",
+      "description": "قلل حجم ملفات PDF بنسبة تصل إلى 90% مع الحفاظ على الجودة. مثالي للإرسال عبر البريد الإلكتروني.",
+      "feature1": "ضغط ذكي",
+      "feature2": "جودة محفوظة",
+      "feature3": "حجم مخفض"
+    },
+    "convert": {
+      "title": "تحويل سهل",
+      "description": "حوّل صورك ومستندات Word وPowerPoint وExcel إلى PDF عالية الجودة في ثوانٍ.",
+      "feature1": "تنسيقات متعددة",
+      "feature2": "تحويل سريع",
+      "feature3": "جودة مثالية"
+    }
+  },
+  "popularTools": {
+    "title": "الأدوات",
+    "titleHighlight": "الشائعة",
+    "subtitle": "الأدوات الأكثر استخداماً لإدارة مستندات PDF",
+    "viewAll": "عرض جميع الأدوات"
+  },
+  "testimonials": {
+    "title": "ماذا يقول",
+    "titleHighlight": "مستخدمونا",
+    "subtitle": "أكثر من 500,000 شخص يثقون بـ E-PDF's",
+    "testimonial1": {
+      "text": "E-PDF's وفر لي ساعات من العمل. الأدوات سهلة الاستخدام وسريعة.",
+      "name": "ماري ل.",
+      "role": "مصممة"
+    },
+    "testimonial2": {
+      "text": "أخيراً أداة PDF مجانية بدون إعلانات مزعجة. أنصح بها بشدة!",
+      "name": "توماس ب.",
+      "role": "رائد أعمال"
+    },
+    "testimonial3": {
+      "text": "مثالي لدراستي. يمكنني دمج ملاحظات PDF بنقرات قليلة.",
+      "name": "صوفي م.",
+      "role": "طالبة"
+    }
+  },
+  "cta": {
+    "title": "هل أنت مستعد لتبسيط عملك مع",
+    "titleHighlight": "PDF",
+    "description": "انضم إلى أكثر من 500,000 مستخدم يثقون بـ E-PDF's لمستندات PDF. مجاني وسريع وآمن.",
+    "button": "ابدأ الآن"
+  },
+  "seo": {
+    "title": "E-PDF's: حلك الشامل لإدارة مستندات PDF",
+    "paragraph1": "E-PDF's هي المنصة المجانية الأكثر شمولاً عبر الإنترنت لجميع احتياجات إدارة ملفات PDF. سواء كنت بحاجة إلى دمج PDF أو تقسيم مستند PDF أو ضغط ملفات PDF لتقليل حجمها أو تحويل الصور إلى PDF، فإن أدواتنا مصممة لتكون بسيطة وسريعة وفعالة.",
+    "paragraph2": "تعمل أدوات PDF عبر الإنترنت مباشرة في متصفحك، دون الحاجة إلى تثبيت أي برنامج. تبقى مستنداتك على جهازك، مما يضمن خصوصية كاملة لبياناتك. مع معالجة أكثر من 10 ملايين ملف، أصبح E-PDF's المرجع لتحرير PDF المجاني.",
+    "paragraph3": "اكتشف ميزاتنا: دمج عدة ملفات PDF، استخراج صفحات PDF، إضافة علامة مائية، تدوير الصفحات، تحويل Word إلى PDF، PDF إلى JPG، والمزيد. جميع أدواتنا مجانية 100% وغير محدودة."
+  },
+  "allTools": {
+    "title": "جميع",
+    "titleHighlight": "أدوات PDF",
+    "subtitle": "اكتشف مجموعتنا الكاملة من الأدوات لإدارة وتحويل وتعديل ملفات PDF. أكثر من 20 أداة مجانية لجميع احتياجات مستندات PDF.",
+    "fastProcessing": "معالجة سريعة",
+    "totalSecurity": "أمان كامل",
+    "freeUnlimited": "مجاني وغير محدود",
+    "fastDesc": "تتم معالجة ملفاتك فوراً",
+    "secureDesc": "ملفاتك تبقى على جهازك",
+    "freeDesc": "جميع الأدوات بدون قيود",
+    "toolsAvailable": "أداة متاحة",
+    "ctaTitle": "تحتاج مساعدة في اختيار الأداة المناسبة؟",
+    "ctaDescription": "عد إلى الصفحة الرئيسية لاكتشاف أدواتنا الأكثر شعبية وكيف يمكنها مساعدتك.",
+    "backHome": "العودة للرئيسية",
+    "guideTitle": "دليل شامل لأدوات PDF عبر الإنترنت",
+    "guideIntro": "يقدم E-PDF's مجموعة كاملة من أدوات PDF المجانية لتلبية جميع احتياجات إدارة المستندات. سواء كنت محترفاً أو طالباً أو فرداً، فإن أدواتنا مصممة لتكون بسيطة وفعالة.",
+    "organizeTitle": "نظّم ملفات PDF",
+    "organizeDesc": "استخدم أدواتنا لدمج عدة ملفات PDF في مستند واحد، أو تقسيم PDF كبير إلى ملفات منفصلة، أو إعادة ترتيب الصفحات حسب احتياجاتك.",
+    "convertTitle": "حوّل مستنداتك",
+    "convertDesc": "حوّل ملفاتك بسهولة مع محولاتنا: JPG إلى PDF، Word إلى PDF، Excel إلى PDF، والعكس. جميع التنسيقات الشائعة مدعومة.",
+    "modifyTitle": "عدّل وخصّص",
+    "modifyDesc": "أضف علامة مائية أو أرقام صفحات أو قم بتدوير صفحات PDF. تمنحك أدوات التعديل التحكم الكامل في مستنداتك."
+  },
+  "categories": {
+    "organize": "تنظيم PDF",
+    "organizeDesc": "نظّم مستندات PDF بسهولة",
+    "optimize": "تحسين PDF",
+    "optimizeDesc": "حسّن وأصلح ملفات PDF",
+    "convertTo": "تحويل إلى PDF",
+    "convertToDesc": "حوّل تنسيقات مختلفة إلى PDF",
+    "convertFrom": "تحويل من PDF",
+    "convertFromDesc": "حوّل PDF إلى تنسيقات أخرى",
+    "modify": "تعديل PDF",
+    "modifyDesc": "عدّل وخصّص ملفات PDF",
+    "compare": "مقارنة PDF",
+    "compareDesc": "قارن ملفات PDF"
+  },
+  "tools": {
+    "merge": {
+      "title": "دمج PDF",
+      "description": "ادمج عدة ملفات PDF في مستند واحد",
+      "longDescription": "ادمج عدة ملفات PDF في مستند واحد بسهولة وسرعة",
+      "dropzone": "أسقط ملفات PDF هنا",
+      "dropzoneDesc": "اسحب وأفلت ملفاتك أو انقر لاختيارها",
+      "processing": "جاري دمج الملفات...",
+      "success": "اكتمل الدمج!",
+      "successDesc": "تم دمج {{count}} ملفات بنجاح.",
+      "download": "تحميل PDF",
+      "reset": "دمج ملفات أخرى",
+      "mergeButton": "دمج {{count}} ملفات",
+      "addMore": "أضف ملفاً آخر على الأقل للدمج"
+    },
+    "split": {
+      "title": "تقسيم PDF",
+      "description": "قسّم PDF إلى عدة ملفات منفصلة",
+      "longDescription": "قسّم PDF إلى صفحات فردية",
+      "dropzone": "أسقط ملف PDF هنا",
+      "dropzoneDesc": "سيتم تقسيم الملف إلى صفحات فردية",
+      "processing": "جاري تقسيم الملف...",
+      "success": "اكتمل التقسيم!",
+      "successDesc": "تم تقسيم PDF إلى {{count}} صفحات.",
+      "download": "تحميل الصفحات (ZIP)",
+      "reset": "تقسيم ملف آخر",
+      "splitButton": "تقسيم PDF"
+    },
+    "compress": {
+      "title": "ضغط PDF",
+      "description": "قلل حجم ملفات PDF",
+      "longDescription": "قلل حجم ملفات PDF دون فقدان جودة ملحوظة",
+      "dropzone": "أسقط ملف PDF هنا",
+      "processing": "جاري الضغط...",
+      "success": "اكتمل الضغط!",
+      "originalSize": "الحجم الأصلي",
+      "newSize": "الحجم الجديد",
+      "reduction": "التخفيض",
+      "currentSize": "الحجم الحالي",
+      "download": "تحميل PDF",
+      "reset": "ضغط ملف آخر",
+      "compressButton": "ضغط PDF"
+    },
+    "deletePages": {
+      "title": "حذف صفحات",
+      "description": "احذف الصفحات غير المرغوبة من PDF",
+      "processing": "جاري الحذف...",
+      "success": "اكتمل الحذف!",
+      "successDesc": "تم حذف الصفحات المحددة.",
+      "selectPages": "حدد الصفحات للحذف",
+      "page": "صفحة",
+      "deleteButton": "حذف الصفحات المحددة",
+      "download": "تحميل PDF",
+      "reset": "تعديل ملف آخر"
+    },
+    "extractPages": {
+      "title": "استخراج صفحات",
+      "description": "استخرج صفحات محددة من PDF",
+      "processing": "جاري الاستخراج...",
+      "success": "اكتمل الاستخراج!",
+      "successDesc": "تم استخراج الصفحات المحددة.",
+      "selectPages": "حدد الصفحات للاستخراج",
+      "page": "صفحة",
+      "extractButton": "استخراج الصفحات المحددة",
+      "download": "تحميل PDF",
+      "reset": "استخراج صفحات أخرى"
+    },
+    "organize": {
+      "title": "تنظيم PDF",
+      "description": "أعد ترتيب صفحات PDF",
+      "processing": "جاري إعادة الترتيب...",
+      "success": "اكتمل إعادة الترتيب!",
+      "successDesc": "تم إعادة ترتيب الصفحات بنجاح.",
+      "dragHint": "اسحب وأفلت لإعادة ترتيب الصفحات",
+      "download": "تحميل PDF",
+      "reset": "ترتيب ملف آخر",
+      "organizeButton": "تطبيق التغييرات"
+    },
+    "scanToPdf": {
+      "title": "مسح إلى PDF",
+      "description": "حوّل صورك الممسوحة إلى PDF"
+    },
+    "repair": {
+      "title": "إصلاح PDF",
+      "description": "أصلح ملفات PDF التالفة",
+      "processing": "جاري الإصلاح...",
+      "success": "اكتمل الإصلاح!",
+      "partial": "إصلاح جزئي",
+      "failed": "فشل الإصلاح",
+      "report": "تقرير الإصلاح",
+      "download": "تحميل PDF",
+      "reset": "إصلاح ملف آخر",
+      "repairButton": "إصلاح PDF"
+    },
+    "jpgToPdf": {
+      "title": "JPG إلى PDF",
+      "description": "حوّل صور JPG إلى مستندات PDF",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل PDF",
+      "reset": "تحويل صور أخرى",
+      "convertButton": "تحويل إلى PDF"
+    },
+    "wordToPdf": {
+      "title": "Word إلى PDF",
+      "description": "حوّل مستندات Word إلى PDF",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل PDF",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى PDF"
+    },
+    "pptToPdf": {
+      "title": "PowerPoint إلى PDF",
+      "description": "حوّل العروض التقديمية إلى PDF",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل PDF",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى PDF"
+    },
+    "excelToPdf": {
+      "title": "Excel إلى PDF",
+      "description": "حوّل جداول البيانات إلى PDF",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل PDF",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى PDF"
+    },
+    "pdfToJpg": {
+      "title": "PDF إلى JPG",
+      "description": "حوّل كل صفحة إلى صورة JPG",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "imagesExtracted": "تم استخراج {{count}} صور",
+      "download": "تحميل الصور (ZIP)",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى JPG"
+    },
+    "pdfToWord": {
+      "title": "PDF إلى Word",
+      "description": "حوّل PDF إلى مستندات Word",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل Word",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى Word"
+    },
+    "pdfToPpt": {
+      "title": "PDF إلى PowerPoint",
+      "description": "حوّل PDF إلى عروض تقديمية",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "slidesCreated": "تم إنشاء {{count}} شرائح",
+      "download": "تحميل PowerPoint",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى PowerPoint"
+    },
+    "pdfToExcel": {
+      "title": "PDF إلى Excel",
+      "description": "حوّل PDF إلى جداول بيانات",
+      "processing": "جاري التحويل...",
+      "success": "اكتمل التحويل!",
+      "download": "تحميل Excel",
+      "reset": "تحويل ملف آخر",
+      "convertButton": "تحويل إلى Excel"
+    },
+    "rotate": {
+      "title": "تدوير PDF",
+      "description": "قم بتدوير صفحات PDF",
+      "processing": "جاري التدوير...",
+      "success": "اكتمل التدوير!",
+      "selectRotation": "اختر زاوية الدوران",
+      "download": "تحميل PDF",
+      "reset": "تدوير ملف آخر",
+      "rotateButton": "تدوير PDF"
+    },
+    "pageNumbers": {
+      "title": "أرقام الصفحات",
+      "description": "أضف أرقاماً لصفحات PDF",
+      "processing": "جاري الإضافة...",
+      "success": "تم إضافة الأرقام!",
+      "position": "موضع الأرقام",
+      "top": "أعلى",
+      "bottom": "أسفل",
+      "format": "تنسيق الأرقام",
+      "download": "تحميل PDF",
+      "reset": "تعديل ملف آخر",
+      "addButton": "إضافة الأرقام"
+    },
+    "watermark": {
+      "title": "إضافة علامة مائية",
+      "description": "أضف علامة مائية لـ PDF",
+      "processing": "جاري إضافة العلامة المائية...",
+      "success": "تم إضافة العلامة المائية!",
+      "text": "نص العلامة المائية",
+      "opacity": "الشفافية",
+      "presets": "إعدادات مسبقة",
+      "download": "تحميل PDF",
+      "reset": "تعديل ملف آخر",
+      "addButton": "إضافة العلامة المائية"
+    },
+    "crop": {
+      "title": "قص PDF",
+      "description": "اقتص صفحات PDF",
+      "processing": "جاري القص...",
+      "success": "اكتمل القص!",
+      "margins": "هوامش القص",
+      "top": "أعلى",
+      "right": "يمين",
+      "bottom": "أسفل",
+      "left": "يسار",
+      "download": "تحميل PDF",
+      "reset": "قص ملف آخر",
+      "cropButton": "قص PDF"
+    },
+    "edit": {
+      "title": "تحرير PDF",
+      "description": "حرر النص والصور في PDF",
+      "processing": "جاري تطبيق التغييرات...",
+      "success": "تم تطبيق التغييرات!",
+      "addText": "إضافة نص",
+      "textPlaceholder": "أدخل النص",
+      "fontSize": "الحجم",
+      "color": "اللون",
+      "page": "صفحة",
+      "download": "تحميل PDF",
+      "reset": "تحرير ملف آخر",
+      "applyButton": "تطبيق التغييرات"
+    },
+    "compare": {
+      "title": "مقارنة PDF",
+      "description": "قارن ملفي PDF",
+      "file1": "الملف الأول",
+      "file2": "الملف الثاني",
+      "processing": "جاري المقارنة...",
+      "pageOf": "صفحة {{current}} من {{total}}",
+      "compareButton": "مقارنة المستندات",
+      "reset": "مقارنة جديدة"
+    }
+  },
+  "toolLayout": {
+    "backToTools": "جميع الأدوات",
+    "benefits": {
+      "instant": "معالجة فورية",
+      "secure": "آمن 100%",
+      "free": "مجاني وغير محدود"
+    },
+    "howTo": {
+      "title": "كيفية استخدام الأداة",
+      "step1Title": "ارفع ملفك",
+      "step1Desc": "اسحب وأفلت ملف PDF أو انقر لاختياره من جهازك.",
+      "step2Title": "اضبط الخيارات",
+      "step2Desc": "اضبط الإعدادات حسب احتياجاتك للحصول على النتيجة المطلوبة.",
+      "step3Title": "حمّل النتيجة",
+      "step3Desc": "احصل على ملفك المعالج فوراً، جاهز للاستخدام."
+    }
+  },
+  "fileUpload": {
+    "title": "أسقط ملفاتك هنا",
+    "description": "أو انقر للاختيار",
+    "singleFile": "ملف واحد في كل مرة",
+    "multipleFiles": "حتى {{max}} ملفات",
+    "addMore": "إضافة المزيد من الملفات"
+  },
+  "common": {
+    "download": "تحميل",
+    "reset": "البدء من جديد",
+    "processing": "جاري المعالجة...",
+    "success": "نجاح!",
+    "error": "حدث خطأ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "loading": "جاري التحميل..."
+  },
+  "footer": {
+    "description": "E-PDF's هو حلك الشامل لإدارة مستندات PDF. ادمج وقسم واضغط وحوّل ملفاتك مجاناً، مباشرة في متصفحك. تم معالجة أكثر من 10 ملايين ملف.",
+    "secure": "آمن",
+    "fast": "سريع",
+    "free": "مجاني",
+    "organize": "تنظيم",
+    "convert": "تحويل",
+    "resources": "الموارد",
+    "allTools": "جميع الأدوات",
+    "copyright": "© 2024 E-Pdf's. جميع الحقوق محفوظة. أدوات PDF مجانية عبر الإنترنت.",
+    "seoKeywords": "E-PDF's - أدوات PDF مجانية عبر الإنترنت: دمج PDF، تقسيم PDF، ضغط PDF، تحويل JPG إلى PDF، PDF إلى Word، Word إلى PDF، PDF إلى JPG، إضافة علامة مائية، أرقام الصفحات، تدوير PDF، استخراج صفحات، حذف صفحات، إصلاح PDF، Excel إلى PDF، PowerPoint إلى PDF."
+  },
+  "blog": {
+    "title": "المدونة",
+    "subtitle": "اكتشف مقالاتنا ودروسنا ونصائحنا لإدارة أفضل لمستندات PDF",
+    "allCategories": "جميع الفئات",
+    "readMore": "اقرأ المزيد",
+    "noPostsFound": "لم يتم العثور على مقالات",
+    "loading": "جاري تحميل المقالات..."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "عفواً! الصفحة غير موجودة",
+    "backHome": "العودة للرئيسية"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English",
+    "ar": "العربية"
+  }
+}

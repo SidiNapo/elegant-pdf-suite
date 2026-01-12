@@ -57,6 +57,9 @@ const Footer = () => {
     }, {
       name: t('footer.privacy'),
       href: '/privacy'
+    }, {
+      name: t('nav.contact'),
+      href: '/contact'
     }]
   }];
   

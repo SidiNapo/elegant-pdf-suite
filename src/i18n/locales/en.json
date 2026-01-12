@@ -5,7 +5,8 @@
     "compress": "Compress",
     "allTools": "All Tools",
     "about": "About",
-    "blog": "Blog"
+    "blog": "Blog",
+    "contact": "Contact"
   },
   "hero": {
     "badge": "#1 Free Online PDF Tool",
@@ -567,6 +568,43 @@
     "sections": { "collection": { "title": "Data Collected", "content": "We only collect data necessary for our service." }, "usage": { "title": "Data Usage", "content": "Data is used to improve services and display relevant ads." }, "storage": { "title": "File Storage", "content": "Your PDF files are processed entirely in your browser. They are NEVER uploaded to our servers." }, "cookies": { "title": "Cookie Usage", "content": "We use cookies for preferences and advertising." }, "thirdParty": { "title": "Third-Party Services", "content": "We use Google AdSense and Analytics." }, "rights": { "title": "Your Rights", "content": "You have the right to access, correct, and delete your data." }, "children": { "title": "Children's Protection", "content": "Our services are for users 13 and older." }, "contact": { "title": "Contact Us", "content": "For privacy questions, contact us." } },
     "advertising": { "title": "Google AdSense", "content": "E-PDF's uses Google AdSense to display ads.", "optOut": "You can disable ad personalization in Google settings." },
     "cta": { "text": "Have questions about our privacy policy?", "terms": "Terms of Service", "tools": "Use the tools" }
+  },
+  "contact": {
+    "metaTitle": "Contact Us - E-PDF's",
+    "metaDescription": "Contact the E-PDF's team. We're here to help with all your PDF needs.",
+    "title": "Get in Touch",
+    "subtitle": "Have a question, feedback, or need support? We'd love to hear from you. Our team is here to help.",
+    "emailTitle": "Email",
+    "phoneTitle": "Phone",
+    "addressTitle": "Address",
+    "hoursTitle": "Hours",
+    "hoursValue": "Mon-Fri: 9AM-6PM",
+    "formTitle": "Send us a message",
+    "formDescription": "Fill out the form and we'll get back to you as soon as possible. We typically respond within 24 hours.",
+    "illustrationText": "We're always ready to help you",
+    "responseTime": "Typically responds within 24 hours",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "email": "Email",
+    "emailPlaceholder": "john@example.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "How can we help?",
+    "message": "Message",
+    "messagePlaceholder": "Tell us more about your question or feedback...",
+    "sendButton": "Send Message",
+    "successMessage": "Message sent successfully! We'll get back to you soon.",
+    "faqTitle": "Frequently Asked Questions",
+    "faqDescription": "Find quick answers to common questions",
+    "faq1Question": "Is E-PDF's really free?",
+    "faq1Answer": "Yes! All our PDF tools are completely free to use with no hidden fees or subscriptions required.",
+    "faq2Question": "Are my files secure?",
+    "faq2Answer": "Absolutely. Your files are processed locally in your browser and never uploaded to our servers.",
+    "faq3Question": "What file formats are supported?",
+    "faq3Answer": "We support PDF, JPG, PNG, Word, Excel, PowerPoint, and many more formats.",
+    "faq4Question": "How can I report a bug?",
+    "faq4Answer": "Use the contact form above to report any issues. Please include as much detail as possible."
   },
   "footer": { "description": "E-PDF's is your complete solution for all PDF needs.", "secure": "100% Secure", "fast": "Fast", "free": "Free", "organize": "Organize", "convert": "Convert", "resources": "Resources", "legal": "Legal", "terms": "Terms of Service", "privacy": "Privacy Policy", "allTools": "All tools", "copyright": "© 2024 E-Pdf's. All rights reserved.", "seoKeywords": "E-PDF's - Free online PDF tools." }
 }

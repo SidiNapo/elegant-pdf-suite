@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Wrench, Download, RotateCcw, AlertCircle, CheckCircle } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -9,6 +10,7 @@ import { PDFDocument } from 'pdf-lib';
 import { motion } from 'framer-motion';
 
 const RepairPDF = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -33,7 +35,6 @@ const RepairPDF = () => {
     try {
       const arrayBuffer = await readFileAsArrayBuffer(files[0]);
       
-      // Try to load and repair the PDF
       let pdf: PDFDocument;
       
       try {
@@ -41,42 +42,38 @@ const RepairPDF = () => {
           ignoreEncryption: true,
           updateMetadata: true,
         });
-        details.push('✓ Structure du document chargée avec succès');
+        details.push(`✓ ${t('tools.repair.structureLoaded')}`);
       } catch (loadError) {
-        details.push('⚠ Tentative de réparation de la structure...');
+        details.push(`⚠ ${t('tools.repair.attemptingRepair')}`);
         
-        // Try with more lenient options
         try {
           pdf = await PDFDocument.load(arrayBuffer, {
             ignoreEncryption: true,
             updateMetadata: true,
             throwOnInvalidObject: false,
           } as any);
-          details.push('✓ Document partiellement récupéré');
+          details.push(`✓ ${t('tools.repair.partiallyRecovered')}`);
         } catch {
           setRepairStatus('failed');
-          setRepairDetails(['✗ Impossible de charger le document - fichier trop corrompu']);
+          setRepairDetails([`✗ ${t('tools.repair.cannotLoad')}`]);
           setIsComplete(true);
           setIsProcessing(false);
           return;
         }
       }
       
-      // Get page count
       const pageCount = pdf.getPageCount();
-      details.push(`✓ ${pageCount} page(s) récupérée(s)`);
+      details.push(`✓ ${pageCount} ${t('tools.repair.pagesRecovered')}`);
       
-      // Update metadata to mark as repaired
       pdf.setProducer('PDF Tools - Repaired');
       pdf.setModificationDate(new Date());
-      details.push('✓ Métadonnées mises à jour');
+      details.push(`✓ ${t('tools.repair.metadataUpdated')}`);
       
-      // Save with optimization
       const result = await pdf.save({
         useObjectStreams: true,
       });
       
-      details.push('✓ Document reconstruit et optimisé');
+      details.push(`✓ ${t('tools.repair.rebuilt')}`);
       
       setPdfData(result);
       setRepairStatus(pageCount > 0 ? 'success' : 'partial');
@@ -85,7 +82,7 @@ const RepairPDF = () => {
     } catch (error) {
       console.error('Error repairing PDF:', error);
       setRepairStatus('failed');
-      setRepairDetails([...details, '✗ Erreur lors de la réparation']);
+      setRepairDetails([...details, `✗ ${t('tools.repair.errorRepairing')}`]);
       setIsComplete(true);
     } finally {
       setIsProcessing(false);
@@ -109,13 +106,13 @@ const RepairPDF = () => {
 
   return (
     <ToolLayout
-      title="Réparer PDF"
-      description="Réparez les fichiers PDF corrompus"
+      title={t('tools.repair.title')}
+      description={t('tools.repair.description')}
       icon={Wrench}
       color="cyan"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Analyse et réparation en cours..." />
+        <ProcessingLoader message={t('tools.repair.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -135,13 +132,13 @@ const RepairPDF = () => {
           </div>
           
           <h3 className="text-2xl font-bold text-foreground">
-            {repairStatus === 'success' ? 'Réparation réussie !' :
-             repairStatus === 'partial' ? 'Réparation partielle' :
-             'Réparation impossible'}
+            {repairStatus === 'success' ? t('tools.repair.success') :
+             repairStatus === 'partial' ? t('tools.repair.partial') :
+             t('tools.repair.failed')}
           </h3>
           
           <div className="bg-muted rounded-lg p-4 text-left max-w-md mx-auto">
-            <h4 className="font-semibold mb-2">Rapport de réparation :</h4>
+            <h4 className="font-semibold mb-2">{t('tools.repair.report')}:</h4>
             <ul className="space-y-1 text-sm">
               {repairDetails.map((detail, i) => (
                 <li key={i} className={
@@ -160,12 +157,12 @@ const RepairPDF = () => {
             {pdfData && (
               <Button onClick={handleDownload} size="lg" className="gap-2">
                 <Download className="w-5 h-5" />
-                Télécharger
+                {t('tools.repair.download')}
               </Button>
             )}
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouveau fichier
+              {t('tools.repair.reset')}
             </Button>
           </div>
         </motion.div>
@@ -177,8 +174,6 @@ const RepairPDF = () => {
             multiple={false}
             maxFiles={1}
             files={files}
-            title="Déposez votre fichier PDF corrompu ici"
-            description="ou cliquez pour sélectionner"
           />
           
           {files.length > 0 && (
@@ -189,7 +184,7 @@ const RepairPDF = () => {
             >
               <Button onClick={handleRepair} size="lg" className="gap-2">
                 <Wrench className="w-5 h-5" />
-                Réparer le PDF
+                {t('tools.repair.repairButton')}
               </Button>
             </motion.div>
           )}

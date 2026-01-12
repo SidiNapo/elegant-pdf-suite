@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScanLine, Download, RotateCcw, Camera, Trash2, Plus } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -8,6 +9,7 @@ import { imagesToPDF, downloadPDF } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const ScanToPdf = () => {
+  const { t } = useTranslation();
   const [mode, setMode] = useState<'select' | 'camera' | 'upload'>('select');
   const [capturedImages, setCapturedImages] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -32,7 +34,7 @@ const ScanToPdf = () => {
       setMode('camera');
     } catch (error) {
       console.error('Camera error:', error);
-      setCameraError('Impossible d\'accéder à la caméra. Vérifiez les permissions.');
+      setCameraError(t('tools.scanToPdf.cameraError'));
     }
   };
 
@@ -72,7 +74,6 @@ const ScanToPdf = () => {
       let filesToConvert: File[] = [];
       
       if (mode === 'camera' && capturedImages.length > 0) {
-        // Convert base64 images to Files
         filesToConvert = await Promise.all(
           capturedImages.map(async (dataUrl, i) => {
             const response = await fetch(dataUrl);
@@ -115,13 +116,13 @@ const ScanToPdf = () => {
 
   return (
     <ToolLayout
-      title="Numériser au format PDF"
-      description="Numérisez des documents avec votre caméra ou importez des images"
+      title={t('tools.scanToPdf.title')}
+      description={t('tools.scanToPdf.description')}
       icon={ScanLine}
       color="rose"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Création du PDF..." />
+        <ProcessingLoader message={t('tools.scanToPdf.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -131,15 +132,15 @@ const ScanToPdf = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <ScanLine className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Document numérisé !</h3>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.scanToPdf.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger
+              {t('common.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle numérisation
+              {t('tools.scanToPdf.reset')}
             </Button>
           </div>
         </motion.div>
@@ -153,9 +154,9 @@ const ScanToPdf = () => {
               className="p-8 rounded-xl border-2 border-dashed border-border hover:border-primary hover:bg-primary/5 transition-colors"
             >
               <Camera className="w-12 h-12 mx-auto mb-4 text-primary" />
-              <h3 className="text-lg font-semibold mb-2">Utiliser la caméra</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('tools.scanToPdf.useCamera')}</h3>
               <p className="text-sm text-muted-foreground">
-                Prenez des photos de vos documents
+                {t('tools.scanToPdf.useCameraDesc')}
               </p>
             </motion.button>
             
@@ -166,9 +167,9 @@ const ScanToPdf = () => {
               className="p-8 rounded-xl border-2 border-dashed border-border hover:border-primary hover:bg-primary/5 transition-colors"
             >
               <ScanLine className="w-12 h-12 mx-auto mb-4 text-primary" />
-              <h3 className="text-lg font-semibold mb-2">Importer des images</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('tools.scanToPdf.importImages')}</h3>
               <p className="text-sm text-muted-foreground">
-                Sélectionnez des images depuis votre appareil
+                {t('tools.scanToPdf.importImagesDesc')}
               </p>
             </motion.button>
           </div>
@@ -189,14 +190,14 @@ const ScanToPdf = () => {
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
               <Button onClick={captureImage} size="lg" className="gap-2 rounded-full">
                 <Camera className="w-5 h-5" />
-                Capturer
+                {t('tools.scanToPdf.capture')}
               </Button>
             </div>
           </div>
           
           {capturedImages.length > 0 && (
             <div className="space-y-4">
-              <h4 className="font-semibold">Images capturées ({capturedImages.length})</h4>
+              <h4 className="font-semibold">{t('tools.scanToPdf.capturedImages', { count: capturedImages.length })}</h4>
               <div className="flex gap-4 overflow-x-auto pb-4">
                 {capturedImages.map((img, i) => (
                   <div key={i} className="relative shrink-0">
@@ -221,11 +222,11 @@ const ScanToPdf = () => {
             {capturedImages.length > 0 && (
               <Button onClick={handleCreatePdf} size="lg" className="gap-2">
                 <ScanLine className="w-5 h-5" />
-                Créer le PDF ({capturedImages.length} page{capturedImages.length > 1 ? 's' : ''})
+                {t('tools.scanToPdf.createPdf', { count: capturedImages.length })}
               </Button>
             )}
             <Button onClick={handleReset} variant="outline" size="lg">
-              Annuler
+              {t('common.cancel')}
             </Button>
           </div>
         </div>
@@ -237,8 +238,6 @@ const ScanToPdf = () => {
             multiple={true}
             maxFiles={20}
             files={uploadedFiles}
-            title="Déposez vos images ici"
-            description="JPG, PNG (max 20 fichiers)"
           />
           
           {uploadedFiles.length > 0 && (
@@ -249,10 +248,10 @@ const ScanToPdf = () => {
             >
               <Button onClick={handleCreatePdf} size="lg" className="gap-2">
                 <ScanLine className="w-5 h-5" />
-                Créer le PDF ({uploadedFiles.length} page{uploadedFiles.length > 1 ? 's' : ''})
+                {t('tools.scanToPdf.createPdf', { count: uploadedFiles.length })}
               </Button>
               <Button onClick={handleReset} variant="outline" size="lg">
-                Annuler
+                {t('common.cancel')}
               </Button>
             </motion.div>
           )}
@@ -260,7 +259,7 @@ const ScanToPdf = () => {
           {uploadedFiles.length === 0 && (
             <div className="flex justify-center">
               <Button onClick={handleReset} variant="outline">
-                Retour
+                {t('tools.scanToPdf.back')}
               </Button>
             </div>
           )}

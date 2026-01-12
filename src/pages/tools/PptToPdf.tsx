@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Presentation, Download, RotateCcw } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -9,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
 const PptToPdf = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -16,15 +18,14 @@ const PptToPdf = () => {
   const { toast } = useToast();
 
   const handleFilesSelected = (newFiles: File[]) => {
-    // Validate file type
     if (newFiles.length > 0) {
       const file = newFiles[0];
       const fileName = file.name.toLowerCase();
       
       if (fileName.endsWith('.ppt') && !fileName.endsWith('.pptx')) {
         toast({
-          title: "Format non recommandé",
-          description: "Les fichiers .ppt peuvent avoir des résultats limités. Utilisez .pptx pour de meilleurs résultats.",
+          title: t('tools.pptToPdf.formatWarningTitle'),
+          description: t('tools.pptToPdf.formatWarningDesc'),
           variant: "destructive",
         });
       }
@@ -44,14 +45,14 @@ const PptToPdf = () => {
       setPdfData(result);
       setIsComplete(true);
       toast({
-        title: "Conversion réussie",
-        description: "Votre présentation a été convertie en PDF.",
+        title: t('tools.pptToPdf.successToast'),
+        description: t('tools.pptToPdf.successToastDesc'),
       });
     } catch (error) {
       console.error('Conversion error:', error);
       toast({
-        title: "Erreur de conversion",
-        description: error instanceof Error ? error.message : "Une erreur est survenue lors de la conversion.",
+        title: t('tools.pptToPdf.errorToast'),
+        description: error instanceof Error ? error.message : t('tools.pptToPdf.errorToastDesc'),
         variant: "destructive",
       });
     } finally {
@@ -74,13 +75,13 @@ const PptToPdf = () => {
 
   return (
     <ToolLayout
-      title="PowerPoint en PDF"
-      description="Convertissez vos présentations PowerPoint (.pptx) en fichiers PDF"
+      title={t('tools.pptToPdf.title')}
+      description={t('tools.pptToPdf.description')}
       icon={Presentation}
       color="cyan"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Conversion de la présentation..." />
+        <ProcessingLoader message={t('tools.pptToPdf.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -90,16 +91,15 @@ const PptToPdf = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <Presentation className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Conversion terminée !</h3>
-          <p className="text-muted-foreground">Votre présentation a été convertie en PDF</p>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.pptToPdf.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger le PDF
+              {t('tools.pptToPdf.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle conversion
+              {t('tools.pptToPdf.reset')}
             </Button>
           </div>
         </motion.div>
@@ -111,8 +111,6 @@ const PptToPdf = () => {
             multiple={false}
             maxFiles={1}
             files={files}
-            title="Déposez votre fichier PowerPoint ici"
-            description="ou cliquez pour sélectionner (.pptx recommandé)"
           />
           
           {files.length > 0 && (
@@ -123,7 +121,7 @@ const PptToPdf = () => {
             >
               <Button onClick={handleConvert} size="lg" className="gap-2">
                 <Presentation className="w-5 h-5" />
-                Convertir en PDF
+                {t('tools.pptToPdf.convertButton')}
               </Button>
             </motion.div>
           )}

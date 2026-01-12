@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Trash2, Download, CheckCircle } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -7,6 +8,7 @@ import { deletePages, downloadPDF, getPDFPageCount } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const DeletePages = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -70,14 +72,14 @@ const DeletePages = () => {
 
   return (
     <ToolLayout
-      title="Supprimer des pages"
-      description="Supprimez les pages indésirables de votre PDF"
+      title={t('tools.deletePages.title')}
+      description={t('tools.deletePages.description')}
       icon={Trash2}
       color="violet"
     >
       <div className="max-w-3xl mx-auto">
         {isProcessing ? (
-          <ProcessingLoader message="Suppression des pages en cours..." />
+          <ProcessingLoader message={t('tools.deletePages.processing')} />
         ) : isComplete ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -87,17 +89,17 @@ const DeletePages = () => {
             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            <h3 className="text-2xl font-semibold mb-4">Suppression terminée !</h3>
+            <h3 className="text-2xl font-semibold mb-4">{t('tools.deletePages.success')}</h3>
             <p className="text-muted-foreground mb-8">
-              {selectedPages.length} page(s) ont été supprimées de votre PDF.
+              {t('tools.deletePages.successDesc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={handleDownload} className="btn-primary flex items-center justify-center gap-2">
                 <Download className="w-5 h-5" />
-                Télécharger le PDF
+                {t('tools.deletePages.download')}
               </button>
               <button onClick={handleReset} className="btn-secondary">
-                Modifier un autre fichier
+                {t('tools.deletePages.reset')}
               </button>
             </div>
           </motion.div>
@@ -108,7 +110,6 @@ const DeletePages = () => {
               accept=".pdf"
               multiple={false}
               files={files}
-              title="Déposez votre fichier PDF ici"
             />
             
             {pageCount > 0 && (
@@ -118,7 +119,7 @@ const DeletePages = () => {
                 className="mt-8"
               >
                 <h3 className="text-lg font-semibold mb-4 text-center">
-                  Sélectionnez les pages à supprimer ({pageCount} pages)
+                  {t('tools.deletePages.selectPages')} ({pageCount} {t('tools.deletePages.page')}s)
                 </h3>
                 <div className="flex flex-wrap gap-3 justify-center mb-8">
                   {Array.from({ length: pageCount }, (_, i) => (
@@ -139,7 +140,7 @@ const DeletePages = () => {
                 {selectedPages.length > 0 && (
                   <div className="text-center">
                     <button onClick={handleDelete} className="btn-primary">
-                      Supprimer {selectedPages.length} page(s)
+                      {t('tools.deletePages.deleteButton')} ({selectedPages.length})
                     </button>
                   </div>
                 )}

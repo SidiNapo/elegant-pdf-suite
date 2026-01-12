@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LayoutGrid, Download, RotateCcw, GripVertical } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -15,6 +16,7 @@ interface PageItem {
 }
 
 const OrganizePDF = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -55,7 +57,6 @@ const OrganizePDF = () => {
       const pdf = await PDFDocument.load(arrayBuffer);
       const newPdf = await PDFDocument.create();
       
-      // Copy pages in new order
       const newOrder = pages.map(p => p.originalIndex);
       const copiedPages = await newPdf.copyPages(pdf, newOrder);
       copiedPages.forEach(page => newPdf.addPage(page));
@@ -87,13 +88,13 @@ const OrganizePDF = () => {
 
   return (
     <ToolLayout
-      title="Organiser PDF"
-      description="Réorganisez les pages de votre PDF par glisser-déposer"
+      title={t('tools.organize.title')}
+      description={t('tools.organize.description')}
       icon={LayoutGrid}
       color="coral"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Traitement en cours..." />
+        <ProcessingLoader message={t('tools.organize.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -103,23 +104,23 @@ const OrganizePDF = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <LayoutGrid className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Réorganisation terminée !</h3>
-          <p className="text-muted-foreground">Vos pages ont été réorganisées avec succès</p>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.organize.success')}</h3>
+          <p className="text-muted-foreground">{t('tools.organize.successDesc')}</p>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger
+              {t('tools.organize.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouveau fichier
+              {t('tools.organize.reset')}
             </Button>
           </div>
         </motion.div>
       ) : pages.length > 0 ? (
         <div className="space-y-6">
           <p className="text-center text-muted-foreground">
-            Glissez et déposez les pages pour les réorganiser
+            {t('tools.organize.dragHint')}
           </p>
           
           <Reorder.Group 
@@ -159,10 +160,10 @@ const OrganizePDF = () => {
           <div className="flex justify-center gap-4">
             <Button onClick={handleReorganize} size="lg" className="gap-2">
               <LayoutGrid className="w-5 h-5" />
-              Appliquer les changements
+              {t('tools.organize.organizeButton')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg">
-              Annuler
+              {t('common.cancel')}
             </Button>
           </div>
         </div>
@@ -173,8 +174,6 @@ const OrganizePDF = () => {
           multiple={false}
           maxFiles={1}
           files={files}
-          title="Déposez votre fichier PDF ici"
-          description="ou cliquez pour sélectionner"
         />
       )}
     </ToolLayout>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Crop, Download, RotateCcw } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -10,6 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 import { motion } from 'framer-motion';
 
 const CropPDF = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -52,7 +54,6 @@ const CropPDF = () => {
       for (const page of pages) {
         const { width, height } = page.getSize();
         
-        // Calculate crop box based on margins (percentage)
         const cropLeft = (cropMargins.left / 100) * width;
         const cropRight = width - (cropMargins.right / 100) * width;
         const cropBottom = (cropMargins.bottom / 100) * height;
@@ -88,13 +89,13 @@ const CropPDF = () => {
 
   return (
     <ToolLayout
-      title="Rogner PDF"
-      description="Recadrez les pages de votre PDF"
+      title={t('tools.crop.title')}
+      description={t('tools.crop.description')}
       icon={Crop}
       color="violet"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Traitement en cours..." />
+        <ProcessingLoader message={t('tools.crop.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -104,15 +105,15 @@ const CropPDF = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <Crop className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Rognage terminé !</h3>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.crop.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger
+              {t('tools.crop.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouveau fichier
+              {t('tools.crop.reset')}
             </Button>
           </div>
         </motion.div>
@@ -144,7 +145,7 @@ const CropPDF = () => {
           
           <div className="max-w-md mx-auto space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Marge supérieure: {cropMargins.top}%</label>
+              <label className="block text-sm font-medium mb-2">{t('tools.crop.top')}: {cropMargins.top}%</label>
               <Slider
                 value={[cropMargins.top]}
                 onValueChange={([v]) => setCropMargins(m => ({ ...m, top: v }))}
@@ -153,7 +154,7 @@ const CropPDF = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Marge droite: {cropMargins.right}%</label>
+              <label className="block text-sm font-medium mb-2">{t('tools.crop.right')}: {cropMargins.right}%</label>
               <Slider
                 value={[cropMargins.right]}
                 onValueChange={([v]) => setCropMargins(m => ({ ...m, right: v }))}
@@ -162,7 +163,7 @@ const CropPDF = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Marge inférieure: {cropMargins.bottom}%</label>
+              <label className="block text-sm font-medium mb-2">{t('tools.crop.bottom')}: {cropMargins.bottom}%</label>
               <Slider
                 value={[cropMargins.bottom]}
                 onValueChange={([v]) => setCropMargins(m => ({ ...m, bottom: v }))}
@@ -171,7 +172,7 @@ const CropPDF = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Marge gauche: {cropMargins.left}%</label>
+              <label className="block text-sm font-medium mb-2">{t('tools.crop.left')}: {cropMargins.left}%</label>
               <Slider
                 value={[cropMargins.left]}
                 onValueChange={([v]) => setCropMargins(m => ({ ...m, left: v }))}
@@ -184,10 +185,10 @@ const CropPDF = () => {
           <div className="flex justify-center gap-4">
             <Button onClick={handleCrop} size="lg" className="gap-2">
               <Crop className="w-5 h-5" />
-              Appliquer le rognage
+              {t('tools.crop.cropButton')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg">
-              Annuler
+              {t('common.cancel')}
             </Button>
           </div>
         </div>
@@ -198,8 +199,6 @@ const CropPDF = () => {
           multiple={false}
           maxFiles={1}
           files={files}
-          title="Déposez votre fichier PDF ici"
-          description="ou cliquez pour sélectionner"
         />
       )}
     </ToolLayout>

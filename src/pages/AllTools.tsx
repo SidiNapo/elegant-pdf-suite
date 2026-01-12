@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Merge,
   Split,
@@ -37,212 +38,214 @@ import compressPdfIllustration from '@/assets/compress-pdf-illustration.jpg';
 import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 
-const toolCategories = [
-  {
-    name: 'Organiser PDF',
-    description: 'Organisez vos documents PDF facilement',
-    image: mergePdfIllustration,
-    tools: [
-      {
-        title: 'Fusionner PDF',
-        description: 'Combinez plusieurs fichiers PDF en un seul document',
-        icon: Merge,
-        href: '/merge',
-        color: 'coral' as const,
-      },
-      {
-        title: 'Diviser PDF',
-        description: 'Divisez un PDF en plusieurs fichiers séparés',
-        icon: Split,
-        href: '/split',
-        color: 'rose' as const,
-      },
-      {
-        title: 'Supprimer des pages',
-        description: 'Supprimez les pages indésirables de votre PDF',
-        icon: Trash2,
-        href: '/delete-pages',
-        color: 'violet' as const,
-      },
-      {
-        title: 'Extraire des pages',
-        description: 'Extrayez des pages spécifiques de votre PDF',
-        icon: FileOutput,
-        href: '/extract-pages',
-        color: 'cyan' as const,
-      },
-      {
-        title: 'Organiser PDF',
-        description: 'Réorganisez les pages de votre PDF',
-        icon: LayoutGrid,
-        href: '/organize',
-        color: 'coral' as const,
-      },
-      {
-        title: 'Numériser au format PDF',
-        description: 'Convertissez vos images numérisées en PDF',
-        icon: ScanLine,
-        href: '/scan-to-pdf',
-        color: 'rose' as const,
-      },
-    ],
-  },
-  {
-    name: 'Optimiser le PDF',
-    description: 'Optimisez et réparez vos fichiers PDF',
-    image: compressPdfIllustration,
-    tools: [
-      {
-        title: 'Compresser PDF',
-        description: 'Réduisez la taille de vos fichiers PDF',
-        icon: Minimize2,
-        href: '/compress',
-        color: 'violet' as const,
-      },
-      {
-        title: 'Réparer PDF',
-        description: 'Réparez les fichiers PDF corrompus',
-        icon: Wrench,
-        href: '/repair',
-        color: 'cyan' as const,
-      },
-    ],
-  },
-  {
-    name: 'Convertir en PDF',
-    description: 'Convertissez différents formats en PDF',
-    image: convertPdfIllustration,
-    tools: [
-      {
-        title: 'JPG en PDF',
-        description: 'Convertissez vos images JPG en documents PDF',
-        icon: Image,
-        href: '/jpg-to-pdf',
-        color: 'rose' as const,
-      },
-      {
-        title: 'Word en PDF',
-        description: 'Convertissez vos documents Word en PDF',
-        icon: FileText,
-        href: '/word-to-pdf',
-        color: 'violet' as const,
-      },
-      {
-        title: 'PowerPoint en PDF',
-        description: 'Convertissez vos présentations en PDF',
-        icon: Presentation,
-        href: '/ppt-to-pdf',
-        color: 'cyan' as const,
-      },
-      {
-        title: 'Excel en PDF',
-        description: 'Convertissez vos feuilles de calcul en PDF',
-        icon: Table,
-        href: '/excel-to-pdf',
-        color: 'coral' as const,
-      },
-    ],
-  },
-  {
-    name: 'Convertir depuis PDF',
-    description: 'Convertissez vos PDF vers d\'autres formats',
-    image: splitPdfIllustration,
-    tools: [
-      {
-        title: 'PDF en JPG',
-        description: 'Convertissez chaque page en image JPG',
-        icon: Image,
-        href: '/pdf-to-jpg',
-        color: 'violet' as const,
-      },
-      {
-        title: 'PDF en Word',
-        description: 'Convertissez vos PDF en documents Word',
-        icon: FileText,
-        href: '/pdf-to-word',
-        color: 'cyan' as const,
-      },
-      {
-        title: 'PDF en PowerPoint',
-        description: 'Convertissez vos PDF en présentations',
-        icon: Presentation,
-        href: '/pdf-to-ppt',
-        color: 'coral' as const,
-      },
-      {
-        title: 'PDF en Excel',
-        description: 'Convertissez vos PDF en feuilles de calcul',
-        icon: Table,
-        href: '/pdf-to-excel',
-        color: 'rose' as const,
-      },
-    ],
-  },
-  {
-    name: 'Modifier PDF',
-    description: 'Modifiez et personnalisez vos fichiers PDF',
-    image: securityIllustration,
-    tools: [
-      {
-        title: 'Faire pivoter PDF',
-        description: 'Faites pivoter les pages de votre PDF',
-        icon: RotateCw,
-        href: '/rotate',
-        color: 'cyan' as const,
-      },
-      {
-        title: 'Numéros de pages',
-        description: 'Ajoutez des numéros aux pages de votre PDF',
-        icon: Hash,
-        href: '/page-numbers',
-        color: 'coral' as const,
-      },
-      {
-        title: 'Ajouter un filigrane',
-        description: 'Ajoutez un filigrane à votre PDF',
-        icon: Droplets,
-        href: '/watermark',
-        color: 'rose' as const,
-      },
-      {
-        title: 'Rogner PDF',
-        description: 'Recadrez les pages de votre PDF',
-        icon: Crop,
-        href: '/crop',
-        color: 'violet' as const,
-      },
-      {
-        title: 'Modifier PDF',
-        description: 'Modifiez le texte et les images de votre PDF',
-        icon: Edit,
-        href: '/edit',
-        color: 'cyan' as const,
-      },
-    ],
-  },
-  {
-    name: 'Comparer PDF',
-    description: 'Comparez vos fichiers PDF',
-    image: heroPdf,
-    tools: [
-      {
-        title: 'Comparer PDF',
-        description: 'Comparez deux fichiers PDF',
-        icon: GitCompare,
-        href: '/compare',
-        color: 'coral' as const,
-      },
-    ],
-  },
-];
-
-const features = [
-  { icon: Zap, title: 'Traitement rapide', description: 'Vos fichiers sont traités instantanément' },
-  { icon: Shield, title: 'Sécurité totale', description: 'Vos fichiers restent sur votre appareil' },
-  { icon: Globe, title: 'Gratuit et illimité', description: 'Tous les outils sans restriction' },
-];
-
 const AllTools = () => {
+  const { t } = useTranslation();
+
+  const toolCategories = [
+    {
+      name: t('categories.organize'),
+      description: t('categories.organizeDesc'),
+      image: mergePdfIllustration,
+      tools: [
+        {
+          title: t('tools.merge.title'),
+          description: t('tools.merge.description'),
+          icon: Merge,
+          href: '/merge',
+          color: 'coral' as const,
+        },
+        {
+          title: t('tools.split.title'),
+          description: t('tools.split.description'),
+          icon: Split,
+          href: '/split',
+          color: 'rose' as const,
+        },
+        {
+          title: t('tools.deletePages.title'),
+          description: t('tools.deletePages.description'),
+          icon: Trash2,
+          href: '/delete-pages',
+          color: 'violet' as const,
+        },
+        {
+          title: t('tools.extractPages.title'),
+          description: t('tools.extractPages.description'),
+          icon: FileOutput,
+          href: '/extract-pages',
+          color: 'cyan' as const,
+        },
+        {
+          title: t('tools.organize.title'),
+          description: t('tools.organize.description'),
+          icon: LayoutGrid,
+          href: '/organize',
+          color: 'coral' as const,
+        },
+        {
+          title: t('tools.scanToPdf.title'),
+          description: t('tools.scanToPdf.description'),
+          icon: ScanLine,
+          href: '/scan-to-pdf',
+          color: 'rose' as const,
+        },
+      ],
+    },
+    {
+      name: t('categories.optimize'),
+      description: t('categories.optimizeDesc'),
+      image: compressPdfIllustration,
+      tools: [
+        {
+          title: t('tools.compress.title'),
+          description: t('tools.compress.description'),
+          icon: Minimize2,
+          href: '/compress',
+          color: 'violet' as const,
+        },
+        {
+          title: t('tools.repair.title'),
+          description: t('tools.repair.description'),
+          icon: Wrench,
+          href: '/repair',
+          color: 'cyan' as const,
+        },
+      ],
+    },
+    {
+      name: t('categories.convertTo'),
+      description: t('categories.convertToDesc'),
+      image: convertPdfIllustration,
+      tools: [
+        {
+          title: t('tools.jpgToPdf.title'),
+          description: t('tools.jpgToPdf.description'),
+          icon: Image,
+          href: '/jpg-to-pdf',
+          color: 'rose' as const,
+        },
+        {
+          title: t('tools.wordToPdf.title'),
+          description: t('tools.wordToPdf.description'),
+          icon: FileText,
+          href: '/word-to-pdf',
+          color: 'violet' as const,
+        },
+        {
+          title: t('tools.pptToPdf.title'),
+          description: t('tools.pptToPdf.description'),
+          icon: Presentation,
+          href: '/ppt-to-pdf',
+          color: 'cyan' as const,
+        },
+        {
+          title: t('tools.excelToPdf.title'),
+          description: t('tools.excelToPdf.description'),
+          icon: Table,
+          href: '/excel-to-pdf',
+          color: 'coral' as const,
+        },
+      ],
+    },
+    {
+      name: t('categories.convertFrom'),
+      description: t('categories.convertFromDesc'),
+      image: splitPdfIllustration,
+      tools: [
+        {
+          title: t('tools.pdfToJpg.title'),
+          description: t('tools.pdfToJpg.description'),
+          icon: Image,
+          href: '/pdf-to-jpg',
+          color: 'violet' as const,
+        },
+        {
+          title: t('tools.pdfToWord.title'),
+          description: t('tools.pdfToWord.description'),
+          icon: FileText,
+          href: '/pdf-to-word',
+          color: 'cyan' as const,
+        },
+        {
+          title: t('tools.pdfToPpt.title'),
+          description: t('tools.pdfToPpt.description'),
+          icon: Presentation,
+          href: '/pdf-to-ppt',
+          color: 'coral' as const,
+        },
+        {
+          title: t('tools.pdfToExcel.title'),
+          description: t('tools.pdfToExcel.description'),
+          icon: Table,
+          href: '/pdf-to-excel',
+          color: 'rose' as const,
+        },
+      ],
+    },
+    {
+      name: t('categories.modify'),
+      description: t('categories.modifyDesc'),
+      image: securityIllustration,
+      tools: [
+        {
+          title: t('tools.rotate.title'),
+          description: t('tools.rotate.description'),
+          icon: RotateCw,
+          href: '/rotate',
+          color: 'cyan' as const,
+        },
+        {
+          title: t('tools.pageNumbers.title'),
+          description: t('tools.pageNumbers.description'),
+          icon: Hash,
+          href: '/page-numbers',
+          color: 'coral' as const,
+        },
+        {
+          title: t('tools.watermark.title'),
+          description: t('tools.watermark.description'),
+          icon: Droplets,
+          href: '/watermark',
+          color: 'rose' as const,
+        },
+        {
+          title: t('tools.crop.title'),
+          description: t('tools.crop.description'),
+          icon: Crop,
+          href: '/crop',
+          color: 'violet' as const,
+        },
+        {
+          title: t('tools.edit.title'),
+          description: t('tools.edit.description'),
+          icon: Edit,
+          href: '/edit',
+          color: 'cyan' as const,
+        },
+      ],
+    },
+    {
+      name: t('categories.compare'),
+      description: t('categories.compareDesc'),
+      image: heroPdf,
+      tools: [
+        {
+          title: t('tools.compare.title'),
+          description: t('tools.compare.description'),
+          icon: GitCompare,
+          href: '/compare',
+          color: 'coral' as const,
+        },
+      ],
+    },
+  ];
+
+  const features = [
+    { icon: Zap, title: t('allTools.fastProcessing'), description: t('allTools.fastDesc') },
+    { icon: Shield, title: t('allTools.totalSecurity'), description: t('allTools.secureDesc') },
+    { icon: Globe, title: t('allTools.freeUnlimited'), description: t('allTools.freeDesc') },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -266,11 +269,10 @@ const AllTools = () => {
               className="text-center max-w-4xl mx-auto"
             >
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Tous les <span className="gradient-text">outils PDF</span>
+                {t('allTools.title')} <span className="gradient-text">{t('allTools.titleHighlight')}</span>
               </h1>
               <p className="text-xl text-muted-foreground mb-10">
-                Découvrez notre collection complète d'outils pour gérer, convertir et modifier vos fichiers PDF. 
-                Plus de 20 outils gratuits pour tous vos besoins en matière de documents PDF.
+                {t('allTools.subtitle')}
               </p>
               
               {/* Feature Pills */}
@@ -315,7 +317,7 @@ const AllTools = () => {
                       <p className="text-lg text-muted-foreground mb-4">{category.description}</p>
                       <div className="flex items-center gap-2 text-sm text-primary">
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>{category.tools.length} outil{category.tools.length > 1 ? 's' : ''} disponible{category.tools.length > 1 ? 's' : ''}</span>
+                        <span>{category.tools.length} {t('allTools.toolsAvailable')}</span>
                       </div>
                     </div>
                   </div>
@@ -350,13 +352,13 @@ const AllTools = () => {
               className="text-center max-w-3xl mx-auto"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Besoin d'aide pour choisir le bon outil ?
+                {t('allTools.ctaTitle')}
               </h2>
               <p className="text-xl text-muted-foreground mb-8">
-                Retournez à la page d'accueil pour découvrir nos outils les plus populaires et comment ils peuvent vous aider.
+                {t('allTools.ctaDescription')}
               </p>
               <Link to="/" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
-                Retour à l'accueil <ArrowRight className="w-5 h-5" />
+                {t('allTools.backHome')} <ArrowRight className="w-5 h-5" />
               </Link>
             </motion.div>
           </div>
@@ -366,29 +368,15 @@ const AllTools = () => {
         <section className="py-16 border-t border-border">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6">Guide complet des outils PDF en ligne</h2>
+              <h2 className="text-2xl font-bold mb-6">{t('allTools.guideTitle')}</h2>
               <div className="text-muted-foreground space-y-4 prose prose-invert">
-                <p>
-                  E-PDF's offre une suite complète d'<strong className="text-foreground">outils PDF gratuits</strong> pour répondre à tous vos besoins de gestion documentaire. 
-                  Que vous soyez un professionnel, un étudiant ou un particulier, nos outils sont conçus pour être <strong className="text-foreground">simples et efficaces</strong>.
-                </p>
-                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">Organiser vos PDF</h3>
-                <p>
-                  Utilisez nos outils pour <strong className="text-foreground">fusionner plusieurs PDF</strong> en un seul document, 
-                  <strong className="text-foreground">diviser un PDF volumineux</strong> en fichiers séparés, ou 
-                  <strong className="text-foreground">réorganiser les pages</strong> selon vos besoins.
-                </p>
-                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">Convertir vos documents</h3>
-                <p>
-                  Transformez facilement vos fichiers avec nos convertisseurs : <strong className="text-foreground">JPG en PDF</strong>, 
-                  <strong className="text-foreground">Word en PDF</strong>, <strong className="text-foreground">Excel en PDF</strong>, 
-                  et inversement. Tous les formats populaires sont supportés.
-                </p>
-                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">Modifier et personnaliser</h3>
-                <p>
-                  Ajoutez un <strong className="text-foreground">filigrane</strong>, des <strong className="text-foreground">numéros de page</strong>, 
-                  ou <strong className="text-foreground">faites pivoter vos pages PDF</strong>. Nos outils de modification vous donnent un contrôle total sur vos documents.
-                </p>
+                <p>{t('allTools.guideIntro')}</p>
+                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">{t('allTools.organizeTitle')}</h3>
+                <p>{t('allTools.organizeDesc')}</p>
+                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">{t('allTools.convertTitle')}</h3>
+                <p>{t('allTools.convertDesc')}</p>
+                <h3 className="text-foreground text-xl font-semibold mt-6 mb-3">{t('allTools.modifyTitle')}</h3>
+                <p>{t('allTools.modifyDesc')}</p>
               </div>
             </div>
           </div>

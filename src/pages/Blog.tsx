@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
@@ -11,6 +12,7 @@ import { useState } from 'react';
 import heroPdf from '@/assets/hero-pdf.jpg';
 
 const Blog = () => {
+  const { t } = useTranslation();
   const { data: posts, isLoading } = usePublishedPosts();
   const { data: categories } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -47,15 +49,15 @@ const Blog = () => {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
                 <BookOpen className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">Blog & Ressources</span>
+                <span className="text-sm text-muted-foreground">{t('blog.title')} & {t('footer.resources')}</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                <span className="gradient-text">Guides & Tutoriels</span> PDF
+                <span className="gradient-text">{t('blog.title')}</span> PDF
               </h1>
 
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Apprenez à maîtriser vos documents PDF avec nos guides complets, tutoriels et astuces d'experts.
+                {t('blog.subtitle')}
               </p>
             </motion.div>
 
@@ -75,7 +77,7 @@ const Blog = () => {
                       : 'glass-card hover:bg-muted'
                   }`}
                 >
-                  Tous
+                  {t('blog.allCategories')}
                 </button>
                 {categories.map((category) => (
                   <button
@@ -121,9 +123,9 @@ const Blog = () => {
                 className="text-center py-20"
               >
                 <BookOpen className="w-16 h-16 mx-auto text-muted-foreground/30 mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Aucun article pour le moment</h2>
+                <h2 className="text-2xl font-bold mb-2">{t('blog.noPostsFound')}</h2>
                 <p className="text-muted-foreground">
-                  Revenez bientôt pour découvrir nos guides et tutoriels.
+                  {t('blog.loading')}
                 </p>
               </motion.div>
             )}

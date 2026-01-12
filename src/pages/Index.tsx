@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
@@ -15,122 +16,124 @@ import securityIllustration from '@/assets/security-illustration.jpg';
 import speedIllustration from '@/assets/speed-illustration.jpg';
 import globalIllustration from '@/assets/global-illustration.jpg';
 
-const popularTools = [{
-  title: 'Fusionner PDF',
-  description: 'Combinez plusieurs PDF en un',
-  icon: Merge,
-  href: '/merge',
-  color: 'coral' as const
-}, {
-  title: 'Diviser PDF',
-  description: 'Divisez un PDF en plusieurs fichiers',
-  icon: Split,
-  href: '/split',
-  color: 'rose' as const
-}, {
-  title: 'Compresser PDF',
-  description: 'Réduisez la taille de vos PDF',
-  icon: Minimize2,
-  href: '/compress',
-  color: 'violet' as const
-}, {
-  title: 'JPG en PDF',
-  description: 'Convertissez vos images en PDF',
-  icon: Image,
-  href: '/jpg-to-pdf',
-  color: 'cyan' as const
-}, {
-  title: 'PDF en JPG',
-  description: 'Convertissez PDF en images',
-  icon: Image,
-  href: '/pdf-to-jpg',
-  color: 'coral' as const
-}, {
-  title: 'Faire pivoter',
-  description: 'Faites pivoter vos pages PDF',
-  icon: RotateCw,
-  href: '/rotate',
-  color: 'rose' as const
-}, {
-  title: 'Filigrane',
-  description: 'Ajoutez un filigrane texte',
-  icon: Droplets,
-  href: '/watermark',
-  color: 'violet' as const
-}];
-
-const features = [{
-  icon: Zap,
-  title: 'Ultra rapide',
-  description: 'Traitement instantané directement dans votre navigateur',
-  image: speedIllustration
-}, {
-  icon: Shield,
-  title: '100% Sécurisé',
-  description: 'Vos fichiers ne quittent jamais votre appareil',
-  image: securityIllustration
-}, {
-  icon: Globe,
-  title: 'Gratuit',
-  description: 'Tous les outils sont gratuits et sans limite',
-  image: globalIllustration
-}];
-
-const showcaseTools = [{
-  title: 'Fusionner vos PDF',
-  description: 'Combinez facilement plusieurs documents PDF en un seul fichier. Idéal pour créer des rapports complets, des portfolios ou des dossiers organisés.',
-  image: mergePdfIllustration,
-  href: '/merge',
-  features: ['Glisser-déposer simple', 'Réorganiser les pages', 'Prévisualisation instantanée']
-}, {
-  title: 'Diviser vos documents',
-  description: 'Séparez un PDF volumineux en plusieurs fichiers distincts. Extrayez des pages spécifiques ou divisez par plages de pages.',
-  image: splitPdfIllustration,
-  href: '/split',
-  features: ['Division par pages', 'Extraction sélective', 'Export multiple']
-}, {
-  title: 'Compresser sans perte',
-  description: 'Réduisez la taille de vos PDF jusqu\'à 90% tout en préservant la qualité. Parfait pour les envois par email.',
-  image: compressPdfIllustration,
-  href: '/compress',
-  features: ['Compression intelligente', 'Qualité préservée', 'Taille réduite']
-}, {
-  title: 'Convertir facilement',
-  description: 'Transformez vos images, documents Word, PowerPoint et Excel en PDF de haute qualité en quelques secondes.',
-  image: convertPdfIllustration,
-  href: '/jpg-to-pdf',
-  features: ['Multi-formats', 'Conversion rapide', 'Qualité optimale']
-}];
-
-const stats = [{
-  value: '10M+',
-  label: 'Fichiers traités'
-}, {
-  value: '500K+',
-  label: 'Utilisateurs satisfaits'
-}, {
-  value: '20+',
-  label: 'Outils disponibles'
-}, {
-  value: '100%',
-  label: 'Gratuit'
-}];
-
-const testimonials = [{
-  name: 'Marie L.',
-  role: 'Designer',
-  text: 'E-PDF\'s m\'a fait gagner des heures de travail. Les outils sont intuitifs et rapides.'
-}, {
-  name: 'Thomas B.',
-  role: 'Entrepreneur',
-  text: 'Enfin un outil PDF gratuit et sans publicités intrusives. Je recommande vivement!'
-}, {
-  name: 'Sophie M.',
-  role: 'Étudiante',
-  text: 'Parfait pour mes cours. Je peux fusionner mes notes PDF en quelques clics.'
-}];
-
 const Index = () => {
+  const { t } = useTranslation();
+
+  const popularTools = [{
+    title: t('tools.merge.title'),
+    description: t('tools.merge.description'),
+    icon: Merge,
+    href: '/merge',
+    color: 'coral' as const
+  }, {
+    title: t('tools.split.title'),
+    description: t('tools.split.description'),
+    icon: Split,
+    href: '/split',
+    color: 'rose' as const
+  }, {
+    title: t('tools.compress.title'),
+    description: t('tools.compress.description'),
+    icon: Minimize2,
+    href: '/compress',
+    color: 'violet' as const
+  }, {
+    title: t('tools.jpgToPdf.title'),
+    description: t('tools.jpgToPdf.description'),
+    icon: Image,
+    href: '/jpg-to-pdf',
+    color: 'cyan' as const
+  }, {
+    title: t('tools.pdfToJpg.title'),
+    description: t('tools.pdfToJpg.description'),
+    icon: Image,
+    href: '/pdf-to-jpg',
+    color: 'coral' as const
+  }, {
+    title: t('tools.rotate.title'),
+    description: t('tools.rotate.description'),
+    icon: RotateCw,
+    href: '/rotate',
+    color: 'rose' as const
+  }, {
+    title: t('tools.watermark.title'),
+    description: t('tools.watermark.description'),
+    icon: Droplets,
+    href: '/watermark',
+    color: 'violet' as const
+  }];
+
+  const features = [{
+    icon: Zap,
+    title: t('features.fast'),
+    description: t('features.fastDesc'),
+    image: speedIllustration
+  }, {
+    icon: Shield,
+    title: t('features.secure'),
+    description: t('features.secureDesc'),
+    image: securityIllustration
+  }, {
+    icon: Globe,
+    title: t('features.free'),
+    description: t('features.freeDesc'),
+    image: globalIllustration
+  }];
+
+  const showcaseTools = [{
+    title: t('showcase.merge.title'),
+    description: t('showcase.merge.description'),
+    image: mergePdfIllustration,
+    href: '/merge',
+    features: [t('showcase.merge.feature1'), t('showcase.merge.feature2'), t('showcase.merge.feature3')]
+  }, {
+    title: t('showcase.split.title'),
+    description: t('showcase.split.description'),
+    image: splitPdfIllustration,
+    href: '/split',
+    features: [t('showcase.split.feature1'), t('showcase.split.feature2'), t('showcase.split.feature3')]
+  }, {
+    title: t('showcase.compress.title'),
+    description: t('showcase.compress.description'),
+    image: compressPdfIllustration,
+    href: '/compress',
+    features: [t('showcase.compress.feature1'), t('showcase.compress.feature2'), t('showcase.compress.feature3')]
+  }, {
+    title: t('showcase.convert.title'),
+    description: t('showcase.convert.description'),
+    image: convertPdfIllustration,
+    href: '/jpg-to-pdf',
+    features: [t('showcase.convert.feature1'), t('showcase.convert.feature2'), t('showcase.convert.feature3')]
+  }];
+
+  const stats = [{
+    value: '10M+',
+    label: t('stats.filesProcessed')
+  }, {
+    value: '500K+',
+    label: t('stats.satisfiedUsers')
+  }, {
+    value: '20+',
+    label: t('stats.availableTools')
+  }, {
+    value: '100%',
+    label: t('stats.free')
+  }];
+
+  const testimonials = [{
+    name: t('testimonials.testimonial1.name'),
+    role: t('testimonials.testimonial1.role'),
+    text: t('testimonials.testimonial1.text')
+  }, {
+    name: t('testimonials.testimonial2.name'),
+    role: t('testimonials.testimonial2.role'),
+    text: t('testimonials.testimonial2.text')
+  }, {
+    name: t('testimonials.testimonial3.name'),
+    role: t('testimonials.testimonial3.role'),
+    text: t('testimonials.testimonial3.text')
+  }];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -154,20 +157,20 @@ const Index = () => {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6">
                 <Star className="w-4 h-4 fill-primary" />
-                <span>#1 Outil PDF en ligne gratuit</span>
+                <span>{t('hero.badge')}</span>
               </span>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                Tous vos outils <span className="gradient-text">PDF</span> en un seul endroit
+                {t('hero.title')} <span className="gradient-text">{t('hero.titleHighlight')}</span> {t('hero.titleEnd')}
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-xl">
-                Fusionnez, divisez, compressez et convertissez vos PDF gratuitement. Rapide, sécurisé et sans inscription. Plus de 10 millions de fichiers traités.
+                {t('hero.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/tools" className="btn-primary inline-flex items-center justify-center gap-2 text-lg px-8 py-4">
-                  Découvrir tous les outils <ArrowRight className="w-5 h-5" />
+                  {t('hero.cta')} <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link to="/merge" className="btn-secondary inline-flex items-center justify-center gap-2 text-lg px-8 py-4">
-                  Fusionner PDF
+                  {t('hero.ctaSecondary')}
                 </Link>
               </div>
               
@@ -175,15 +178,15 @@ const Index = () => {
               <div className="flex items-center gap-6 mt-10 pt-10 border-t border-border/50">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">100% Sécurisé</span>
+                  <span className="text-sm text-muted-foreground">{t('hero.secure')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Zap className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Traitement rapide</span>
+                  <span className="text-sm text-muted-foreground">{t('hero.fast')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">500K+ utilisateurs</span>
+                  <span className="text-sm text-muted-foreground">{t('hero.users')}</span>
                 </div>
               </div>
             </motion.div>
@@ -234,10 +237,10 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Pourquoi choisir <span className="gradient-text">E-PDF's</span> ?
+              {t('features.title')} <span className="gradient-text">{t('features.titleHighlight')}</span> ?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Une solution complète pour tous vos besoins PDF, conçue pour être simple, rapide et sécurisée.
+              {t('features.subtitle')}
             </p>
           </motion.div>
           
@@ -278,10 +281,10 @@ const Index = () => {
             className="text-center mb-20"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Outils <span className="gradient-text">puissants</span> et intuitifs
+              {t('showcase.title')} <span className="gradient-text">{t('showcase.titleHighlight')}</span> {t('showcase.titleEnd')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Découvrez nos outils les plus populaires pour gérer vos documents PDF comme un professionnel.
+              {t('showcase.subtitle')}
             </p>
           </motion.div>
           
@@ -315,7 +318,7 @@ const Index = () => {
                     ))}
                   </ul>
                   <Link to={tool.href} className="btn-primary inline-flex items-center gap-2">
-                    Essayer maintenant <ArrowRight className="w-4 h-4" />
+                    {t('showcase.tryNow')} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </motion.div>
@@ -333,15 +336,15 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Outils <span className="gradient-text">populaires</span></h2>
-            <p className="text-xl text-muted-foreground">Les outils les plus utilisés pour gérer vos documents PDF</p>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('popularTools.title')} <span className="gradient-text">{t('popularTools.titleHighlight')}</span></h2>
+            <p className="text-xl text-muted-foreground">{t('popularTools.subtitle')}</p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {popularTools.map(tool => <ToolCard key={tool.title} {...tool} />)}
           </div>
           <div className="text-center mt-12">
             <Link to="/tools" className="btn-secondary inline-flex items-center gap-2 text-lg px-8 py-4">
-              Voir tous les outils <ArrowRight className="w-4 h-4" />
+              {t('popularTools.viewAll')} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -357,9 +360,9 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Ce que disent nos <span className="gradient-text">utilisateurs</span>
+              {t('testimonials.title')} <span className="gradient-text">{t('testimonials.titleHighlight')}</span>
             </h2>
-            <p className="text-xl text-muted-foreground">Plus de 500 000 personnes font confiance à E-PDF's</p>
+            <p className="text-xl text-muted-foreground">{t('testimonials.subtitle')}</p>
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -403,42 +406,27 @@ const Index = () => {
           >
             <FileText className="w-16 h-16 text-primary mx-auto mb-6" />
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Prêt à simplifier votre travail avec les <span className="gradient-text">PDF</span> ?
+              {t('cta.title')} <span className="gradient-text">{t('cta.titleHighlight')}</span> ?
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Rejoignez plus de 500 000 utilisateurs qui font confiance à E-PDF's pour leurs documents PDF. Gratuit, rapide et sécurisé.
+              {t('cta.description')}
             </p>
-            <Link to="/tools" className="btn-primary inline-flex items-center gap-2 text-lg px-10 py-5">
-              Commencer maintenant <ArrowRight className="w-5 h-5" />
+            <Link to="/tools" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
+              {t('cta.button')} <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* SEO Content Section */}
+      {/* SEO Content */}
       <section className="py-16 border-t border-border">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto prose prose-invert">
-            <h2 className="text-2xl font-bold mb-6 text-foreground">E-PDF's : Votre solution complète pour la gestion de documents PDF</h2>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold mb-6">{t('seo.title')}</h2>
             <div className="text-muted-foreground space-y-4">
-              <p>
-                <strong className="text-foreground">E-PDF's</strong> est la plateforme en ligne gratuite la plus complète pour tous vos besoins en matière de <strong className="text-foreground">gestion de fichiers PDF</strong>. 
-                Que vous ayez besoin de <strong className="text-foreground">fusionner des PDF</strong>, <strong className="text-foreground">diviser un document PDF</strong>, 
-                <strong className="text-foreground">compresser des fichiers PDF</strong> pour réduire leur taille, ou <strong className="text-foreground">convertir des images en PDF</strong>, 
-                nos outils sont conçus pour être simples, rapides et efficaces.
-              </p>
-              <p>
-                Nos <strong className="text-foreground">outils PDF en ligne</strong> fonctionnent directement dans votre navigateur, sans nécessiter d'installation de logiciel. 
-                Vos documents restent sur votre appareil, garantissant une <strong className="text-foreground">confidentialité totale</strong> de vos données. 
-                Avec plus de <strong className="text-foreground">10 millions de fichiers traités</strong>, E-PDF's est devenu la référence pour 
-                <strong className="text-foreground">l'édition de PDF gratuite</strong>.
-              </p>
-              <p>
-                Découvrez nos fonctionnalités : <strong className="text-foreground">fusionner plusieurs PDF</strong>, <strong className="text-foreground">extraire des pages PDF</strong>, 
-                <strong className="text-foreground">ajouter un filigrane</strong>, <strong className="text-foreground">faire pivoter des pages</strong>, 
-                <strong className="text-foreground">convertir Word en PDF</strong>, <strong className="text-foreground">PDF en JPG</strong>, et bien plus encore. 
-                Tous nos outils sont <strong className="text-foreground">100% gratuits</strong> et <strong className="text-foreground">sans limite d'utilisation</strong>.
-              </p>
+              <p>{t('seo.paragraph1')}</p>
+              <p>{t('seo.paragraph2')}</p>
+              <p>{t('seo.paragraph3')}</p>
             </div>
           </div>
         </div>

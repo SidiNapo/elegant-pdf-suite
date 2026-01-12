@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { LucideIcon, ArrowLeft, Shield, Zap, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -34,12 +35,6 @@ const backgroundImages = {
   cyan: convertPdfIllustration,
 };
 
-const benefits = [
-  { icon: Zap, text: 'Traitement instantané' },
-  { icon: Shield, text: '100% sécurisé' },
-  { icon: CheckCircle2, text: 'Gratuit et illimité' },
-];
-
 const ToolLayout = ({
   title,
   description,
@@ -47,7 +42,14 @@ const ToolLayout = ({
   children,
   color = 'coral',
 }: ToolLayoutProps) => {
+  const { t } = useTranslation();
   const bgImage = backgroundImages[color];
+
+  const benefits = [
+    { icon: Zap, text: t('toolLayout.benefits.instant') },
+    { icon: Shield, text: t('toolLayout.benefits.secure') },
+    { icon: CheckCircle2, text: t('toolLayout.benefits.free') },
+  ];
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -77,7 +79,7 @@ const ToolLayout = ({
                 className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Tous les outils</span>
+                <span>{t('toolLayout.backToTools')}</span>
               </Link>
             </motion.div>
 
@@ -130,7 +132,7 @@ const ToolLayout = ({
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Comment utiliser l'outil <span className="gradient-text">{title}</span>
+                  {t('toolLayout.howTo.title')} <span className="gradient-text">{title}</span>
                 </h2>
                 <div className="space-y-4 text-muted-foreground">
                   <div className="flex items-start gap-3">
@@ -138,8 +140,8 @@ const ToolLayout = ({
                       <span className="text-primary font-bold">1</span>
                     </div>
                     <div>
-                      <h3 className="text-foreground font-semibold mb-1">Téléchargez votre fichier</h3>
-                      <p>Glissez-déposez votre fichier PDF ou cliquez pour le sélectionner depuis votre appareil.</p>
+                      <h3 className="text-foreground font-semibold mb-1">{t('toolLayout.howTo.step1Title')}</h3>
+                      <p>{t('toolLayout.howTo.step1Desc')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -147,8 +149,8 @@ const ToolLayout = ({
                       <span className="text-primary font-bold">2</span>
                     </div>
                     <div>
-                      <h3 className="text-foreground font-semibold mb-1">Configurez les options</h3>
-                      <p>Ajustez les paramètres selon vos besoins pour obtenir le résultat souhaité.</p>
+                      <h3 className="text-foreground font-semibold mb-1">{t('toolLayout.howTo.step2Title')}</h3>
+                      <p>{t('toolLayout.howTo.step2Desc')}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -156,8 +158,8 @@ const ToolLayout = ({
                       <span className="text-primary font-bold">3</span>
                     </div>
                     <div>
-                      <h3 className="text-foreground font-semibold mb-1">Téléchargez le résultat</h3>
-                      <p>Récupérez votre fichier traité instantanément, prêt à être utilisé.</p>
+                      <h3 className="text-foreground font-semibold mb-1">{t('toolLayout.howTo.step3Title')}</h3>
+                      <p>{t('toolLayout.howTo.step3Desc')}</p>
                     </div>
                   </div>
                 </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FileText, Download, RotateCcw } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -8,6 +9,7 @@ import { wordToPDF, downloadPDF } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const WordToPdf = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -49,13 +51,13 @@ const WordToPdf = () => {
 
   return (
     <ToolLayout
-      title="Word en PDF"
-      description="Convertissez vos documents Word en fichiers PDF de haute qualité"
+      title={t('tools.wordToPdf.title')}
+      description={t('tools.wordToPdf.description')}
       icon={FileText}
       color="violet"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Conversion du document Word..." />
+        <ProcessingLoader message={t('tools.wordToPdf.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -65,16 +67,15 @@ const WordToPdf = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <FileText className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Conversion terminée !</h3>
-          <p className="text-muted-foreground">Votre document Word a été converti en PDF</p>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.wordToPdf.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger le PDF
+              {t('tools.wordToPdf.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle conversion
+              {t('tools.wordToPdf.reset')}
             </Button>
           </div>
         </motion.div>
@@ -86,8 +87,6 @@ const WordToPdf = () => {
             multiple={false}
             maxFiles={1}
             files={files}
-            title="Déposez votre fichier Word ici"
-            description="ou cliquez pour sélectionner (DOC, DOCX)"
           />
           
           {files.length > 0 && (
@@ -98,7 +97,7 @@ const WordToPdf = () => {
             >
               <Button onClick={handleConvert} size="lg" className="gap-2">
                 <FileText className="w-5 h-5" />
-                Convertir en PDF
+                {t('tools.wordToPdf.convertButton')}
               </Button>
             </motion.div>
           )}

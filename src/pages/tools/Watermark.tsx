@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Droplets, Download, CheckCircle } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -7,11 +8,12 @@ import { addWatermark, downloadPDF } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const Watermark = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [resultPdf, setResultPdf] = useState<Uint8Array | null>(null);
-  const [watermarkText, setWatermarkText] = useState('CONFIDENTIEL');
+  const [watermarkText, setWatermarkText] = useState('CONFIDENTIAL');
   const [opacity, setOpacity] = useState(0.3);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
@@ -47,18 +49,18 @@ const Watermark = () => {
     setResultPdf(null);
   };
 
-  const presets = ['CONFIDENTIEL', 'BROUILLON', 'COPIE', 'EXEMPLE', 'URGENT'];
+  const presets = ['CONFIDENTIAL', 'DRAFT', 'COPY', 'SAMPLE', 'URGENT'];
 
   return (
     <ToolLayout
-      title="Ajouter un filigrane"
-      description="Ajoutez un filigrane texte à toutes les pages de votre PDF"
+      title={t('tools.watermark.title')}
+      description={t('tools.watermark.description')}
       icon={Droplets}
       color="rose"
     >
       <div className="max-w-3xl mx-auto">
         {isProcessing ? (
-          <ProcessingLoader message="Ajout du filigrane en cours..." />
+          <ProcessingLoader message={t('tools.watermark.processing')} />
         ) : isComplete ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -68,17 +70,17 @@ const Watermark = () => {
             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            <h3 className="text-2xl font-semibold mb-4">Filigrane ajouté !</h3>
+            <h3 className="text-2xl font-semibold mb-4">{t('tools.watermark.success')}</h3>
             <p className="text-muted-foreground mb-8">
-              Le filigrane "{watermarkText}" a été ajouté à votre PDF.
+              {t('tools.watermark.successDesc', { text: watermarkText })}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={handleDownload} className="btn-primary flex items-center justify-center gap-2">
                 <Download className="w-5 h-5" />
-                Télécharger le PDF
+                {t('tools.watermark.download')}
               </button>
               <button onClick={handleReset} className="btn-secondary">
-                Modifier un autre fichier
+                {t('tools.watermark.reset')}
               </button>
             </div>
           </motion.div>
@@ -89,7 +91,6 @@ const Watermark = () => {
               accept=".pdf"
               multiple={false}
               files={files}
-              title="Déposez votre fichier PDF ici"
             />
             
             {files.length > 0 && (
@@ -100,12 +101,12 @@ const Watermark = () => {
               >
                 {/* Watermark Text */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4 text-center">Texte du filigrane</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-center">{t('tools.watermark.text')}</h3>
                   <input
                     type="text"
                     value={watermarkText}
                     onChange={(e) => setWatermarkText(e.target.value)}
-                    placeholder="Entrez le texte du filigrane"
+                    placeholder={t('tools.watermark.textPlaceholder')}
                     className="w-full glass-card rounded-xl px-4 py-3 text-center text-lg bg-transparent border border-border focus:border-primary focus:outline-none transition-colors"
                   />
                   <div className="flex flex-wrap gap-2 justify-center mt-4">
@@ -124,7 +125,7 @@ const Watermark = () => {
                 {/* Opacity */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-center">
-                    Opacité: {Math.round(opacity * 100)}%
+                    {t('tools.watermark.opacity')}: {Math.round(opacity * 100)}%
                   </h3>
                   <input
                     type="range"
@@ -143,7 +144,7 @@ const Watermark = () => {
                     className="btn-primary"
                     disabled={!watermarkText.trim()}
                   >
-                    Ajouter le filigrane
+                    {t('tools.watermark.addButton')}
                   </button>
                 </div>
               </motion.div>

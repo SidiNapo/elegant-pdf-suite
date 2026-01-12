@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GitCompare, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -8,6 +9,7 @@ import { pdfToImages } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const ComparePDF = () => {
+  const { t } = useTranslation();
   const [files1, setFiles1] = useState<File[]>([]);
   const [files2, setFiles2] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -62,13 +64,13 @@ const ComparePDF = () => {
 
   return (
     <ToolLayout
-      title="Comparer PDF"
-      description="Comparez deux fichiers PDF côte à côte"
+      title={t('tools.compare.title')}
+      description={t('tools.compare.description')}
       icon={GitCompare}
       color="coral"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Chargement des documents..." />
+        <ProcessingLoader message={t('tools.compare.processing')} />
       ) : isComparing ? (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
@@ -79,11 +81,11 @@ const ComparePDF = () => {
               disabled={currentPage === 0}
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
-              Précédent
+              {t('tools.compare.previous')}
             </Button>
             
             <span className="text-sm text-muted-foreground">
-              Page {currentPage + 1} / {maxPages}
+              {t('tools.compare.pageOf', { current: currentPage + 1, total: maxPages })}
             </span>
             
             <Button
@@ -92,7 +94,7 @@ const ComparePDF = () => {
               onClick={() => setCurrentPage(p => Math.min(maxPages - 1, p + 1))}
               disabled={currentPage >= maxPages - 1}
             >
-              Suivant
+              {t('tools.compare.next')}
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
@@ -111,7 +113,7 @@ const ComparePDF = () => {
                   />
                 ) : (
                   <div className="aspect-[3/4] flex items-center justify-center bg-muted">
-                    <p className="text-muted-foreground">Page non disponible</p>
+                    <p className="text-muted-foreground">{t('tools.compare.pageNotAvailable')}</p>
                   </div>
                 )}
               </div>
@@ -130,7 +132,7 @@ const ComparePDF = () => {
                   />
                 ) : (
                   <div className="aspect-[3/4] flex items-center justify-center bg-muted">
-                    <p className="text-muted-foreground">Page non disponible</p>
+                    <p className="text-muted-foreground">{t('tools.compare.pageNotAvailable')}</p>
                   </div>
                 )}
               </div>
@@ -140,7 +142,7 @@ const ComparePDF = () => {
           <div className="flex justify-center">
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle comparaison
+              {t('tools.compare.reset')}
             </Button>
           </div>
         </div>
@@ -148,28 +150,24 @@ const ComparePDF = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-center">Document 1</h3>
+              <h3 className="text-lg font-semibold text-center">{t('tools.compare.file1')}</h3>
               <FileUpload
                 onFilesSelected={handleFiles1Selected}
                 accept=".pdf"
                 multiple={false}
                 maxFiles={1}
                 files={files1}
-                title="Premier PDF"
-                description="Déposez ou cliquez"
               />
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-center">Document 2</h3>
+              <h3 className="text-lg font-semibold text-center">{t('tools.compare.file2')}</h3>
               <FileUpload
                 onFilesSelected={handleFiles2Selected}
                 accept=".pdf"
                 multiple={false}
                 maxFiles={1}
                 files={files2}
-                title="Second PDF"
-                description="Déposez ou cliquez"
               />
             </div>
           </div>
@@ -182,7 +180,7 @@ const ComparePDF = () => {
             >
               <Button onClick={handleCompare} size="lg" className="gap-2">
                 <GitCompare className="w-5 h-5" />
-                Comparer les documents
+                {t('tools.compare.compareButton')}
               </Button>
             </motion.div>
           )}

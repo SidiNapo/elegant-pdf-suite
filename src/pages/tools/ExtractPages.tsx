@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FileOutput, Download, CheckCircle } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -7,6 +8,7 @@ import { extractPages, downloadPDF, getPDFPageCount } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const ExtractPages = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -71,14 +73,14 @@ const ExtractPages = () => {
 
   return (
     <ToolLayout
-      title="Extraire des pages"
-      description="Extrayez des pages spécifiques de votre PDF"
+      title={t('tools.extractPages.title')}
+      description={t('tools.extractPages.description')}
       icon={FileOutput}
       color="cyan"
     >
       <div className="max-w-3xl mx-auto">
         {isProcessing ? (
-          <ProcessingLoader message="Extraction des pages en cours..." />
+          <ProcessingLoader message={t('tools.extractPages.processing')} />
         ) : isComplete ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -88,17 +90,17 @@ const ExtractPages = () => {
             <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            <h3 className="text-2xl font-semibold mb-4">Extraction terminée !</h3>
+            <h3 className="text-2xl font-semibold mb-4">{t('tools.extractPages.success')}</h3>
             <p className="text-muted-foreground mb-8">
-              {selectedPages.length} page(s) ont été extraites avec succès.
+              {t('tools.extractPages.successDesc')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button onClick={handleDownload} className="btn-primary flex items-center justify-center gap-2">
                 <Download className="w-5 h-5" />
-                Télécharger le PDF
+                {t('tools.extractPages.download')}
               </button>
               <button onClick={handleReset} className="btn-secondary">
-                Extraire d'autres pages
+                {t('tools.extractPages.reset')}
               </button>
             </div>
           </motion.div>
@@ -109,7 +111,6 @@ const ExtractPages = () => {
               accept=".pdf"
               multiple={false}
               files={files}
-              title="Déposez votre fichier PDF ici"
             />
             
             {pageCount > 0 && (
@@ -119,7 +120,7 @@ const ExtractPages = () => {
                 className="mt-8"
               >
                 <h3 className="text-lg font-semibold mb-4 text-center">
-                  Sélectionnez les pages à extraire ({pageCount} pages)
+                  {t('tools.extractPages.selectPages')} ({pageCount} {t('tools.extractPages.page')}s)
                 </h3>
                 <div className="flex flex-wrap gap-3 justify-center mb-8">
                   {Array.from({ length: pageCount }, (_, i) => (
@@ -140,7 +141,7 @@ const ExtractPages = () => {
                 {selectedPages.length > 0 && (
                   <div className="text-center">
                     <button onClick={handleExtract} className="btn-primary">
-                      Extraire {selectedPages.length} page(s)
+                      {t('tools.extractPages.extractButton')} ({selectedPages.length})
                     </button>
                   </div>
                 )}

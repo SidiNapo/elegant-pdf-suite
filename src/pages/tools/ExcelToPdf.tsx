@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Table, Download, RotateCcw } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -8,6 +9,7 @@ import { excelToPDF, downloadPDF } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const ExcelToPdf = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -49,13 +51,13 @@ const ExcelToPdf = () => {
 
   return (
     <ToolLayout
-      title="Excel en PDF"
-      description="Convertissez vos feuilles de calcul Excel en fichiers PDF"
+      title={t('tools.excelToPdf.title')}
+      description={t('tools.excelToPdf.description')}
       icon={Table}
       color="coral"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Conversion du fichier Excel..." />
+        <ProcessingLoader message={t('tools.excelToPdf.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -65,16 +67,15 @@ const ExcelToPdf = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <Table className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Conversion terminée !</h3>
-          <p className="text-muted-foreground">Votre fichier Excel a été converti en PDF</p>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.excelToPdf.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger le PDF
+              {t('tools.excelToPdf.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle conversion
+              {t('tools.excelToPdf.reset')}
             </Button>
           </div>
         </motion.div>
@@ -86,8 +87,6 @@ const ExcelToPdf = () => {
             multiple={false}
             maxFiles={1}
             files={files}
-            title="Déposez votre fichier Excel ici"
-            description="ou cliquez pour sélectionner (XLS, XLSX)"
           />
           
           {files.length > 0 && (
@@ -98,7 +97,7 @@ const ExcelToPdf = () => {
             >
               <Button onClick={handleConvert} size="lg" className="gap-2">
                 <Table className="w-5 h-5" />
-                Convertir en PDF
+                {t('tools.excelToPdf.convertButton')}
               </Button>
             </motion.div>
           )}

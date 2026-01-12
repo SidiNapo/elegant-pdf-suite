@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Presentation, Download, RotateCcw } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -8,6 +9,7 @@ import { pdfToImages, createPowerPointFromImages } from '@/lib/pdfUtils';
 import { motion } from 'framer-motion';
 
 const PdfToPpt = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -49,13 +51,13 @@ const PdfToPpt = () => {
 
   return (
     <ToolLayout
-      title="PDF en PowerPoint"
-      description="Convertissez vos fichiers PDF en présentations PowerPoint"
+      title={t('tools.pdfToPpt.title')}
+      description={t('tools.pdfToPpt.description')}
       icon={Presentation}
       color="coral"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Conversion du PDF en diapositives..." />
+        <ProcessingLoader message={t('tools.pdfToPpt.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -65,9 +67,9 @@ const PdfToPpt = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <Presentation className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Conversion terminée !</h3>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.pdfToPpt.success')}</h3>
           <p className="text-muted-foreground">
-            {images.length} diapositive(s) créée(s) avec succès
+            {t('tools.pdfToPpt.slidesCreated', { count: images.length })}
           </p>
           
           {/* Preview slides */}
@@ -79,7 +81,7 @@ const PdfToPpt = () => {
             ))}
             {images.length > 8 && (
               <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border">
-                <span className="text-muted-foreground">+{images.length - 8} autres</span>
+                <span className="text-muted-foreground">+{images.length - 8} {t('tools.pdfToPpt.more')}</span>
               </div>
             )}
           </div>
@@ -87,11 +89,11 @@ const PdfToPpt = () => {
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger PowerPoint
+              {t('tools.pdfToPpt.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouvelle conversion
+              {t('tools.pdfToPpt.reset')}
             </Button>
           </div>
         </motion.div>
@@ -103,8 +105,6 @@ const PdfToPpt = () => {
             multiple={false}
             maxFiles={1}
             files={files}
-            title="Déposez votre fichier PDF ici"
-            description="ou cliquez pour sélectionner"
           />
           
           {files.length > 0 && (
@@ -115,7 +115,7 @@ const PdfToPpt = () => {
             >
               <Button onClick={handleConvert} size="lg" className="gap-2">
                 <Presentation className="w-5 h-5" />
-                Convertir en PowerPoint
+                {t('tools.pdfToPpt.convertButton')}
               </Button>
             </motion.div>
           )}

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Edit, Download, RotateCcw, Type, Trash2 } from 'lucide-react';
 import ToolLayout from '@/components/ToolLayout';
 import FileUpload from '@/components/FileUpload';
@@ -20,6 +21,7 @@ interface TextAnnotation {
 }
 
 const EditPDF = () => {
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -89,11 +91,9 @@ const EditPDF = () => {
           const page = pages[annotation.page];
           const { width, height } = page.getSize();
           
-          // Convert percentage to actual coordinates
           const x = (annotation.x / 100) * width;
           const y = height - (annotation.y / 100) * height;
           
-          // Parse hex color
           const hex = annotation.color.replace('#', '');
           const r = parseInt(hex.substring(0, 2), 16) / 255;
           const g = parseInt(hex.substring(2, 4), 16) / 255;
@@ -140,13 +140,13 @@ const EditPDF = () => {
 
   return (
     <ToolLayout
-      title="Modifier PDF"
-      description="Ajoutez du texte à vos documents PDF"
+      title={t('tools.edit.title')}
+      description={t('tools.edit.description')}
       icon={Edit}
       color="cyan"
     >
       {isProcessing ? (
-        <ProcessingLoader message="Traitement en cours..." />
+        <ProcessingLoader message={t('tools.edit.processing')} />
       ) : isComplete ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -156,15 +156,15 @@ const EditPDF = () => {
           <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
             <Edit className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-foreground">Modifications appliquées !</h3>
+          <h3 className="text-2xl font-bold text-foreground">{t('tools.edit.success')}</h3>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleDownload} size="lg" className="gap-2">
               <Download className="w-5 h-5" />
-              Télécharger
+              {t('tools.edit.download')}
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg" className="gap-2">
               <RotateCcw className="w-5 h-5" />
-              Nouveau fichier
+              {t('tools.edit.reset')}
             </Button>
           </div>
         </motion.div>
@@ -172,15 +172,15 @@ const EditPDF = () => {
         <div className="space-y-6">
           <div className="flex flex-wrap gap-4 justify-center items-end">
             <div className="flex-1 min-w-[200px] max-w-[300px]">
-              <label className="block text-sm font-medium mb-1">Texte à ajouter</label>
+              <label className="block text-sm font-medium mb-1">{t('tools.edit.addText')}</label>
               <Input
                 value={newText}
                 onChange={(e) => setNewText(e.target.value)}
-                placeholder="Entrez votre texte..."
+                placeholder={t('tools.edit.textPlaceholder')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Taille</label>
+              <label className="block text-sm font-medium mb-1">{t('tools.edit.fontSize')}</label>
               <Input
                 type="number"
                 value={fontSize}
@@ -191,7 +191,7 @@ const EditPDF = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Couleur</label>
+              <label className="block text-sm font-medium mb-1">{t('tools.edit.color')}</label>
               <input
                 type="color"
                 value={textColor}
@@ -202,7 +202,7 @@ const EditPDF = () => {
           </div>
           
           <p className="text-center text-sm text-muted-foreground">
-            {newText ? 'Cliquez sur le document pour placer le texte' : 'Entrez du texte ci-dessus puis cliquez pour le placer'}
+            {newText ? t('tools.edit.clickToPlace') : t('tools.edit.enterTextFirst')}
           </p>
           
           {previews.length > 1 && (
@@ -214,7 +214,7 @@ const EditPDF = () => {
                   size="sm"
                   onClick={() => setCurrentPage(i)}
                 >
-                  Page {i + 1}
+                  {t('tools.edit.page')} {i + 1}
                 </Button>
               ))}
             </div>
@@ -264,10 +264,10 @@ const EditPDF = () => {
               disabled={annotations.length === 0}
             >
               <Edit className="w-5 h-5" />
-              Appliquer ({annotations.length} annotation{annotations.length > 1 ? 's' : ''})
+              {t('tools.edit.applyButton')} ({annotations.length})
             </Button>
             <Button onClick={handleReset} variant="outline" size="lg">
-              Annuler
+              {t('common.cancel')}
             </Button>
           </div>
         </div>
@@ -278,8 +278,6 @@ const EditPDF = () => {
           multiple={false}
           maxFiles={1}
           files={files}
-          title="Déposez votre fichier PDF ici"
-          description="ou cliquez pour sélectionner"
         />
       )}
     </ToolLayout>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Calendar, User, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface BlogCardProps {
   slug: string;
@@ -23,7 +24,9 @@ const BlogCard = ({
   viewsCount,
   categoryName,
 }: BlogCardProps) => {
-  const formattedDate = new Date(publishedAt).toLocaleDateString('fr-FR', {
+  const { i18n } = useTranslation();
+  const locale = i18n.language === 'ar' ? 'ar-SA' : i18n.language === 'en' ? 'en-US' : 'fr-FR';
+  const formattedDate = new Date(publishedAt).toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

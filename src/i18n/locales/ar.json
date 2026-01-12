@@ -5,7 +5,8 @@
     "compress": "ضغط",
     "allTools": "جميع الأدوات",
     "about": "من نحن",
-    "blog": "المدونة"
+    "blog": "المدونة",
+    "contact": "اتصل بنا"
   },
   "hero": {
     "badge": "أداة PDF المجانية الأولى عبر الإنترنت",
@@ -567,6 +568,43 @@
     "sections": { "collection": { "title": "البيانات المجمعة", "content": "نجمع فقط البيانات الضرورية لخدمتنا." }, "usage": { "title": "استخدام البيانات", "content": "تُستخدم البيانات لتحسين الخدمات وعرض الإعلانات." }, "storage": { "title": "تخزين الملفات", "content": "تتم معالجة ملفات PDF بالكامل في متصفحك. لا يتم تحميلها أبداً على خوادمنا." }, "cookies": { "title": "استخدام ملفات تعريف الارتباط", "content": "نستخدم ملفات تعريف الارتباط للتفضيلات والإعلانات." }, "thirdParty": { "title": "خدمات الطرف الثالث", "content": "نستخدم Google AdSense وAnalytics." }, "rights": { "title": "حقوقك", "content": "لديك الحق في الوصول إلى بياناتك وتصحيحها وحذفها." }, "children": { "title": "حماية الأطفال", "content": "خدماتنا للمستخدمين من 13 عاماً فأكثر." }, "contact": { "title": "اتصل بنا", "content": "لأسئلة الخصوصية، اتصل بنا." } },
     "advertising": { "title": "Google AdSense", "content": "يستخدم E-PDF's Google AdSense لعرض الإعلانات.", "optOut": "يمكنك تعطيل تخصيص الإعلانات في إعدادات Google." },
     "cta": { "text": "هل لديك أسئلة حول سياسة الخصوصية؟", "terms": "شروط الاستخدام", "tools": "استخدم الأدوات" }
+  },
+  "contact": {
+    "metaTitle": "اتصل بنا - E-PDF's",
+    "metaDescription": "تواصل مع فريق E-PDF's. نحن هنا لمساعدتك في جميع احتياجات PDF.",
+    "title": "تواصل معنا",
+    "subtitle": "هل لديك سؤال أو ملاحظة أو تحتاج إلى دعم؟ يسعدنا سماعك. فريقنا هنا للمساعدة.",
+    "emailTitle": "البريد الإلكتروني",
+    "phoneTitle": "الهاتف",
+    "addressTitle": "العنوان",
+    "hoursTitle": "ساعات العمل",
+    "hoursValue": "الإثنين-الجمعة: 9ص-6م",
+    "formTitle": "أرسل لنا رسالة",
+    "formDescription": "املأ النموذج وسنرد عليك في أقرب وقت ممكن. نرد عادة خلال 24 ساعة.",
+    "illustrationText": "نحن دائماً مستعدون لمساعدتك",
+    "responseTime": "يرد عادة خلال 24 ساعة",
+    "firstName": "الاسم الأول",
+    "firstNamePlaceholder": "أحمد",
+    "lastName": "اسم العائلة",
+    "lastNamePlaceholder": "محمد",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "ahmed@example.com",
+    "subject": "الموضوع",
+    "subjectPlaceholder": "كيف يمكننا مساعدتك؟",
+    "message": "الرسالة",
+    "messagePlaceholder": "أخبرنا المزيد عن سؤالك أو ملاحظاتك...",
+    "sendButton": "إرسال الرسالة",
+    "successMessage": "تم إرسال الرسالة بنجاح! سنرد عليك قريباً.",
+    "faqTitle": "الأسئلة الشائعة",
+    "faqDescription": "اعثر على إجابات سريعة للأسئلة الشائعة",
+    "faq1Question": "هل E-PDF's مجاني حقاً؟",
+    "faq1Answer": "نعم! جميع أدوات PDF لدينا مجانية تماماً بدون رسوم خفية أو اشتراكات.",
+    "faq2Question": "هل ملفاتي آمنة؟",
+    "faq2Answer": "بالتأكيد. تتم معالجة ملفاتك محلياً في متصفحك ولا يتم تحميلها أبداً على خوادمنا.",
+    "faq3Question": "ما هي تنسيقات الملفات المدعومة؟",
+    "faq3Answer": "ندعم PDF وJPG وPNG وWord وExcel وPowerPoint والعديد من التنسيقات الأخرى.",
+    "faq4Question": "كيف يمكنني الإبلاغ عن خطأ؟",
+    "faq4Answer": "استخدم نموذج الاتصال أعلاه للإبلاغ عن أي مشاكل. يرجى تضمين أكبر قدر ممكن من التفاصيل."
   },
   "footer": { "description": "E-PDF's هو حلك الشامل لجميع احتياجات PDF.", "secure": "آمن 100%", "fast": "سريع", "free": "مجاني", "organize": "تنظيم", "convert": "تحويل", "resources": "الموارد", "legal": "قانوني", "terms": "شروط الاستخدام", "privacy": "سياسة الخصوصية", "allTools": "جميع الأدوات", "copyright": "© 2024 E-Pdf's. جميع الحقوق محفوظة.", "seoKeywords": "E-PDF's - أدوات PDF مجانية." }
 }

@@ -5,7 +5,8 @@
     "compress": "Compresser",
     "allTools": "Tous les outils",
     "about": "À propos",
-    "blog": "Blog"
+    "blog": "Blog",
+    "contact": "Contact"
   },
   "hero": {
     "badge": "#1 Outil PDF en ligne gratuit",
@@ -741,6 +742,43 @@
       "terms": "Conditions d'utilisation",
       "tools": "Utiliser les outils"
     }
+  },
+  "contact": {
+    "metaTitle": "Contactez-nous - E-PDF's",
+    "metaDescription": "Contactez l'équipe E-PDF's. Nous sommes là pour vous aider avec tous vos besoins PDF.",
+    "title": "Contactez-nous",
+    "subtitle": "Une question, un retour ou besoin d'aide ? Nous serions ravis de vous entendre. Notre équipe est là pour vous aider.",
+    "emailTitle": "Email",
+    "phoneTitle": "Téléphone",
+    "addressTitle": "Adresse",
+    "hoursTitle": "Horaires",
+    "hoursValue": "Lun-Ven: 9h-18h",
+    "formTitle": "Envoyez-nous un message",
+    "formDescription": "Remplissez le formulaire et nous vous répondrons dès que possible. Nous répondons généralement sous 24 heures.",
+    "illustrationText": "Nous sommes toujours prêts à vous aider",
+    "responseTime": "Répond généralement sous 24 heures",
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Jean",
+    "lastName": "Nom",
+    "lastNamePlaceholder": "Dupont",
+    "email": "Email",
+    "emailPlaceholder": "jean@exemple.com",
+    "subject": "Sujet",
+    "subjectPlaceholder": "Comment pouvons-nous vous aider ?",
+    "message": "Message",
+    "messagePlaceholder": "Dites-nous en plus sur votre question ou commentaire...",
+    "sendButton": "Envoyer le message",
+    "successMessage": "Message envoyé avec succès ! Nous vous répondrons bientôt.",
+    "faqTitle": "Questions fréquentes",
+    "faqDescription": "Trouvez des réponses rapides aux questions courantes",
+    "faq1Question": "E-PDF's est-il vraiment gratuit ?",
+    "faq1Answer": "Oui ! Tous nos outils PDF sont entièrement gratuits sans frais cachés ni abonnement.",
+    "faq2Question": "Mes fichiers sont-ils sécurisés ?",
+    "faq2Answer": "Absolument. Vos fichiers sont traités localement dans votre navigateur et jamais téléchargés sur nos serveurs.",
+    "faq3Question": "Quels formats de fichiers sont supportés ?",
+    "faq3Answer": "Nous supportons PDF, JPG, PNG, Word, Excel, PowerPoint et bien d'autres formats.",
+    "faq4Question": "Comment signaler un bug ?",
+    "faq4Answer": "Utilisez le formulaire de contact ci-dessus pour signaler tout problème. Veuillez inclure autant de détails que possible."
   },
   "footer": {
     "description": "E-PDF's est votre solution complète pour tous vos besoins PDF. Fusionnez, divisez, compressez et convertissez vos fichiers gratuitement.",

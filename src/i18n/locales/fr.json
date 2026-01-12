@@ -4,6 +4,7 @@
     "split": "Diviser",
     "compress": "Compresser",
     "allTools": "Tous les outils",
+    "about": "À propos",
     "blog": "Blog"
   },
   "hero": {
@@ -538,5 +539,222 @@
     "fr": "Français",
     "en": "English",
     "ar": "العربية"
+  },
+  "about": {
+    "seo": {
+      "title": "À propos de E-PDF's - Outils PDF gratuits en ligne",
+      "description": "Découvrez E-PDF's, la plateforme gratuite pour tous vos besoins PDF. Plus de 20 outils pour fusionner, diviser, compresser et convertir vos fichiers.",
+      "keywords": "à propos e-pdfs, outils pdf gratuits, qui sommes nous, équipe pdf"
+    },
+    "hero": {
+      "badge": "Notre histoire",
+      "title": "À propos de",
+      "titleHighlight": "E-PDF's",
+      "description": "Nous rendons la gestion des PDF simple, rapide et accessible à tous. Notre mission est de fournir des outils gratuits et puissants pour tous vos besoins documentaires.",
+      "cta": "Découvrir nos outils",
+      "ctaSecondary": "Lire le blog"
+    },
+    "stats": {
+      "filesProcessed": "Fichiers traités",
+      "happyUsers": "Utilisateurs satisfaits",
+      "pdfTools": "Outils PDF",
+      "availability": "Disponibilité"
+    },
+    "mission": {
+      "badge": "Notre mission",
+      "title": "Simplifier la gestion des PDF pour tous",
+      "description": "Nous croyons que les outils PDF professionnels devraient être accessibles à tous, sans barrières de prix ou de complexité. C'est pourquoi nous avons créé E-PDF's - une suite complète d'outils gratuits qui fonctionnent directement dans votre navigateur.",
+      "imageAlt": "Mission globale E-PDF's",
+      "countries": "Pays desservis"
+    },
+    "values": {
+      "badge": "Nos valeurs",
+      "title": "Ce qui nous guide",
+      "subtitle": "Nos principes fondamentaux définissent chaque fonctionnalité que nous créons",
+      "security": {
+        "title": "Sécurité maximale",
+        "description": "Vos fichiers restent sur votre appareil. Nous ne stockons jamais vos documents sur nos serveurs."
+      },
+      "speed": {
+        "title": "Rapidité optimale",
+        "description": "Traitement instantané grâce à notre technologie de pointe directement dans votre navigateur."
+      },
+      "simplicity": {
+        "title": "Simplicité d'utilisation",
+        "description": "Interface intuitive conçue pour que chacun puisse utiliser nos outils sans formation."
+      },
+      "accessibility": {
+        "title": "Accessibilité totale",
+        "description": "Outils gratuits, sans inscription, disponibles 24h/24 sur tous les appareils."
+      }
+    },
+    "features": {
+      "noInstallation": "Aucune installation requise",
+      "noRegistration": "Pas d'inscription nécessaire",
+      "noLimits": "Aucune limite d'utilisation",
+      "allDevices": "Compatible tous appareils",
+      "instantProcessing": "Traitement instantané",
+      "secureEncryption": "Chiffrement sécurisé"
+    },
+    "whyUs": {
+      "badge": "Pourquoi nous choisir",
+      "title": "Une équipe dédiée à votre succès",
+      "description": "Notre équipe passionnée travaille chaque jour pour améliorer vos outils PDF et vous offrir la meilleure expérience possible.",
+      "securityAlt": "Sécurité des fichiers",
+      "speedAlt": "Rapidité de traitement"
+    },
+    "team": {
+      "developer": "Développeurs",
+      "designer": "Designers",
+      "support": "Support client"
+    },
+    "cta": {
+      "title": "Prêt à essayer",
+      "titleHighlight": "E-PDF's ?",
+      "description": "Rejoignez plus de 500 000 utilisateurs qui font confiance à nos outils pour leurs documents PDF.",
+      "button": "Commencer maintenant"
+    }
+  },
+  "terms": {
+    "seo": {
+      "title": "Conditions d'utilisation - E-PDF's",
+      "description": "Consultez les conditions d'utilisation de E-PDF's. Règles et directives pour l'utilisation de nos outils PDF gratuits."
+    },
+    "hero": {
+      "title": "Conditions d'utilisation",
+      "subtitle": "Règles et directives pour l'utilisation de nos services",
+      "lastUpdated": "Dernière mise à jour",
+      "date": "Janvier 2024"
+    },
+    "introduction": "Bienvenue sur E-PDF's. En utilisant notre site web et nos services, vous acceptez les présentes conditions d'utilisation. Veuillez les lire attentivement avant d'utiliser nos outils.",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptation des conditions",
+        "content": "En accédant à E-PDF's et en utilisant nos services, vous acceptez d'être lié par ces conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser nos services."
+      },
+      "services": {
+        "title": "Description des services",
+        "content": "E-PDF's fournit des outils en ligne gratuits pour la manipulation de fichiers PDF, notamment la fusion, la division, la compression, la conversion et l'édition de documents PDF. Tous les traitements sont effectués localement dans votre navigateur."
+      },
+      "usage": {
+        "title": "Utilisation acceptable",
+        "content": "Vous vous engagez à utiliser nos services uniquement à des fins légales. Il est interdit d'utiliser nos outils pour traiter des documents illégaux, violer des droits d'auteur ou nuire à des tiers."
+      },
+      "privacy": {
+        "title": "Confidentialité des données",
+        "content": "Vos fichiers sont traités localement dans votre navigateur et ne sont jamais téléchargés sur nos serveurs. Nous ne conservons aucune copie de vos documents."
+      },
+      "intellectual": {
+        "title": "Propriété intellectuelle",
+        "content": "Le contenu de E-PDF's, y compris le design, les logos et le code, est protégé par les droits d'auteur. Vous ne pouvez pas copier, modifier ou redistribuer notre contenu sans autorisation."
+      },
+      "liability": {
+        "title": "Limitation de responsabilité",
+        "content": "E-PDF's est fourni \"tel quel\" sans garantie. Nous ne sommes pas responsables des pertes de données ou des dommages résultant de l'utilisation de nos services."
+      },
+      "modifications": {
+        "title": "Modifications des conditions",
+        "content": "Nous nous réservons le droit de modifier ces conditions à tout moment. Les modifications entreront en vigueur dès leur publication sur ce site."
+      },
+      "contact": {
+        "title": "Nous contacter",
+        "content": "Pour toute question concernant ces conditions, contactez-nous via notre formulaire de contact ou par email."
+      }
+    },
+    "advertising": {
+      "title": "Publicité et cookies",
+      "content": "E-PDF's utilise Google AdSense pour afficher des publicités. Ces publicités peuvent utiliser des cookies pour personnaliser votre expérience. En utilisant notre site, vous consentez à l'utilisation de cookies publicitaires conformément à notre politique de confidentialité."
+    },
+    "cta": {
+      "text": "Vous avez des questions sur nos conditions ?",
+      "privacy": "Politique de confidentialité",
+      "tools": "Utiliser les outils"
+    }
+  },
+  "privacy": {
+    "seo": {
+      "title": "Politique de confidentialité - E-PDF's",
+      "description": "Découvrez comment E-PDF's protège vos données et respecte votre vie privée lors de l'utilisation de nos outils PDF."
+    },
+    "hero": {
+      "title": "Politique de confidentialité",
+      "subtitle": "Comment nous protégeons vos données et respectons votre vie privée",
+      "lastUpdated": "Dernière mise à jour",
+      "date": "Janvier 2024"
+    },
+    "highlights": {
+      "noStorage": {
+        "title": "Pas de stockage",
+        "description": "Vos fichiers ne sont jamais stockés sur nos serveurs"
+      },
+      "encryption": {
+        "title": "Chiffrement SSL",
+        "description": "Connexion sécurisée pour toutes les communications"
+      },
+      "noTracking": {
+        "title": "Respect de la vie privée",
+        "description": "Nous ne suivons pas votre activité personnelle"
+      }
+    },
+    "introduction": "Chez E-PDF's, nous prenons votre vie privée très au sérieux. Cette politique explique comment nous traitons vos données lorsque vous utilisez nos services.",
+    "sections": {
+      "collection": {
+        "title": "Données collectées",
+        "content": "Nous collectons uniquement les données nécessaires au fonctionnement de notre service :\n• Données d'utilisation anonymes (pages visitées, outils utilisés)\n• Informations techniques (type de navigateur, système d'exploitation)\n• Cookies essentiels et publicitaires"
+      },
+      "usage": {
+        "title": "Utilisation des données",
+        "content": "Les données collectées sont utilisées pour :\n• Améliorer nos services et l'expérience utilisateur\n• Analyser les tendances d'utilisation\n• Afficher des publicités pertinentes via Google AdSense"
+      },
+      "storage": {
+        "title": "Stockage des fichiers",
+        "content": "IMPORTANT : Vos fichiers PDF sont traités entièrement dans votre navigateur. Ils ne sont JAMAIS téléchargés, stockés ou traités sur nos serveurs. Une fois le traitement terminé, tous les fichiers restent sur votre appareil."
+      },
+      "cookies": {
+        "title": "Utilisation des cookies",
+        "content": "Nous utilisons des cookies pour :\n• Mémoriser vos préférences (langue, thème)\n• Analyser le trafic via des outils d'analyse\n• Afficher des publicités personnalisées via Google AdSense"
+      },
+      "thirdParty": {
+        "title": "Services tiers",
+        "content": "Nous utilisons des services tiers qui peuvent collecter des données :\n• Google AdSense pour la publicité\n• Google Analytics pour les statistiques\n• Ces services ont leurs propres politiques de confidentialité"
+      },
+      "rights": {
+        "title": "Vos droits",
+        "content": "Conformément au RGPD, vous avez le droit de :\n• Accéder à vos données personnelles\n• Demander la correction de vos données\n• Demander la suppression de vos données\n• Vous opposer au traitement de vos données"
+      },
+      "children": {
+        "title": "Protection des mineurs",
+        "content": "Nos services sont destinés aux personnes de 13 ans et plus. Nous ne collectons pas intentionnellement de données sur les enfants de moins de 13 ans."
+      },
+      "contact": {
+        "title": "Nous contacter",
+        "content": "Pour toute question concernant cette politique de confidentialité, contactez-nous via notre formulaire de contact."
+      }
+    },
+    "advertising": {
+      "title": "Publicité Google AdSense",
+      "content": "E-PDF's utilise Google AdSense pour afficher des publicités. Google peut utiliser des cookies et des balises web pour personnaliser les annonces en fonction de vos visites sur ce site et d'autres sites.",
+      "optOut": "Vous pouvez désactiver la personnalisation des annonces en visitant les paramètres de publicité de Google ou en utilisant l'extension de navigateur appropriée."
+    },
+    "cta": {
+      "text": "Vous avez des questions sur notre politique de confidentialité ?",
+      "terms": "Conditions d'utilisation",
+      "tools": "Utiliser les outils"
+    }
+  },
+  "footer": {
+    "description": "E-PDF's est votre solution complète pour tous vos besoins PDF. Fusionnez, divisez, compressez et convertissez vos fichiers gratuitement.",
+    "secure": "100% Sécurisé",
+    "fast": "Rapide",
+    "free": "Gratuit",
+    "organize": "Organiser",
+    "convert": "Convertir",
+    "resources": "Ressources",
+    "legal": "Légal",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Confidentialité",
+    "allTools": "Tous les outils",
+    "copyright": "© 2024 E-Pdf's. Tous droits réservés. Outils PDF gratuits en ligne.",
+    "seoKeywords": "E-PDF's - Outils PDF en ligne gratuits : fusionner PDF, diviser PDF, compresser PDF, convertir JPG en PDF, PDF en Word, Word en PDF, PDF en JPG, ajouter filigrane, numéros de page, faire pivoter PDF, extraire pages, supprimer pages, réparer PDF, Excel en PDF, PowerPoint en PDF."
   }
 }

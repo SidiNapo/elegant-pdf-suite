@@ -46,11 +46,17 @@ const Footer = () => {
       name: t('nav.allTools'),
       href: '/tools'
     }, {
-      name: t('tools.compress.title'),
-      href: '/compress'
+      name: t('nav.about'),
+      href: '/about'
+    }]
+  }, {
+    title: t('footer.legal'),
+    links: [{
+      name: t('footer.terms'),
+      href: '/terms'
     }, {
-      name: t('tools.rotate.title'),
-      href: '/rotate'
+      name: t('footer.privacy'),
+      href: '/privacy'
     }]
   }];
   

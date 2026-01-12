@@ -4,6 +4,7 @@
     "split": "تقسيم",
     "compress": "ضغط",
     "allTools": "جميع الأدوات",
+    "about": "من نحن",
     "blog": "المدونة"
   },
   "hero": {
@@ -538,5 +539,34 @@
     "fr": "Français",
     "en": "English",
     "ar": "العربية"
-  }
+  },
+  "about": {
+    "seo": { "title": "عن E-PDF's - أدوات PDF مجانية", "description": "اكتشف E-PDF's، المنصة المجانية لجميع احتياجات PDF.", "keywords": "عن e-pdfs" },
+    "hero": { "badge": "قصتنا", "title": "عن", "titleHighlight": "E-PDF's", "description": "نجعل إدارة PDF بسيطة وسريعة ومتاحة للجميع.", "cta": "اكتشف أدواتنا", "ctaSecondary": "اقرأ المدونة" },
+    "stats": { "filesProcessed": "ملفات تمت معالجتها", "happyUsers": "مستخدمون سعداء", "pdfTools": "أدوات PDF", "availability": "التوفر" },
+    "mission": { "badge": "مهمتنا", "title": "تبسيط إدارة PDF للجميع", "description": "نؤمن أن أدوات PDF الاحترافية يجب أن تكون متاحة للجميع.", "imageAlt": "مهمة E-PDF's العالمية", "countries": "دول مخدومة" },
+    "values": { "badge": "قيمنا", "title": "ما يوجهنا", "subtitle": "مبادئنا الأساسية تحدد كل ميزة ننشئها", "security": { "title": "أمان أقصى", "description": "ملفاتك تبقى على جهازك." }, "speed": { "title": "سرعة مثالية", "description": "معالجة فورية بتقنية متطورة." }, "simplicity": { "title": "سهولة الاستخدام", "description": "واجهة بديهية مصممة للجميع." }, "accessibility": { "title": "إمكانية وصول كاملة", "description": "أدوات مجانية، بدون تسجيل، متاحة 24/7." } },
+    "features": { "noInstallation": "لا يتطلب تثبيت", "noRegistration": "لا يتطلب تسجيل", "noLimits": "بلا حدود استخدام", "allDevices": "يعمل على جميع الأجهزة", "instantProcessing": "معالجة فورية", "secureEncryption": "تشفير آمن" },
+    "whyUs": { "badge": "لماذا نحن", "title": "فريق مخصص لنجاحك", "description": "فريقنا الشغوف يعمل كل يوم لتحسين أدوات PDF.", "securityAlt": "أمان الملفات", "speedAlt": "سرعة المعالجة" },
+    "team": { "developer": "مطورون", "designer": "مصممون", "support": "دعم العملاء" },
+    "cta": { "title": "جاهز لتجربة", "titleHighlight": "E-PDF's؟", "description": "انضم لأكثر من 500,000 مستخدم يثقون بأدواتنا.", "button": "ابدأ الآن" }
+  },
+  "terms": {
+    "seo": { "title": "شروط الاستخدام - E-PDF's", "description": "اقرأ شروط استخدام E-PDF's." },
+    "hero": { "title": "شروط الاستخدام", "subtitle": "القواعد والإرشادات لاستخدام خدماتنا", "lastUpdated": "آخر تحديث", "date": "يناير 2024" },
+    "introduction": "مرحباً بك في E-PDF's. باستخدام موقعنا وخدماتنا، فإنك توافق على هذه الشروط.",
+    "sections": { "acceptance": { "title": "قبول الشروط", "content": "بالوصول إلى E-PDF's، فإنك توافق على الالتزام بهذه الشروط." }, "services": { "title": "وصف الخدمات", "content": "يوفر E-PDF's أدوات مجانية لمعالجة PDF." }, "usage": { "title": "الاستخدام المقبول", "content": "توافق على استخدام خدماتنا لأغراض قانونية فقط." }, "privacy": { "title": "خصوصية البيانات", "content": "يتم معالجة ملفاتك محلياً ولا يتم تحميلها على خوادمنا." }, "intellectual": { "title": "الملكية الفكرية", "content": "محتوى E-PDF's محمي بحقوق النشر." }, "liability": { "title": "تحديد المسؤولية", "content": "يتم تقديم E-PDF's كما هو بدون ضمان." }, "modifications": { "title": "التعديلات", "content": "نحتفظ بالحق في تعديل هذه الشروط." }, "contact": { "title": "اتصل بنا", "content": "لأي أسئلة حول هذه الشروط، اتصل بنا." } },
+    "advertising": { "title": "الإعلانات وملفات تعريف الارتباط", "content": "يستخدم E-PDF's Google AdSense لعرض الإعلانات." },
+    "cta": { "text": "هل لديك أسئلة حول شروطنا؟", "privacy": "سياسة الخصوصية", "tools": "استخدم الأدوات" }
+  },
+  "privacy": {
+    "seo": { "title": "سياسة الخصوصية - E-PDF's", "description": "تعرف على كيفية حماية E-PDF's لبياناتك." },
+    "hero": { "title": "سياسة الخصوصية", "subtitle": "كيف نحمي بياناتك ونحترم خصوصيتك", "lastUpdated": "آخر تحديث", "date": "يناير 2024" },
+    "highlights": { "noStorage": { "title": "لا تخزين", "description": "ملفاتك لا تُخزن على خوادمنا" }, "encryption": { "title": "تشفير SSL", "description": "اتصال آمن لجميع الاتصالات" }, "noTracking": { "title": "احترام الخصوصية", "description": "لا نتتبع نشاطك الشخصي" } },
+    "introduction": "في E-PDF's، نأخذ خصوصيتك على محمل الجد.",
+    "sections": { "collection": { "title": "البيانات المجمعة", "content": "نجمع فقط البيانات الضرورية لخدمتنا." }, "usage": { "title": "استخدام البيانات", "content": "تُستخدم البيانات لتحسين الخدمات وعرض الإعلانات." }, "storage": { "title": "تخزين الملفات", "content": "تتم معالجة ملفات PDF بالكامل في متصفحك. لا يتم تحميلها أبداً على خوادمنا." }, "cookies": { "title": "استخدام ملفات تعريف الارتباط", "content": "نستخدم ملفات تعريف الارتباط للتفضيلات والإعلانات." }, "thirdParty": { "title": "خدمات الطرف الثالث", "content": "نستخدم Google AdSense وAnalytics." }, "rights": { "title": "حقوقك", "content": "لديك الحق في الوصول إلى بياناتك وتصحيحها وحذفها." }, "children": { "title": "حماية الأطفال", "content": "خدماتنا للمستخدمين من 13 عاماً فأكثر." }, "contact": { "title": "اتصل بنا", "content": "لأسئلة الخصوصية، اتصل بنا." } },
+    "advertising": { "title": "Google AdSense", "content": "يستخدم E-PDF's Google AdSense لعرض الإعلانات.", "optOut": "يمكنك تعطيل تخصيص الإعلانات في إعدادات Google." },
+    "cta": { "text": "هل لديك أسئلة حول سياسة الخصوصية؟", "terms": "شروط الاستخدام", "tools": "استخدم الأدوات" }
+  },
+  "footer": { "description": "E-PDF's هو حلك الشامل لجميع احتياجات PDF.", "secure": "آمن 100%", "fast": "سريع", "free": "مجاني", "organize": "تنظيم", "convert": "تحويل", "resources": "الموارد", "legal": "قانوني", "terms": "شروط الاستخدام", "privacy": "سياسة الخصوصية", "allTools": "جميع الأدوات", "copyright": "© 2024 E-Pdf's. جميع الحقوق محفوظة.", "seoKeywords": "E-PDF's - أدوات PDF مجانية." }
 }

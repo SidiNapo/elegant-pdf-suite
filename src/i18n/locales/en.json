@@ -4,6 +4,7 @@
     "split": "Split",
     "compress": "Compress",
     "allTools": "All Tools",
+    "about": "About",
     "blog": "Blog"
   },
   "hero": {
@@ -538,5 +539,34 @@
     "fr": "Français",
     "en": "English",
     "ar": "العربية"
-  }
+  },
+  "about": {
+    "seo": { "title": "About E-PDF's - Free Online PDF Tools", "description": "Discover E-PDF's, the free platform for all your PDF needs.", "keywords": "about e-pdfs, free pdf tools" },
+    "hero": { "badge": "Our Story", "title": "About", "titleHighlight": "E-PDF's", "description": "We make PDF management simple, fast and accessible to everyone.", "cta": "Discover our tools", "ctaSecondary": "Read the blog" },
+    "stats": { "filesProcessed": "Files processed", "happyUsers": "Happy users", "pdfTools": "PDF Tools", "availability": "Availability" },
+    "mission": { "badge": "Our mission", "title": "Simplifying PDF management for everyone", "description": "We believe professional PDF tools should be accessible to all.", "imageAlt": "E-PDF's global mission", "countries": "Countries served" },
+    "values": { "badge": "Our values", "title": "What guides us", "subtitle": "Our core principles define every feature we create", "security": { "title": "Maximum security", "description": "Your files stay on your device. We never store your documents." }, "speed": { "title": "Optimal speed", "description": "Instant processing with cutting-edge technology." }, "simplicity": { "title": "Ease of use", "description": "Intuitive interface designed for everyone." }, "accessibility": { "title": "Total accessibility", "description": "Free tools, no registration, available 24/7." } },
+    "features": { "noInstallation": "No installation required", "noRegistration": "No registration needed", "noLimits": "No usage limits", "allDevices": "Works on all devices", "instantProcessing": "Instant processing", "secureEncryption": "Secure encryption" },
+    "whyUs": { "badge": "Why choose us", "title": "A team dedicated to your success", "description": "Our passionate team works every day to improve your PDF tools.", "securityAlt": "File security", "speedAlt": "Processing speed" },
+    "team": { "developer": "Developers", "designer": "Designers", "support": "Customer support" },
+    "cta": { "title": "Ready to try", "titleHighlight": "E-PDF's?", "description": "Join over 500,000 users who trust our tools.", "button": "Get started now" }
+  },
+  "terms": {
+    "seo": { "title": "Terms of Service - E-PDF's", "description": "Read E-PDF's terms of service." },
+    "hero": { "title": "Terms of Service", "subtitle": "Rules and guidelines for using our services", "lastUpdated": "Last updated", "date": "January 2024" },
+    "introduction": "Welcome to E-PDF's. By using our website and services, you agree to these terms.",
+    "sections": { "acceptance": { "title": "Acceptance of Terms", "content": "By accessing E-PDF's, you agree to be bound by these terms." }, "services": { "title": "Description of Services", "content": "E-PDF's provides free online tools for PDF manipulation." }, "usage": { "title": "Acceptable Use", "content": "You agree to use our services only for lawful purposes." }, "privacy": { "title": "Data Privacy", "content": "Your files are processed locally and never uploaded to our servers." }, "intellectual": { "title": "Intellectual Property", "content": "E-PDF's content is protected by copyright." }, "liability": { "title": "Limitation of Liability", "content": "E-PDF's is provided as-is without warranty." }, "modifications": { "title": "Modifications", "content": "We reserve the right to modify these terms at any time." }, "contact": { "title": "Contact Us", "content": "For questions about these terms, contact us." } },
+    "advertising": { "title": "Advertising and Cookies", "content": "E-PDF's uses Google AdSense to display ads." },
+    "cta": { "text": "Have questions about our terms?", "privacy": "Privacy Policy", "tools": "Use the tools" }
+  },
+  "privacy": {
+    "seo": { "title": "Privacy Policy - E-PDF's", "description": "Learn how E-PDF's protects your data." },
+    "hero": { "title": "Privacy Policy", "subtitle": "How we protect your data and respect your privacy", "lastUpdated": "Last updated", "date": "January 2024" },
+    "highlights": { "noStorage": { "title": "No Storage", "description": "Your files are never stored on our servers" }, "encryption": { "title": "SSL Encryption", "description": "Secure connection for all communications" }, "noTracking": { "title": "Privacy Respect", "description": "We don't track your personal activity" } },
+    "introduction": "At E-PDF's, we take your privacy seriously.",
+    "sections": { "collection": { "title": "Data Collected", "content": "We only collect data necessary for our service." }, "usage": { "title": "Data Usage", "content": "Data is used to improve services and display relevant ads." }, "storage": { "title": "File Storage", "content": "Your PDF files are processed entirely in your browser. They are NEVER uploaded to our servers." }, "cookies": { "title": "Cookie Usage", "content": "We use cookies for preferences and advertising." }, "thirdParty": { "title": "Third-Party Services", "content": "We use Google AdSense and Analytics." }, "rights": { "title": "Your Rights", "content": "You have the right to access, correct, and delete your data." }, "children": { "title": "Children's Protection", "content": "Our services are for users 13 and older." }, "contact": { "title": "Contact Us", "content": "For privacy questions, contact us." } },
+    "advertising": { "title": "Google AdSense", "content": "E-PDF's uses Google AdSense to display ads.", "optOut": "You can disable ad personalization in Google settings." },
+    "cta": { "text": "Have questions about our privacy policy?", "terms": "Terms of Service", "tools": "Use the tools" }
+  },
+  "footer": { "description": "E-PDF's is your complete solution for all PDF needs.", "secure": "100% Secure", "fast": "Fast", "free": "Free", "organize": "Organize", "convert": "Convert", "resources": "Resources", "legal": "Legal", "terms": "Terms of Service", "privacy": "Privacy Policy", "allTools": "All tools", "copyright": "© 2024 E-Pdf's. All rights reserved.", "seoKeywords": "E-PDF's - Free online PDF tools." }
 }

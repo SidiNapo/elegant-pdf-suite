@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText, Star } from 'lucide-react';
+import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
@@ -15,10 +15,10 @@ import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 import speedIllustration from '@/assets/speed-illustration.jpg';
 import globalIllustration from '@/assets/global-illustration.jpg';
-
 const Index = () => {
-  const { t } = useTranslation();
-
+  const {
+    t
+  } = useTranslation();
   const popularTools = [{
     title: t('tools.merge.title'),
     description: t('tools.merge.description'),
@@ -62,7 +62,6 @@ const Index = () => {
     href: '/watermark',
     color: 'violet' as const
   }];
-
   const features = [{
     icon: Zap,
     title: t('features.fast'),
@@ -79,7 +78,6 @@ const Index = () => {
     description: t('features.freeDesc'),
     image: globalIllustration
   }];
-
   const showcaseTools = [{
     title: t('showcase.merge.title'),
     description: t('showcase.merge.description'),
@@ -105,7 +103,6 @@ const Index = () => {
     href: '/jpg-to-pdf',
     features: [t('showcase.convert.feature1'), t('showcase.convert.feature2'), t('showcase.convert.feature3')]
   }];
-
   const stats = [{
     value: '10M+',
     label: t('stats.filesProcessed')
@@ -119,7 +116,6 @@ const Index = () => {
     value: '100%',
     label: t('stats.free')
   }];
-
   const testimonials = [{
     name: t('testimonials.testimonial1.name'),
     role: t('testimonials.testimonial1.role'),
@@ -133,9 +129,7 @@ const Index = () => {
     role: t('testimonials.testimonial3.role'),
     text: t('testimonials.testimonial3.text')
   }];
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
       
       {/* Hero Section with Background Image */}
@@ -149,14 +143,17 @@ const Index = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-left"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            x: -50
+          }} animate={{
+            opacity: 1,
+            x: 0
+          }} transition={{
+            duration: 0.8
+          }} className="text-left">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6">
-                <Star className="w-4 h-4 fill-primary" />
+                
                 <span>{t('hero.badge')}</span>
               </span>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
@@ -191,12 +188,16 @@ const Index = () => {
               </div>
             </motion.div>
             
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:block"
-            >
+            <motion.div initial={{
+            opacity: 0,
+            scale: 0.8
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} transition={{
+            duration: 0.8,
+            delay: 0.2
+          }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-rose/20 rounded-3xl blur-3xl" />
                 <img src={heroPdf} alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" className="relative rounded-2xl shadow-2xl border border-white/10" />
@@ -210,19 +211,20 @@ const Index = () => {
       <section className="py-16 bg-gradient-to-b from-background to-card/50 border-y border-border">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="text-center"
-              >
+            {stats.map((stat, i) => <motion.div key={stat.label} initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.1
+          }} className="text-center">
                 <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
                 <div className="text-muted-foreground">{stat.label}</div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -230,12 +232,13 @@ const Index = () => {
       {/* Features with Images */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               {t('features.title')} <span className="gradient-text">{t('features.titleHighlight')}</span> ?
             </h2>
@@ -245,15 +248,17 @@ const Index = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, i) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500"
-              >
+            {features.map((feature, i) => <motion.div key={feature.title} initial={{
+            opacity: 0,
+            y: 30
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.15
+          }} className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
                 <div className="aspect-square overflow-hidden">
                   <img src={feature.image} alt={`${feature.title} - ${feature.description}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/80 to-transparent" />
@@ -265,8 +270,7 @@ const Index = () => {
                   <h3 className="font-bold text-2xl mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -274,12 +278,13 @@ const Index = () => {
       {/* Showcase Tools with Images - Alternating Layout */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-20">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               {t('showcase.title')} <span className="gradient-text">{t('showcase.titleHighlight')}</span> {t('showcase.titleEnd')}
             </h2>
@@ -289,15 +294,18 @@ const Index = () => {
           </motion.div>
           
           <div className="space-y-32">
-            {showcaseTools.map((tool, i) => (
-              <motion.div
-                key={tool.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6 }}
-                className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
-              >
+            {showcaseTools.map((tool, i) => <motion.div key={tool.title} initial={{
+            opacity: 0,
+            y: 50
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true,
+            margin: "-100px"
+          }} transition={{
+            duration: 0.6
+          }} className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
                 <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <div className="relative group">
                     <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-rose/30 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -308,21 +316,18 @@ const Index = () => {
                   <h3 className="text-3xl md:text-4xl font-bold mb-4">{tool.title}</h3>
                   <p className="text-lg text-muted-foreground mb-8">{tool.description}</p>
                   <ul className="space-y-4 mb-8">
-                    {tool.features.map(feature => (
-                      <li key={feature} className="flex items-center gap-3">
+                    {tool.features.map(feature => <li key={feature} className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
                           <CheckCircle2 className="w-4 h-4 text-primary" />
                         </div>
                         <span>{feature}</span>
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                   <Link to={tool.href} className="btn-primary inline-flex items-center gap-2">
                     {t('showcase.tryNow')} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -330,12 +335,13 @@ const Index = () => {
       {/* Popular Tools */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('popularTools.title')} <span className="gradient-text">{t('popularTools.titleHighlight')}</span></h2>
             <p className="text-xl text-muted-foreground">{t('popularTools.subtitle')}</p>
           </motion.div>
@@ -353,12 +359,13 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <motion.div initial={{
+          opacity: 0
+        }} whileInView={{
+          opacity: 1
+        }} viewport={{
+          once: true
+        }} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               {t('testimonials.title')} <span className="gradient-text">{t('testimonials.titleHighlight')}</span>
             </h2>
@@ -366,15 +373,17 @@ const Index = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass-card p-8 rounded-2xl"
-              >
+            {testimonials.map((testimonial, i) => <motion.div key={testimonial.name} initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            delay: i * 0.1
+          }} className="glass-card p-8 rounded-2xl">
                 <p className="text-lg mb-6">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-rose flex items-center justify-center text-white font-bold">
@@ -385,8 +394,7 @@ const Index = () => {
                     <div className="text-sm text-muted-foreground">{testimonial.role}</div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </section>
@@ -398,12 +406,15 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-background to-rose/20" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <motion.div initial={{
+          opacity: 0,
+          y: 30
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true
+        }} className="text-center max-w-3xl mx-auto">
             <FileText className="w-16 h-16 text-primary mx-auto mb-6" />
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
               {t('cta.title')} <span className="gradient-text">{t('cta.titleHighlight')}</span> ?
@@ -433,8 +444,6 @@ const Index = () => {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

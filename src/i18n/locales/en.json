@@ -13,16 +13,16 @@
     "title": "All your",
     "titleHighlight": "PDF",
     "titleEnd": "tools in one place",
-    "description": "Merge, split, compress and convert your PDFs for free. Fast, secure and no registration required. Over 10 million files processed.",
+    "description": "Merge, split, compress and convert your PDFs for free. Fast, secure and no registration required. Your files are processed locally in your browser.",
     "cta": "Discover all tools",
     "ctaSecondary": "Merge PDF",
     "secure": "100% Secure",
     "fast": "Fast processing",
-    "users": "500K+ users"
+    "users": "Trusted by thousands"
   },
   "stats": {
-    "filesProcessed": "Files processed",
-    "satisfiedUsers": "Satisfied users",
+    "filesProcessed": "Files processed daily",
+    "satisfiedUsers": "Happy users",
     "availableTools": "Available tools",
     "free": "Free"
   },
@@ -81,33 +81,33 @@
   "testimonials": {
     "title": "What our",
     "titleHighlight": "users",
-    "subtitle": "Over 500,000 people trust E-PDF's",
+    "subtitle": "Trusted by professionals, students, and individuals worldwide",
     "testimonial1": {
       "text": "E-PDF's has saved me hours of work. The tools are intuitive and fast.",
       "name": "Marie L.",
-      "role": "Designer"
+      "role": "Graphic Designer"
     },
     "testimonial2": {
-      "text": "Finally a free PDF tool without intrusive ads. Highly recommended!",
+      "text": "Finally a free PDF tool that respects my privacy. Highly recommended!",
       "name": "Thomas B.",
-      "role": "Entrepreneur"
+      "role": "Small Business Owner"
     },
     "testimonial3": {
       "text": "Perfect for my studies. I can merge my PDF notes in a few clicks.",
       "name": "Sophie M.",
-      "role": "Student"
+      "role": "University Student"
     }
   },
   "cta": {
     "title": "Ready to simplify your work with",
     "titleHighlight": "PDF",
-    "description": "Join over 500,000 users who trust E-PDF's for their PDF documents. Free, fast and secure.",
+    "description": "Join thousands of users who trust E-PDF's for their PDF documents. Free, fast and secure.",
     "button": "Get started now"
   },
   "seo": {
     "title": "E-PDF's: Your complete solution for PDF document management",
     "paragraph1": "E-PDF's is the most complete free online platform for all your PDF file management needs. Whether you need to merge PDFs, split a PDF document, compress PDF files to reduce their size, or convert images to PDF, our tools are designed to be simple, fast and efficient.",
-    "paragraph2": "Our online PDF tools work directly in your browser, without requiring any software installation. Your documents stay on your device, ensuring complete privacy of your data. With over 10 million files processed, E-PDF's has become the reference for free PDF editing.",
+    "paragraph2": "Our online PDF tools work directly in your browser, without requiring any software installation. Your documents stay on your device, ensuring complete privacy of your data. E-PDF's is the trusted choice for free PDF editing.",
     "paragraph3": "Discover our features: merge multiple PDFs, extract PDF pages, add a watermark, rotate pages, convert Word to PDF, PDF to JPG, and much more. All our tools are 100% free and unlimited."
   },
   "allTools": {
@@ -330,15 +330,6 @@
       "reset": "Convert another file",
       "convertButton": "Convert to PDF"
     },
-    "pptToPdf": {
-      "title": "PowerPoint to PDF",
-      "description": "Convert your presentations to PDF",
-      "processing": "Converting...",
-      "success": "Conversion complete!",
-      "download": "Download PDF",
-      "reset": "Convert another file",
-      "convertButton": "Convert to PDF"
-    },
     "excelToPdf": {
       "title": "Excel to PDF",
       "description": "Convert your spreadsheets to PDF",
@@ -357,34 +348,6 @@
       "download": "Download images (ZIP)",
       "reset": "Convert another file",
       "convertButton": "Convert to JPG"
-    },
-    "pdfToWord": {
-      "title": "PDF to Word",
-      "description": "Convert your PDFs to Word documents",
-      "processing": "Converting...",
-      "success": "Conversion complete!",
-      "download": "Download Word",
-      "reset": "Convert another file",
-      "convertButton": "Convert to Word"
-    },
-    "pdfToPpt": {
-      "title": "PDF to PowerPoint",
-      "description": "Convert your PDFs to presentations",
-      "processing": "Converting...",
-      "success": "Conversion complete!",
-      "slidesCreated": "{{count}} slides created",
-      "download": "Download PowerPoint",
-      "reset": "Convert another file",
-      "convertButton": "Convert to PowerPoint"
-    },
-    "pdfToExcel": {
-      "title": "PDF to Excel",
-      "description": "Convert your PDFs to spreadsheets",
-      "processing": "Converting...",
-      "success": "Conversion complete!",
-      "download": "Download Excel",
-      "reset": "Convert another file",
-      "convertButton": "Convert to Excel"
     },
     "rotate": {
       "title": "Rotate PDF",
@@ -448,16 +411,6 @@
       "download": "Download PDF",
       "reset": "Edit another file",
       "applyButton": "Apply changes"
-    },
-    "compare": {
-      "title": "Compare PDF",
-      "description": "Compare two PDF files",
-      "file1": "First file",
-      "file2": "Second file",
-      "processing": "Comparing...",
-      "pageOf": "Page {{current}} of {{total}}",
-      "compareButton": "Compare documents",
-      "reset": "New comparison"
     }
   },
   "toolLayout": {
@@ -496,16 +449,22 @@
     "loading": "Loading..."
   },
   "footer": {
-    "description": "E-PDF's is your complete solution for PDF document management. Merge, split, compress and convert your files for free, directly in your browser. Over 10 million files processed.",
-    "secure": "Secure",
+    "description": "E-PDF's is your complete free solution for PDF document management. Merge, split, compress and convert your files directly in your browser. Your files never leave your device - 100% private and secure.",
+    "secure": "100% Secure",
     "fast": "Fast",
     "free": "Free",
     "organize": "Organize",
     "convert": "Convert",
     "resources": "Resources",
+    "legal": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
     "allTools": "All tools",
-    "copyright": "© 2024 E-Pdf's. All rights reserved. Free online PDF tools.",
-    "seoKeywords": "E-PDF's - Free online PDF tools: merge PDF, split PDF, compress PDF, convert JPG to PDF, PDF to Word, Word to PDF, PDF to JPG, add watermark, page numbers, rotate PDF, extract pages, delete pages, repair PDF, Excel to PDF, PowerPoint to PDF."
+    "copyright": "© 2024 E-PDF's. All rights reserved. Free online PDF tools.",
+    "seoKeywords": "E-PDF's - Free online PDF tools: merge PDF, split PDF, compress PDF, convert JPG to PDF, PDF to Word, Word to PDF, PDF to JPG, add watermark, page numbers, rotate PDF, extract pages, delete pages, repair PDF, Excel to PDF, PowerPoint to PDF. 100% browser-based, no file uploads, complete privacy.",
+    "noFileStorage": "No files stored on servers",
+    "browserBased": "100% Browser-based processing",
+    "gdprCompliant": "GDPR Compliant"
   },
   "blog": {
     "title": "Blog",
@@ -542,47 +501,247 @@
     "ar": "العربية"
   },
   "about": {
-    "seo": { "title": "About E-PDF's - Free Online PDF Tools", "description": "Discover E-PDF's, the free platform for all your PDF needs.", "keywords": "about e-pdfs, free pdf tools" },
-    "hero": { "badge": "Our Story", "title": "About", "titleHighlight": "E-PDF's", "description": "We make PDF management simple, fast and accessible to everyone.", "cta": "Discover our tools", "ctaSecondary": "Read the blog" },
-    "stats": { "filesProcessed": "Files processed", "happyUsers": "Happy users", "pdfTools": "PDF Tools", "availability": "Availability" },
-    "mission": { "badge": "Our mission", "title": "Simplifying PDF management for everyone", "description": "We believe professional PDF tools should be accessible to all.", "imageAlt": "E-PDF's global mission", "countries": "Countries served" },
-    "values": { "badge": "Our values", "title": "What guides us", "subtitle": "Our core principles define every feature we create", "security": { "title": "Maximum security", "description": "Your files stay on your device. We never store your documents." }, "speed": { "title": "Optimal speed", "description": "Instant processing with cutting-edge technology." }, "simplicity": { "title": "Ease of use", "description": "Intuitive interface designed for everyone." }, "accessibility": { "title": "Total accessibility", "description": "Free tools, no registration, available 24/7." } },
-    "features": { "noInstallation": "No installation required", "noRegistration": "No registration needed", "noLimits": "No usage limits", "allDevices": "Works on all devices", "instantProcessing": "Instant processing", "secureEncryption": "Secure encryption" },
-    "whyUs": { "badge": "Why choose us", "title": "A team dedicated to your success", "description": "Our passionate team works every day to improve your PDF tools.", "securityAlt": "File security", "speedAlt": "Processing speed" },
-    "team": { "developer": "Developers", "designer": "Designers", "support": "Customer support" },
-    "cta": { "title": "Ready to try", "titleHighlight": "E-PDF's?", "description": "Join over 500,000 users who trust our tools.", "button": "Get started now" }
+    "seo": {
+      "title": "About E-PDF's - Free Online PDF Tools | Our Mission",
+      "description": "Learn about E-PDF's, the free platform providing secure, browser-based PDF tools. Discover our commitment to privacy, accessibility, and user-friendly document management.",
+      "keywords": "about e-pdfs, free pdf tools, pdf software company, browser-based pdf, privacy-first pdf tools"
+    },
+    "hero": {
+      "badge": "Our Story",
+      "title": "About",
+      "titleHighlight": "E-PDF's",
+      "description": "We make PDF management simple, fast and accessible to everyone. Our mission is to provide professional-grade PDF tools that respect your privacy.",
+      "cta": "Discover our tools",
+      "ctaSecondary": "Read the blog"
+    },
+    "stats": {
+      "filesProcessed": "Files processed daily",
+      "happyUsers": "Happy users",
+      "pdfTools": "PDF Tools",
+      "availability": "Availability"
+    },
+    "mission": {
+      "badge": "Our Mission",
+      "title": "Simplifying PDF management for everyone",
+      "description": "We believe professional PDF tools should be accessible to all - without expensive subscriptions, complex software installations, or privacy compromises. That's why we built E-PDF's: a completely free, browser-based solution that processes your files locally on your device.",
+      "imageAlt": "E-PDF's global mission",
+      "countries": "Languages supported"
+    },
+    "values": {
+      "badge": "Our Values",
+      "title": "What guides us",
+      "subtitle": "Our core principles define every feature we create",
+      "security": {
+        "title": "Maximum Security",
+        "description": "Your files are processed entirely in your browser. We never upload, store, or access your documents. Your data stays yours."
+      },
+      "speed": {
+        "title": "Optimal Speed",
+        "description": "Instant processing powered by cutting-edge browser technology. No waiting for server uploads or downloads."
+      },
+      "simplicity": {
+        "title": "Ease of Use",
+        "description": "Intuitive interface designed for everyone, from students to professionals. No learning curve required."
+      },
+      "accessibility": {
+        "title": "Total Accessibility",
+        "description": "Free tools with no registration required, available 24/7 on any device with a modern browser."
+      }
+    },
+    "features": {
+      "noInstallation": "No installation required",
+      "noRegistration": "No registration needed",
+      "noLimits": "No usage limits",
+      "allDevices": "Works on all devices",
+      "instantProcessing": "Instant processing",
+      "secureEncryption": "Secure encryption"
+    },
+    "whyUs": {
+      "badge": "Why Choose Us",
+      "title": "A platform dedicated to your success",
+      "description": "E-PDF's was built with one goal: to make PDF management simple, secure, and free for everyone. Unlike other services, we don't require accounts, don't limit your usage, and never access your files.",
+      "securityAlt": "File security",
+      "speedAlt": "Processing speed"
+    },
+    "team": {
+      "developer": "Developers",
+      "designer": "Designers",
+      "support": "Customer Support"
+    },
+    "cta": {
+      "title": "Ready to try",
+      "titleHighlight": "E-PDF's?",
+      "description": "Join thousands of users who trust our tools for their PDF needs.",
+      "button": "Get started now"
+    }
   },
   "terms": {
-    "seo": { "title": "Terms of Service - E-PDF's", "description": "Read E-PDF's terms of service." },
-    "hero": { "title": "Terms of Service", "subtitle": "Rules and guidelines for using our services", "lastUpdated": "Last updated", "date": "January 2024" },
-    "introduction": "Welcome to E-PDF's. By using our website and services, you agree to these terms.",
-    "sections": { "acceptance": { "title": "Acceptance of Terms", "content": "By accessing E-PDF's, you agree to be bound by these terms." }, "services": { "title": "Description of Services", "content": "E-PDF's provides free online tools for PDF manipulation." }, "usage": { "title": "Acceptable Use", "content": "You agree to use our services only for lawful purposes." }, "privacy": { "title": "Data Privacy", "content": "Your files are processed locally and never uploaded to our servers." }, "intellectual": { "title": "Intellectual Property", "content": "E-PDF's content is protected by copyright." }, "liability": { "title": "Limitation of Liability", "content": "E-PDF's is provided as-is without warranty." }, "modifications": { "title": "Modifications", "content": "We reserve the right to modify these terms at any time." }, "contact": { "title": "Contact Us", "content": "For questions about these terms, contact us." } },
-    "advertising": { "title": "Advertising and Cookies", "content": "E-PDF's uses Google AdSense to display ads." },
-    "cta": { "text": "Have questions about our terms?", "privacy": "Privacy Policy", "tools": "Use the tools" }
+    "seo": {
+      "title": "Terms of Service - E-PDF's | User Agreement",
+      "description": "Read the complete terms of service for E-PDF's. Learn about acceptable use, intellectual property, limitations, and your rights when using our free PDF tools."
+    },
+    "hero": {
+      "title": "Terms of Service",
+      "subtitle": "Rules and guidelines for using our services",
+      "lastUpdated": "Last updated",
+      "date": "January 2024"
+    },
+    "introduction": "Welcome to E-PDF's. These Terms of Service govern your use of our website located at e-pdfs.com and all related services. By accessing or using E-PDF's, you agree to be bound by these terms. Please read them carefully before using our services.",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing and using E-PDF's, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services. We reserve the right to modify these terms at any time, and your continued use of our services constitutes acceptance of any modifications."
+      },
+      "services": {
+        "title": "2. Description of Services",
+        "content": "E-PDF's provides free online tools for PDF document manipulation, including but not limited to: merging PDFs, splitting PDFs, compressing PDFs, converting between file formats, adding watermarks, rotating pages, and other PDF-related functions. All processing occurs locally in your browser - your files are never uploaded to our servers. We strive to maintain service availability but do not guarantee uninterrupted access."
+      },
+      "usage": {
+        "title": "3. Acceptable Use Policy",
+        "content": "You agree to use E-PDF's only for lawful purposes and in accordance with these terms. You may not: (a) use our services to process illegal, harmful, or offensive content; (b) attempt to circumvent any security measures; (c) interfere with the proper functioning of our services; (d) use automated systems to access our services without permission; (e) violate any applicable laws or regulations. We reserve the right to terminate access for violations of this policy."
+      },
+      "privacy": {
+        "title": "4. Data Privacy & File Processing",
+        "content": "Your privacy is our priority. All PDF processing occurs locally in your web browser using JavaScript. Your files are NEVER uploaded to our servers, stored, or accessed by us. We do not have access to your documents, and no file data leaves your device during processing. For more details, please review our Privacy Policy."
+      },
+      "intellectual": {
+        "title": "5. Intellectual Property Rights",
+        "content": "All content on E-PDF's, including but not limited to text, graphics, logos, icons, images, and software, is the property of E-PDF's or its content suppliers and is protected by international copyright laws. You retain all rights to your own documents processed through our tools. Our tools are provided for personal and commercial use, but you may not copy, modify, distribute, or reverse engineer our software."
+      },
+      "liability": {
+        "title": "6. Limitation of Liability",
+        "content": "E-PDF's is provided on an 'AS IS' and 'AS AVAILABLE' basis without warranties of any kind, either express or implied. We do not guarantee that our services will be uninterrupted, secure, or error-free. To the fullest extent permitted by law, E-PDF's shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services. Our total liability shall not exceed the amount paid by you for use of our services (which is zero for free services)."
+      },
+      "dmca": {
+        "title": "7. DMCA & Copyright Policy",
+        "content": "E-PDF's respects intellectual property rights. Since all processing occurs locally and we never access your files, we cannot be held responsible for content processed through our tools. If you believe any content on our website infringes your copyright, please contact us at contact@e-pdfs.com with: (a) description of the copyrighted work; (b) location of the infringing material; (c) your contact information; (d) a statement of good faith belief. We will respond to valid DMCA notices promptly."
+      },
+      "thirdParty": {
+        "title": "8. Third-Party Services & Advertising",
+        "content": "E-PDF's may display advertisements through Google AdSense and other advertising networks. These third parties may use cookies and similar technologies to serve ads based on your prior visits to our website or other websites. You can opt out of personalized advertising by visiting Google's Ads Settings. We are not responsible for the privacy practices of third-party advertisers. For more information, see our Privacy Policy."
+      },
+      "disputes": {
+        "title": "9. Dispute Resolution",
+        "content": "Any disputes arising from these terms or your use of E-PDF's shall first be attempted to be resolved through good-faith negotiation. If negotiation fails, disputes shall be resolved through binding arbitration in accordance with applicable laws. You agree to waive any right to participate in class action lawsuits against E-PDF's. This agreement shall be governed by and construed in accordance with international laws."
+      },
+      "modifications": {
+        "title": "10. Modifications to Terms",
+        "content": "We reserve the right to modify these Terms of Service at any time. Changes will be effective immediately upon posting to this page. The 'Last updated' date at the top of this page indicates when these terms were last revised. Your continued use of E-PDF's after any changes constitutes acceptance of the new terms."
+      },
+      "contact": {
+        "title": "11. Contact Information",
+        "content": "If you have any questions about these Terms of Service, please contact us at: contact@e-pdfs.com. We aim to respond to all inquiries within 48 hours during business days."
+      }
+    },
+    "advertising": {
+      "title": "Advertising Disclosure",
+      "content": "E-PDF's is a free service supported by advertising. We display ads through Google AdSense and may use cookies and similar technologies to serve personalized advertisements. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website or other websites. You can opt out of personalized advertising by visiting www.aboutads.info or Google's Ads Settings. By using E-PDF's, you consent to the use of advertising cookies as described in our Privacy Policy."
+    },
+    "cta": {
+      "text": "Have questions about our terms?",
+      "privacy": "Privacy Policy",
+      "tools": "Use the tools"
+    }
   },
   "privacy": {
-    "seo": { "title": "Privacy Policy - E-PDF's", "description": "Learn how E-PDF's protects your data." },
-    "hero": { "title": "Privacy Policy", "subtitle": "How we protect your data and respect your privacy", "lastUpdated": "Last updated", "date": "January 2024" },
-    "highlights": { "noStorage": { "title": "No Storage", "description": "Your files are never stored on our servers" }, "encryption": { "title": "SSL Encryption", "description": "Secure connection for all communications" }, "noTracking": { "title": "Privacy Respect", "description": "We don't track your personal activity" } },
-    "introduction": "At E-PDF's, we take your privacy seriously.",
-    "sections": { "collection": { "title": "Data Collected", "content": "We only collect data necessary for our service." }, "usage": { "title": "Data Usage", "content": "Data is used to improve services and display relevant ads." }, "storage": { "title": "File Storage", "content": "Your PDF files are processed entirely in your browser. They are NEVER uploaded to our servers." }, "cookies": { "title": "Cookie Usage", "content": "We use cookies for preferences and advertising." }, "thirdParty": { "title": "Third-Party Services", "content": "We use Google AdSense and Analytics." }, "rights": { "title": "Your Rights", "content": "You have the right to access, correct, and delete your data." }, "children": { "title": "Children's Protection", "content": "Our services are for users 13 and older." }, "contact": { "title": "Contact Us", "content": "For privacy questions, contact us." } },
-    "advertising": { "title": "Google AdSense", "content": "E-PDF's uses Google AdSense to display ads.", "optOut": "You can disable ad personalization in Google settings." },
-    "cta": { "text": "Have questions about our privacy policy?", "terms": "Terms of Service", "tools": "Use the tools" }
+    "seo": {
+      "title": "Privacy Policy - E-PDF's | Data Protection & GDPR Compliance",
+      "description": "Learn how E-PDF's protects your privacy. Our browser-based PDF tools never upload or store your files. GDPR compliant with complete transparency about data practices."
+    },
+    "hero": {
+      "title": "Privacy Policy",
+      "subtitle": "How we protect your data and respect your privacy",
+      "lastUpdated": "Last updated",
+      "date": "January 2024"
+    },
+    "highlights": {
+      "noStorage": {
+        "title": "No File Storage",
+        "description": "Your files are processed locally in your browser and are never uploaded to our servers"
+      },
+      "encryption": {
+        "title": "SSL Encryption",
+        "description": "All communications with our website are encrypted using industry-standard SSL/TLS"
+      },
+      "noTracking": {
+        "title": "Privacy Respect",
+        "description": "We minimize data collection and never sell your personal information to third parties"
+      }
+    },
+    "introduction": "At E-PDF's, we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect your information when you use our free online PDF tools at e-pdfs.com. By using our services, you agree to the practices described in this policy.",
+    "sections": {
+      "collection": {
+        "title": "1. Information We Collect",
+        "content": "We collect minimal information necessary to provide our services: (a) Automatically collected data: browser type, device type, operating system, IP address (anonymized), page views, and referral source; (b) Cookies: essential cookies for site functionality and third-party cookies for advertising (see Cookie section); (c) Contact form data: if you contact us, we collect your name, email, and message content. IMPORTANT: We do NOT collect, access, store, or process any PDF files or documents. All file processing occurs entirely in your browser."
+      },
+      "usage": {
+        "title": "2. How We Use Your Information",
+        "content": "We use collected information to: (a) Provide and improve our services; (b) Analyze website usage patterns to enhance user experience; (c) Display relevant advertisements through Google AdSense; (d) Respond to your inquiries and support requests; (e) Comply with legal obligations. We never use your data to track your document content or personal files."
+      },
+      "storage": {
+        "title": "3. File Processing & Storage",
+        "content": "This is our most important privacy feature: YOUR FILES NEVER LEAVE YOUR DEVICE. All PDF processing (merging, splitting, compressing, converting, etc.) happens entirely within your web browser using JavaScript. Your documents are: (a) Never uploaded to any server; (b) Never stored on our systems; (c) Never accessed by us or third parties; (d) Automatically cleared from browser memory when you close the tab. This browser-based approach ensures complete privacy and security for your sensitive documents."
+      },
+      "cookies": {
+        "title": "4. Cookies & Tracking Technologies",
+        "content": "We use cookies for: (a) Essential cookies: Required for basic site functionality, language preferences, and user settings; (b) Analytics cookies: Google Analytics to understand how visitors use our site (anonymized); (c) Advertising cookies: Google AdSense uses cookies to display relevant ads. These may include DoubleClick DART cookies that track browsing across websites. You can control cookies through your browser settings or our cookie consent banner. Disabling cookies may affect site functionality."
+      },
+      "thirdParty": {
+        "title": "5. Third-Party Services",
+        "content": "We use the following third-party services: (a) Google AdSense: For displaying advertisements. Google may use cookies to serve ads based on your visits to this and other websites. You can opt out at www.aboutads.info or Google Ad Settings; (b) Google Analytics: For website analytics (anonymized IP addresses); (c) Content Delivery Networks: For fast page loading. These services have their own privacy policies. We encourage you to review them."
+      },
+      "gdpr": {
+        "title": "6. Your Rights (GDPR & CCPA)",
+        "content": "Under GDPR, CCPA, and similar regulations, you have the right to: (a) Access: Request a copy of data we hold about you; (b) Rectification: Request correction of inaccurate data; (c) Erasure: Request deletion of your data ('right to be forgotten'); (d) Restriction: Request limitation of data processing; (e) Portability: Receive your data in a portable format; (f) Objection: Object to certain processing activities; (g) Withdraw consent: Withdraw previously given consent at any time. To exercise these rights, contact us at contact@e-pdfs.com."
+      },
+      "children": {
+        "title": "7. Children's Privacy",
+        "content": "E-PDF's is not intended for children under 13 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child under 13, please contact us immediately at contact@e-pdfs.com, and we will take steps to delete such information."
+      },
+      "security": {
+        "title": "8. Data Security",
+        "content": "We implement appropriate technical and organizational security measures, including: (a) SSL/TLS encryption for all data transmission; (b) Regular security audits and updates; (c) Limited access to any stored data; (d) Secure hosting infrastructure. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security."
+      },
+      "retention": {
+        "title": "9. Data Retention",
+        "content": "Since we don't store your PDF files, there is no file data to retain. For other data: (a) Analytics data: Retained for up to 26 months; (b) Contact form submissions: Retained until your inquiry is resolved, then deleted within 12 months; (c) Cookie preferences: Stored locally on your device. You can clear this data at any time through your browser settings."
+      },
+      "international": {
+        "title": "10. International Data Transfers",
+        "content": "Our website and services are hosted internationally. If you access E-PDF's from outside our hosting region, your information may be transferred across borders. We ensure appropriate safeguards are in place for any international data transfers in compliance with applicable data protection laws."
+      },
+      "contact": {
+        "title": "11. Contact Us",
+        "content": "For privacy-related questions or to exercise your rights, contact us at: Email: contact@e-pdfs.com. We aim to respond to all privacy requests within 30 days. For EU residents, you also have the right to lodge a complaint with your local supervisory authority."
+      }
+    },
+    "advertising": {
+      "title": "Google AdSense Privacy Notice",
+      "content": "E-PDF's uses Google AdSense to display advertisements. Google and its partners use cookies to serve ads based on your prior visits to our website or other websites. The DoubleClick DART cookie is used by Google to serve ads to you based on your visit to this site and other sites on the Internet. You may opt out of the use of the DART cookie by visiting the Google Ad and Content Network privacy policy at: https://policies.google.com/technologies/ads. Third-party vendors also use cookies, web beacons, and similar technologies to serve and personalize ads. You can review and control your ad preferences at: https://www.aboutads.info/choices/",
+      "optOut": "Opt out of personalized ads: Visit Google Ad Settings or www.aboutads.info/choices to manage your preferences."
+    },
+    "cta": {
+      "text": "Have questions about our privacy practices?",
+      "terms": "Terms of Service",
+      "tools": "Use the tools"
+    }
   },
   "contact": {
-    "metaTitle": "Contact Us - E-PDF's",
-    "metaDescription": "Contact the E-PDF's team. We're here to help with all your PDF needs.",
+    "metaTitle": "Contact Us - E-PDF's | Get Help & Support",
+    "metaDescription": "Contact the E-PDF's team for support, feedback, or partnership inquiries. We're here to help with all your PDF needs. Response within 24-48 hours.",
     "title": "Get in Touch",
-    "subtitle": "Have a question, feedback, or need support? We'd love to hear from you. Our team is here to help.",
-    "emailTitle": "Email",
-    "phoneTitle": "Phone",
-    "addressTitle": "Address",
-    "hoursTitle": "Hours",
-    "hoursValue": "Mon-Fri: 9AM-6PM",
+    "subtitle": "Have a question, feedback, or need support? We'd love to hear from you. Our team is here to help with all your PDF needs.",
+    "emailTitle": "Email Us",
+    "hoursTitle": "Response Time",
+    "hoursValue": "24-48 hours (Mon-Fri)",
     "formTitle": "Send us a message",
-    "formDescription": "Fill out the form and we'll get back to you as soon as possible. We typically respond within 24 hours.",
-    "illustrationText": "We're always ready to help you",
-    "responseTime": "Typically responds within 24 hours",
+    "formDescription": "Fill out the form below and we'll get back to you as soon as possible. We typically respond within 24-48 business hours.",
+    "whyContactTitle": "Why contact us?",
+    "reasonFeature": "Request a new feature or tool",
+    "reasonBug": "Report a bug or issue",
+    "reasonPartnership": "Partnership or business inquiries",
+    "reasonGeneral": "General questions about E-PDF's",
+    "responseTime": "Average response: 24-48 hours",
     "firstName": "First Name",
     "firstNamePlaceholder": "John",
     "lastName": "Last Name",
@@ -592,19 +751,50 @@
     "subject": "Subject",
     "subjectPlaceholder": "How can we help?",
     "message": "Message",
-    "messagePlaceholder": "Tell us more about your question or feedback...",
+    "messagePlaceholder": "Tell us more about your question or feedback. Please be as detailed as possible...",
     "sendButton": "Send Message",
-    "successMessage": "Message sent successfully! We'll get back to you soon.",
+    "successMessage": "Thank you! Your message has been received. We'll get back to you within 24-48 hours.",
+    "privacyNotice": "By submitting this form, you agree to our Privacy Policy. We'll only use your information to respond to your inquiry.",
+    "trustSecure": "100% Secure",
+    "trustFast": "Fast Response",
+    "trustFree": "Free Support",
     "faqTitle": "Frequently Asked Questions",
-    "faqDescription": "Find quick answers to common questions",
-    "faq1Question": "Is E-PDF's really free?",
-    "faq1Answer": "Yes! All our PDF tools are completely free to use with no hidden fees or subscriptions required.",
-    "faq2Question": "Are my files secure?",
-    "faq2Answer": "Absolutely. Your files are processed locally in your browser and never uploaded to our servers.",
-    "faq3Question": "What file formats are supported?",
-    "faq3Answer": "We support PDF, JPG, PNG, Word, Excel, PowerPoint, and many more formats.",
-    "faq4Question": "How can I report a bug?",
-    "faq4Answer": "Use the contact form above to report any issues. Please include as much detail as possible."
+    "faqDescription": "Find quick answers to common questions about E-PDF's",
+    "faq1Question": "Is E-PDF's really free to use?",
+    "faq1Answer": "Yes! All our PDF tools are completely free to use with no hidden fees, subscriptions, or usage limits. We're supported by non-intrusive advertising, which allows us to offer all features at no cost.",
+    "faq2Question": "Are my files secure and private?",
+    "faq2Answer": "Absolutely. Your files are processed 100% locally in your web browser. They are NEVER uploaded to our servers or any cloud storage. This means we have zero access to your documents, ensuring complete privacy for sensitive files.",
+    "faq3Question": "What file formats do you support?",
+    "faq3Answer": "We support a wide range of formats: PDF, JPG, PNG, Word (DOC, DOCX), Excel (XLS, XLSX), PowerPoint (PPT, PPTX), and more. Check our All Tools page for the complete list of supported conversions.",
+    "faq4Question": "How can I report a bug or request a feature?",
+    "faq4Answer": "Use the contact form above! We carefully review all feedback and bug reports. Please include as much detail as possible (browser type, steps to reproduce, screenshots if applicable) to help us investigate and improve."
   },
-  "footer": { "description": "E-PDF's is your complete solution for all PDF needs.", "secure": "100% Secure", "fast": "Fast", "free": "Free", "organize": "Organize", "convert": "Convert", "resources": "Resources", "legal": "Legal", "terms": "Terms of Service", "privacy": "Privacy Policy", "allTools": "All tools", "copyright": "© 2024 E-Pdf's. All rights reserved.", "seoKeywords": "E-PDF's - Free online PDF tools." }
+  "cookieConsent": {
+    "title": "We value your privacy",
+    "description": "We use cookies to enhance your browsing experience, serve personalized ads, and analyze our traffic. By clicking 'Accept All', you consent to our use of cookies.",
+    "essential": "Essential",
+    "essentialDesc": "Required for basic functionality",
+    "analytics": "Analytics",
+    "analyticsDesc": "Help us improve our site",
+    "advertising": "Advertising",
+    "advertisingDesc": "Personalized ads via AdSense",
+    "acceptAll": "Accept All",
+    "essentialOnly": "Essential Only",
+    "learnMore": "Learn more",
+    "close": "Close"
+  },
+  "trustBadges": {
+    "secure": "100% Secure",
+    "secureDesc": "Files never uploaded",
+    "ssl": "SSL Encrypted",
+    "sslDesc": "Secure connection",
+    "noUpload": "No Server Upload",
+    "noUploadDesc": "Browser-based processing",
+    "instant": "Instant Processing",
+    "instantDesc": "No waiting time",
+    "free": "Always Free",
+    "freeDesc": "No hidden costs",
+    "noAccount": "No Account Needed",
+    "noAccountDesc": "Start instantly"
+  }
 }

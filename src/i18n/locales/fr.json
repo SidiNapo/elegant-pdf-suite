@@ -780,6 +780,34 @@
     "faq4Question": "Comment signaler un bug ?",
     "faq4Answer": "Utilisez le formulaire de contact ci-dessus pour signaler tout problème. Veuillez inclure autant de détails que possible."
   },
+  "cookieConsent": {
+    "title": "Nous respectons votre vie privée",
+    "description": "Nous utilisons des cookies pour améliorer votre expérience de navigation, afficher des publicités personnalisées et analyser notre trafic. En cliquant sur 'Tout accepter', vous consentez à notre utilisation des cookies.",
+    "essential": "Essentiels",
+    "essentialDesc": "Requis pour le fonctionnement de base",
+    "analytics": "Analytiques",
+    "analyticsDesc": "Nous aident à améliorer notre site",
+    "advertising": "Publicitaires",
+    "advertisingDesc": "Annonces personnalisées via AdSense",
+    "acceptAll": "Tout accepter",
+    "essentialOnly": "Essentiels uniquement",
+    "learnMore": "En savoir plus",
+    "close": "Fermer"
+  },
+  "trustBadges": {
+    "secure": "100% Sécurisé",
+    "secureDesc": "Fichiers jamais téléchargés",
+    "ssl": "Chiffrement SSL",
+    "sslDesc": "Connexion sécurisée",
+    "noUpload": "Pas de téléchargement serveur",
+    "noUploadDesc": "Traitement dans le navigateur",
+    "instant": "Traitement instantané",
+    "instantDesc": "Aucun temps d'attente",
+    "free": "Toujours gratuit",
+    "freeDesc": "Pas de frais cachés",
+    "noAccount": "Pas de compte requis",
+    "noAccountDesc": "Commencez instantanément"
+  },
   "footer": {
     "description": "E-PDF's est votre solution complète pour tous vos besoins PDF. Fusionnez, divisez, compressez et convertissez vos fichiers gratuitement.",
     "secure": "100% Sécurisé",

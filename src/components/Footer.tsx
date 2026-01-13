@@ -1,8 +1,9 @@
-import { Shield, Zap, Globe } from 'lucide-react';
+import { Shield, Zap, Globe, Lock, Server, FileCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroPdf from '@/assets/hero-pdf.jpg';
+import TrustBadges from '@/components/TrustBadges';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -126,8 +127,13 @@ const Footer = () => {
           ))}
         </div>
 
-        {/* SEO Keywords */}
+        {/* Trust Badges */}
         <div className="mt-12 pt-8 border-t border-border">
+          <TrustBadges />
+        </div>
+
+        {/* SEO Keywords */}
+        <div className="mt-8 pt-8 border-t border-border">
           <p className="text-xs text-muted-foreground/70 text-center max-w-4xl mx-auto">
             {t('footer.seoKeywords')}
           </p>

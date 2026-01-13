@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
+import StructuredData from '@/components/StructuredData';
+import SEOHead from '@/components/SEOHead';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -130,6 +132,13 @@ const Index = () => {
     text: t('testimonials.testimonial3.text')
   }];
   return <div className="min-h-screen flex flex-col">
+      <SEOHead 
+        title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
+        description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
+        canonicalUrl="https://e-pdfs.com"
+        ogImage="https://e-pdfs.com/og-image.jpg"
+      />
+      <StructuredData />
       <Header />
       
       {/* Hero Section with Background Image */}

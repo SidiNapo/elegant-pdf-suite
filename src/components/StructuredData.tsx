@@ -213,3 +213,20 @@ export const WebsiteSchema = () => {
 
   return null;
 };
+
+// Default export combining main schemas for homepage
+const StructuredData = () => {
+  return (
+    <>
+      <OrganizationSchema
+        name="E-PDF's"
+        url="https://e-pdfs.com"
+        logo="https://e-pdfs.com/logo.png"
+        description="Free online PDF tools - Merge, split, compress, and convert PDF files instantly in your browser. No registration required, 100% secure browser-based processing."
+      />
+      <WebsiteSchema />
+    </>
+  );
+};
+
+export default StructuredData;

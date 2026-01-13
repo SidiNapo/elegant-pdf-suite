@@ -606,5 +606,33 @@
     "faq4Question": "كيف يمكنني الإبلاغ عن خطأ؟",
     "faq4Answer": "استخدم نموذج الاتصال أعلاه للإبلاغ عن أي مشاكل. يرجى تضمين أكبر قدر ممكن من التفاصيل."
   },
-  "footer": { "description": "E-PDF's هو حلك الشامل لجميع احتياجات PDF.", "secure": "آمن 100%", "fast": "سريع", "free": "مجاني", "organize": "تنظيم", "convert": "تحويل", "resources": "الموارد", "legal": "قانوني", "terms": "شروط الاستخدام", "privacy": "سياسة الخصوصية", "allTools": "جميع الأدوات", "copyright": "© 2024 E-Pdf's. جميع الحقوق محفوظة.", "seoKeywords": "E-PDF's - أدوات PDF مجانية." }
+  "footer": { "description": "E-PDF's هو حلك الشامل لجميع احتياجات PDF.", "secure": "آمن 100%", "fast": "سريع", "free": "مجاني", "organize": "تنظيم", "convert": "تحويل", "resources": "الموارد", "legal": "قانوني", "terms": "شروط الاستخدام", "privacy": "سياسة الخصوصية", "allTools": "جميع الأدوات", "copyright": "© 2024 E-Pdf's. جميع الحقوق محفوظة.", "seoKeywords": "E-PDF's - أدوات PDF مجانية." },
+  "cookieConsent": {
+    "title": "نحن نحترم خصوصيتك",
+    "description": "نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفح وعرض الإعلانات المخصصة وتحليل حركة المرور. بالنقر على 'قبول الكل'، فإنك توافق على استخدامنا لملفات تعريف الارتباط.",
+    "essential": "أساسية",
+    "essentialDesc": "مطلوبة للوظائف الأساسية",
+    "analytics": "تحليلية",
+    "analyticsDesc": "تساعدنا في تحسين موقعنا",
+    "advertising": "إعلانية",
+    "advertisingDesc": "إعلانات مخصصة عبر AdSense",
+    "acceptAll": "قبول الكل",
+    "essentialOnly": "الأساسية فقط",
+    "learnMore": "معرفة المزيد",
+    "close": "إغلاق"
+  },
+  "trustBadges": {
+    "secure": "آمن 100%",
+    "secureDesc": "الملفات لا تُرفع أبداً",
+    "ssl": "تشفير SSL",
+    "sslDesc": "اتصال آمن",
+    "noUpload": "لا رفع للخادم",
+    "noUploadDesc": "معالجة في المتصفح",
+    "instant": "معالجة فورية",
+    "instantDesc": "لا وقت انتظار",
+    "free": "مجاني دائماً",
+    "freeDesc": "لا تكاليف خفية",
+    "noAccount": "لا حاجة لحساب",
+    "noAccountDesc": "ابدأ فوراً"
+  }
 }

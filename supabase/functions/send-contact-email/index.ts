@@ -290,24 +290,20 @@ const handler = async (req: Request): Promise<Response> => {
 </html>`;
 
         // Send notification email to site admin
+        // NOTE: Until domain is verified at resend.com/domains, emails go to youssefwin747@gmail.com
         const adminEmailResponse = await resend.emails.send({
           from: "E-PDF's Contact <onboarding@resend.dev>",
-          to: ["contact@e-pdfs.com"],
+          to: ["youssefwin747@gmail.com"],
+          reply_to: email,
           subject: `🔔 [E-PDF's Contact] ${subject} - from ${firstName} ${lastName}`,
           html: adminEmailHtml,
         });
 
         console.log("Admin notification email sent:", adminEmailResponse);
 
-        // Send confirmation email to user
-        const userEmailResponse = await resend.emails.send({
-          from: "E-PDF's <onboarding@resend.dev>",
-          to: [email],
-          subject: "We received your message! - E-PDF's",
-          html: userEmailHtml,
-        });
-
-        console.log("User confirmation email sent:", userEmailResponse);
+        // Skip user confirmation email until domain is verified
+        // Users still see success message, and admin can reply directly
+        console.log("User confirmation email skipped (domain not verified yet)");
       } catch (emailError) {
         console.error("Email sending failed:", emailError);
         // Continue - the message was still logged and stored

@@ -108,47 +108,203 @@ const handler = async (req: Request): Promise<Response> => {
     if (resendApiKey) {
       try {
         const resend = new Resend(resendApiKey);
+        const currentDate = new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Modern HTML email template for admin
+        const adminEmailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); padding: 32px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">📧 E-PDF's</h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px;">New Contact Form Submission</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 32px;">
+              <!-- Contact Info Card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fdf4ff; border-radius: 12px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <h2 style="color: #1f2937; margin: 0 0 16px 0; font-size: 18px; font-weight: 600;">👤 Contact Information</h2>
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #f3e8ff;">
+                          <span style="color: #6b7280; font-size: 13px;">Full Name</span><br>
+                          <span style="color: #1f2937; font-size: 16px; font-weight: 500;">${firstName} ${lastName}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #f3e8ff;">
+                          <span style="color: #6b7280; font-size: 13px;">Email Address</span><br>
+                          <a href="mailto:${email}" style="color: #ec4899; font-size: 16px; font-weight: 500; text-decoration: none;">${email}</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0;">
+                          <span style="color: #6b7280; font-size: 13px;">Subject</span><br>
+                          <span style="color: #1f2937; font-size: 16px; font-weight: 500;">${subject}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Message Card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border-radius: 12px; border-left: 4px solid #ec4899;">
+                <tr>
+                  <td style="padding: 24px;">
+                    <h2 style="color: #1f2937; margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">💬 Message</h2>
+                    <p style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0; white-space: pre-wrap;">${message}</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Reply Button -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 24px;">
+                <tr>
+                  <td align="center">
+                    <a href="mailto:${email}?subject=Re: ${subject}" style="display: inline-block; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                      ↩️ Reply to ${firstName}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #1f2937; padding: 24px; text-align: center;">
+              <p style="color: #9ca3af; margin: 0 0 8px 0; font-size: 13px;">
+                📅 Received on ${currentDate}
+              </p>
+              <p style="color: #6b7280; margin: 0; font-size: 12px;">
+                This email was sent from the contact form at <a href="https://e-pdfs.com" style="color: #ec4899; text-decoration: none;">e-pdfs.com</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+        // Modern HTML email template for user confirmation
+        const userEmailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); padding: 40px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700;">E-PDF's</h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 12px 0 0 0; font-size: 16px;">Free Online PDF Tools</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 32px;">
+              <h2 style="color: #1f2937; margin: 0 0 16px 0; font-size: 24px; font-weight: 600;">Thank you, ${firstName}! ✨</h2>
+              <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                We've received your message and our team will get back to you as soon as possible, usually within <strong>24 hours</strong>.
+              </p>
+              
+              <!-- Message Summary -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fdf4ff; border-radius: 12px; border-left: 4px solid #ec4899; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="color: #6b7280; font-size: 13px; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">Your Message</p>
+                    <p style="color: #1f2937; font-size: 15px; font-weight: 600; margin: 0 0 12px 0;">${subject}</p>
+                    <p style="color: #4b5563; font-size: 14px; line-height: 1.5; margin: 0; white-space: pre-wrap;">${message}</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- CTA -->
+              <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 0 0 24px 0;">
+                While you wait, feel free to explore our free PDF tools:
+              </p>
+              
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="https://e-pdfs.com" style="display: inline-block; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                      🔧 Explore PDF Tools
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #1f2937; padding: 32px; text-align: center;">
+              <p style="color: #f9fafb; margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">E-PDF's</p>
+              <p style="color: #9ca3af; margin: 0 0 16px 0; font-size: 14px;">
+                Merge • Split • Compress • Convert
+              </p>
+              <p style="color: #6b7280; margin: 0; font-size: 12px;">
+                © 2025 E-PDF's. All rights reserved.<br>
+                <a href="https://e-pdfs.com/privacy" style="color: #ec4899; text-decoration: none;">Privacy Policy</a> • 
+                <a href="https://e-pdfs.com/terms" style="color: #ec4899; text-decoration: none;">Terms of Service</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
         // Send notification email to site admin
         const adminEmailResponse = await resend.emails.send({
-          from: "E-PDF's <noreply@e-pdfs.com>",
+          from: "E-PDF's Contact <onboarding@resend.dev>",
           to: ["contact@e-pdfs.com"],
-          subject: `[Contact Form] ${subject}`,
-          html: `
-            <h2>New Contact Form Submission</h2>
-            <p><strong>From:</strong> ${firstName} ${lastName}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Subject:</strong> ${subject}</p>
-            <h3>Message:</h3>
-            <p>${message.replace(/\n/g, '<br>')}</p>
-            <hr>
-            <p style="color: #666; font-size: 12px;">Received at: ${new Date().toISOString()}</p>
-          `,
+          subject: `🔔 [E-PDF's Contact] ${subject} - from ${firstName} ${lastName}`,
+          html: adminEmailHtml,
         });
 
         console.log("Admin notification email sent:", adminEmailResponse);
 
         // Send confirmation email to user
         const userEmailResponse = await resend.emails.send({
-          from: "E-PDF's <noreply@e-pdfs.com>",
+          from: "E-PDF's <onboarding@resend.dev>",
           to: [email],
-          subject: "We received your message - E-PDF's",
-          html: `
-            <h2>Thank you for contacting E-PDF's!</h2>
-            <p>Hello ${firstName},</p>
-            <p>We have received your message and will get back to you as soon as possible, usually within 24 hours.</p>
-            <p><strong>Your message:</strong></p>
-            <blockquote style="border-left: 3px solid #ec4899; padding-left: 15px; margin: 15px 0;">
-              <p><strong>Subject:</strong> ${subject}</p>
-              <p>${message.replace(/\n/g, '<br>')}</p>
-            </blockquote>
-            <p>Best regards,<br>The E-PDF's Team</p>
-            <hr>
-            <p style="color: #666; font-size: 12px;">
-              E-PDF's - Free Online PDF Tools<br>
-              <a href="https://e-pdfs.com">https://e-pdfs.com</a>
-            </p>
-          `,
+          subject: "We received your message! - E-PDF's",
+          html: userEmailHtml,
         });
 
         console.log("User confirmation email sent:", userEmailResponse);

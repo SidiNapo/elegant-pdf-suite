@@ -30,7 +30,22 @@ export interface BlogCategory {
   description: string | null;
 }
 
-// Fetch all published posts (public)
+// Lightweight post type for list views (no content field)
+export interface BlogPostSummary {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  featured_image: string | null;
+  author_name: string;
+  published_at: string | null;
+  created_at: string;
+  views_count: number;
+  category_id: string | null;
+  category?: BlogCategory;
+}
+
+// Fetch all published posts (public) - OPTIMIZED: only select needed fields
 export const usePublishedPosts = () => {
   return useQuery({
     queryKey: ['blog-posts', 'published'],
@@ -38,15 +53,26 @@ export const usePublishedPosts = () => {
       const { data, error } = await supabase
         .from('blog_posts')
         .select(`
-          *,
-          category:blog_categories(*)
+          id,
+          slug,
+          title,
+          excerpt,
+          featured_image,
+          author_name,
+          published_at,
+          created_at,
+          views_count,
+          category_id,
+          category:blog_categories(id, name, slug)
         `)
         .eq('is_published', true)
         .order('published_at', { ascending: false });
 
       if (error) throw error;
-      return data as BlogPost[];
+      return data as BlogPostSummary[];
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
 };
 
@@ -67,12 +93,15 @@ export const usePostBySlug = (slug: string) => {
 
       if (error) throw error;
       
-      // Increment view count
-      await supabase.rpc('increment_post_views', { post_id: data.id });
+      // Increment view count (fire and forget)
+      try {
+        supabase.rpc('increment_post_views', { post_id: data.id });
+      } catch {}
       
       return data as BlogPost;
     },
     enabled: !!slug,
+    staleTime: 2 * 60 * 1000, // 2 minutes cache
   });
 };
 
@@ -116,19 +145,21 @@ export const usePostById = (id: string) => {
   });
 };
 
-// Fetch all categories
+// Fetch all categories - OPTIMIZED with caching
 export const useCategories = () => {
   return useQuery({
     queryKey: ['blog-categories'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('blog_categories')
-        .select('*')
+        .select('id, name, slug')
         .order('name');
 
       if (error) throw error;
       return data as BlogCategory[];
     },
+    staleTime: 10 * 60 * 1000, // 10 minutes cache
+    gcTime: 30 * 60 * 1000, // 30 minutes garbage collection
   });
 };
 

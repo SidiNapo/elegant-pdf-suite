@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
 import { Calendar, User, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { memo } from 'react';
 
 interface BlogCardProps {
   slug: string;
@@ -14,7 +14,7 @@ interface BlogCardProps {
   categoryName?: string;
 }
 
-const BlogCard = ({
+const BlogCard = memo(({
   slug,
   title,
   excerpt,
@@ -28,25 +28,21 @@ const BlogCard = ({
   const locale = i18n.language === 'ar' ? 'ar-SA' : i18n.language === 'en' ? 'en-US' : 'fr-FR';
   const formattedDate = new Date(publishedAt).toLocaleDateString(locale, {
     day: 'numeric',
-    month: 'long',
+    month: 'short',
     year: 'numeric',
   });
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="glass-card rounded-2xl overflow-hidden hover-glow group"
-    >
+    <article className="glass-card rounded-2xl overflow-hidden hover-glow group transition-all duration-300">
       <Link to={`/blog/${slug}`}>
         {featuredImage ? (
-          <div className="aspect-video overflow-hidden">
+          <div className="aspect-video overflow-hidden bg-muted">
             <img
               src={featuredImage}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
+              decoding="async"
             />
           </div>
         ) : (
@@ -55,7 +51,7 @@ const BlogCard = ({
           </div>
         )}
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-3">
           {categoryName && (
             <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
               {categoryName}
@@ -66,7 +62,7 @@ const BlogCard = ({
             {title}
           </h2>
 
-          <p className="text-muted-foreground text-sm line-clamp-3">{excerpt}</p>
+          <p className="text-muted-foreground text-sm line-clamp-2">{excerpt}</p>
 
           <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
             <span className="flex items-center gap-1">
@@ -84,8 +80,10 @@ const BlogCard = ({
           </div>
         </div>
       </Link>
-    </motion.article>
+    </article>
   );
-};
+});
+
+BlogCard.displayName = 'BlogCard';
 
 export default BlogCard;

@@ -508,6 +508,11 @@
     "seoKeywords": "E-PDF's - Outils PDF en ligne gratuits : fusionner PDF, diviser PDF, compresser PDF, convertir JPG en PDF, PDF en Word, Word en PDF, PDF en JPG, ajouter filigrane, numéros de page, faire pivoter PDF, extraire pages, supprimer pages, réparer PDF, Excel en PDF, PowerPoint en PDF."
   },
   "blog": {
+    "seo": {
+      "title": "Blog E-PDF's - Conseils et Tutoriels PDF",
+      "description": "Découvrez nos articles, guides et tutoriels sur la manipulation de fichiers PDF. Apprenez à fusionner, diviser, compresser et convertir vos documents.",
+      "keywords": "blog PDF, tutoriels PDF, guides PDF, astuces PDF, conseils PDF"
+    },
     "title": "Blog",
     "subtitle": "Découvrez nos articles, tutoriels et conseils pour mieux gérer vos documents PDF",
     "allCategories": "Toutes les catégories",

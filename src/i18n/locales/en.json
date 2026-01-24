@@ -467,6 +467,11 @@
     "gdprCompliant": "GDPR Compliant"
   },
   "blog": {
+    "seo": {
+      "title": "Blog E-PDF's - PDF Tips, Tutorials & Guides",
+      "description": "Discover our articles, guides and tutorials on PDF document management. Learn how to merge, split, compress and convert your documents.",
+      "keywords": "PDF blog, PDF tutorials, PDF guides, PDF tips, PDF advice"
+    },
     "title": "Blog",
     "subtitle": "Discover our articles, tutorials and tips for better PDF document management",
     "allCategories": "All categories",

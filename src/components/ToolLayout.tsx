@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { LucideIcon, ArrowLeft, Shield, Zap, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from './Header';
 import Footer from './Footer';
+import SEOHead from './SEOHead';
 
 // Import background images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -19,6 +20,7 @@ interface ToolLayoutProps {
   icon: LucideIcon;
   children: React.ReactNode;
   color?: 'coral' | 'rose' | 'violet' | 'cyan';
+  seoKeywords?: string;
 }
 
 const colorClasses = {
@@ -41,9 +43,18 @@ const ToolLayout = ({
   icon: Icon,
   children,
   color = 'coral',
+  seoKeywords,
 }: ToolLayoutProps) => {
   const { t } = useTranslation();
+  const location = useLocation();
   const bgImage = backgroundImages[color];
+
+  // Generate canonical URL from current path
+  const canonicalUrl = `https://e-pdfs.com${location.pathname}`;
+  
+  // Generate SEO title and description
+  const seoTitle = `${title} - E-PDF's | Free Online PDF Tool`;
+  const seoDescription = `${description} Free, secure, and fast. No registration required. Process your PDF files directly in your browser.`;
 
   const benefits = [
     { icon: Zap, text: t('toolLayout.benefits.instant') },
@@ -52,8 +63,15 @@ const ToolLayout = ({
   ];
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords || `${title}, PDF tools, free PDF, online PDF, PDF converter`}
+        canonicalUrl={canonicalUrl}
+      />
+      <div className="min-h-screen flex flex-col">
+        <Header />
       
       <main className="flex-1">
         {/* Hero Section with Background Image */}
@@ -177,8 +195,9 @@ const ToolLayout = ({
         </section>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

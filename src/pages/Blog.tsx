@@ -40,9 +40,9 @@ const Blog = () => {
   return (
     <>
       <SEOHead
-        title="Blog E-PDF's - Conseils et Tutoriels PDF"
-        description="Découvrez nos articles, guides et tutoriels sur la manipulation de fichiers PDF. Apprenez à fusionner, diviser, compresser et convertir vos documents."
-        keywords="blog PDF, tutoriels PDF, guides PDF, astuces PDF, conseils PDF"
+        title={t('blog.seo.title')}
+        description={t('blog.seo.description')}
+        keywords={t('blog.seo.keywords')}
         canonicalUrl="https://e-pdfs.com/blog"
       />
 

@@ -29,6 +29,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
+import SEOHead from '@/components/SEOHead';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -247,8 +248,15 @@ const AllTools = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <>
+      <SEOHead
+        title="All PDF Tools - E-PDF's | Free Online PDF Tools"
+        description="Complete collection of free online PDF tools. Merge, split, compress, convert, rotate, watermark and edit PDF files. 100% free, secure, and browser-based."
+        keywords="PDF tools, all PDF tools, free PDF tools, online PDF, merge PDF, split PDF, compress PDF, convert PDF, PDF editor"
+        canonicalUrl="https://e-pdfs.com/tools"
+      />
+      <div className="min-h-screen flex flex-col">
+        <Header />
 
       <main className="flex-1">
         {/* Hero Section with Image */}
@@ -383,8 +391,9 @@ const AllTools = () => {
         </section>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 

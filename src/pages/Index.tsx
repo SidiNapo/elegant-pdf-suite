@@ -124,24 +124,28 @@ const Index = () => {
     description: t('showcase.merge.description'),
     image: mergePdfIllustration,
     href: '/merge',
+    ctaKey: 'merge',
     features: [t('showcase.merge.feature1'), t('showcase.merge.feature2'), t('showcase.merge.feature3')]
   }, {
     title: t('showcase.split.title'),
     description: t('showcase.split.description'),
     image: splitPdfIllustration,
     href: '/split',
+    ctaKey: 'split',
     features: [t('showcase.split.feature1'), t('showcase.split.feature2'), t('showcase.split.feature3')]
   }, {
     title: t('showcase.compress.title'),
     description: t('showcase.compress.description'),
     image: compressPdfIllustration,
     href: '/compress',
+    ctaKey: 'compress',
     features: [t('showcase.compress.feature1'), t('showcase.compress.feature2'), t('showcase.compress.feature3')]
   }, {
     title: t('showcase.convert.title'),
     description: t('showcase.convert.description'),
     image: convertPdfIllustration,
     href: '/jpg-to-pdf',
+    ctaKey: 'convert',
     features: [t('showcase.convert.feature1'), t('showcase.convert.feature2'), t('showcase.convert.feature3')]
   }];
   const stats = [{
@@ -267,15 +271,17 @@ const Index = () => {
           }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-rose/20 rounded-3xl blur-3xl" />
-                <img 
-                  src={heroPdf} 
-                  alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" 
-                  width={800}
-                  height={600}
-                  loading="eager"
-                  decoding="async"
-                  className="relative rounded-2xl shadow-2xl border border-white/10" 
-                />
+                <div style={{ aspectRatio: '16/9' }} className="w-full">
+                  <img 
+                    src={heroPdf} 
+                    alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" 
+                    width={800}
+                    height={450}
+                    loading="eager"
+                    decoding="async"
+                    className="relative rounded-2xl shadow-2xl border border-white/10 w-full h-full object-cover" 
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
@@ -444,7 +450,7 @@ const Index = () => {
                     ))}
                   </ul>
                   <Link to={tool.href} className="btn-primary inline-flex items-center gap-2">
-                    {t('showcase.tryNow')} <ArrowRight className="w-4 h-4" />
+                    {t(`showcase.${tool.ctaKey}.cta`)} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </motion.div>

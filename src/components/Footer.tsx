@@ -91,10 +91,11 @@ const Footer = () => {
               <img 
                 src={logo} 
                 alt="E-Pdfs" 
-                width={200}
-                height={122}
+                width={96}
+                height={58}
                 loading="lazy"
                 decoding="async"
+                style={{ aspectRatio: '138/84' }}
                 className="h-24 md:h-28 lg:h-32 w-auto object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.8)] group-hover:scale-105" 
               />
             </Link>

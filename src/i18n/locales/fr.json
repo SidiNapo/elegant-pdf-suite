@@ -53,28 +53,35 @@
       "description": "Combinez facilement plusieurs documents PDF en un seul fichier. Idéal pour créer des rapports complets, des portfolios ou des dossiers organisés.",
       "feature1": "Glisser-déposer simple",
       "feature2": "Réorganiser les pages",
-      "feature3": "Prévisualisation instantanée"
+      "feature3": "Prévisualisation instantanée",
+      "cta": "Essayer Fusion"
     },
     "split": {
       "title": "Diviser vos documents",
       "description": "Séparez un PDF volumineux en plusieurs fichiers distincts. Extrayez des pages spécifiques ou divisez par plages de pages.",
       "feature1": "Division par pages",
       "feature2": "Extraction sélective",
-      "feature3": "Export multiple"
+      "feature3": "Export multiple",
+      "cta": "Essayer Division"
     },
     "compress": {
       "title": "Compresser sans perte",
       "description": "Réduisez la taille de vos PDF jusqu'à 90% tout en préservant la qualité. Parfait pour les envois par email.",
       "feature1": "Compression intelligente",
       "feature2": "Qualité préservée",
-      "feature3": "Taille réduite"
+      "feature3": "Taille réduite",
+      "cta": "Essayer Compression"
     },
     "convert": {
       "title": "Convertir facilement",
       "description": "Transformez vos images, documents Word, PowerPoint et Excel en PDF de haute qualité en quelques secondes.",
       "feature1": "Multi-formats",
       "feature2": "Conversion rapide",
-      "feature3": "Qualité optimale"
+      "feature3": "Qualité optimale",
+      "cta": "Essayer Conversion"
+    },
+    "jpgtopdf": {
+      "cta": "Essayer Conversion"
     }
   },
   "popularTools": {

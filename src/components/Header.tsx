@@ -51,9 +51,10 @@ const Header = () => {
               <img 
                 src={logo} 
                 alt="E-Pdfs - Outils PDF en ligne gratuits" 
-                width={138}
-                height={84}
+                width={56}
+                height={34}
                 fetchPriority="high"
+                style={{ aspectRatio: '138/84' }}
                 className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_25px_rgba(236,72,153,0.7)]" 
               />
             </motion.div>

@@ -1,35 +1,19 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, User, Eye, Tag, Clock, Share2, Twitter, Facebook, Linkedin, Copy } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import ArticleSchema from '@/components/blog/ArticleSchema';
+import ShareButtons from '@/components/blog/ShareButtons';
 import { usePostBySlug } from '@/hooks/useBlogPosts';
 import { Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 
 const BlogPost = () => {
   const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug || '');
-  
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success(t('blog.linkCopied'));
-  };
-  const handleShare = (platform: 'twitter' | 'facebook' | 'linkedin') => {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent(post?.title || '');
-    const shareUrls = {
-      twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
-    };
-    window.open(shareUrls[platform], '_blank', 'width=600,height=400');
-  };
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -270,33 +254,13 @@ const BlogPost = () => {
             )}
 
             {/* Share Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-12 p-6 glass-card rounded-2xl"
-            >
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <Share2 className="w-5 h-5 text-primary" />
-                  <span className="font-semibold">{t('blog.shareArticle')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="icon" onClick={() => handleShare('twitter')} className="rounded-full hover:bg-[#1DA1F2]/10 hover:text-[#1DA1F2] hover:border-[#1DA1F2]">
-                    <Twitter className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={() => handleShare('facebook')} className="rounded-full hover:bg-[#4267B2]/10 hover:text-[#4267B2] hover:border-[#4267B2]">
-                    <Facebook className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={() => handleShare('linkedin')} className="rounded-full hover:bg-[#0077B5]/10 hover:text-[#0077B5] hover:border-[#0077B5]">
-                    <Linkedin className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={handleCopyLink} className="rounded-full">
-                    <Copy className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
+            <div className="mt-12">
+              <ShareButtons 
+                url={canonicalUrl}
+                title={post.title}
+                description={post.excerpt || post.meta_description || ''}
+              />
+            </div>
 
             {/* Article Info Footer */}
             <motion.div

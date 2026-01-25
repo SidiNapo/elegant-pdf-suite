@@ -21,6 +21,9 @@
     "users": "Trusted by thousands"
   },
   "stats": {
+    "title": "Trusted by",
+    "titleHighlight": "Millions",
+    "subtitle": "Join millions of users who trust our tools for their PDF needs",
     "filesProcessed": "Files processed daily",
     "satisfiedUsers": "Happy users",
     "availableTools": "Available tools",

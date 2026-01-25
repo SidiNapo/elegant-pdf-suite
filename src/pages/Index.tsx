@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText, Files, Smile, Wrench, Gift } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
@@ -17,6 +18,44 @@ import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 import speedIllustration from '@/assets/speed-illustration.jpg';
 import globalIllustration from '@/assets/global-illustration.jpg';
+// Animated Counter Component
+const AnimatedCounter = ({ value, suffix, delay = 0 }: { value: number; suffix: string; delay?: number }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (hasAnimated) return;
+    
+    const timeout = setTimeout(() => {
+      setHasAnimated(true);
+      const duration = 2000;
+      const steps = 60;
+      const increment = value / steps;
+      let current = 0;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= value) {
+          setDisplayValue(value);
+          clearInterval(timer);
+        } else {
+          setDisplayValue(Math.floor(current));
+        }
+      }, duration / steps);
+      
+      return () => clearInterval(timer);
+    }, delay * 1000 + 300);
+    
+    return () => clearTimeout(timeout);
+  }, [value, delay, hasAnimated]);
+
+  return (
+    <div className="text-4xl md:text-5xl font-bold gradient-text">
+      {displayValue}{suffix}
+    </div>
+  );
+};
+
 const Index = () => {
   const {
     t
@@ -106,17 +145,29 @@ const Index = () => {
     features: [t('showcase.convert.feature1'), t('showcase.convert.feature2'), t('showcase.convert.feature3')]
   }];
   const stats = [{
-    value: '10M+',
-    label: t('stats.filesProcessed')
+    value: 10,
+    suffix: 'M+',
+    label: t('stats.filesProcessed'),
+    icon: Files,
+    color: 'from-coral to-rose'
   }, {
-    value: '500K+',
-    label: t('stats.satisfiedUsers')
+    value: 500,
+    suffix: 'K+',
+    label: t('stats.satisfiedUsers'),
+    icon: Smile,
+    color: 'from-rose to-violet'
   }, {
-    value: '20+',
-    label: t('stats.availableTools')
+    value: 20,
+    suffix: '+',
+    label: t('stats.availableTools'),
+    icon: Wrench,
+    color: 'from-violet to-cyan'
   }, {
-    value: '100%',
-    label: t('stats.free')
+    value: 100,
+    suffix: '%',
+    label: t('stats.free'),
+    icon: Gift,
+    color: 'from-cyan to-coral'
   }];
   const testimonials = [{
     name: t('testimonials.testimonial1.name'),
@@ -216,24 +267,74 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-b from-background to-card/50 border-y border-border">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => <motion.div key={stat.label} initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            delay: i * 0.1
-          }} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">{stat.value}</div>
-                <div className="text-muted-foreground">{stat.label}</div>
-              </motion.div>)}
+      {/* Stats Section - Modern Glass Cards */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-card/30 to-background" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-coral/10 via-rose/10 to-violet/10 blur-[120px] rounded-full" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              {t('stats.title') || 'Trusted by'} <span className="gradient-text">{t('stats.titleHighlight') || 'Millions'}</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              {t('stats.subtitle') || 'Join millions of users who trust our tools for their PDF needs'}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, type: 'spring', stiffness: 100 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative"
+              >
+                {/* Card Glow Effect */}
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-3xl blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-500`} />
+                
+                {/* Card */}
+                <div className="relative glass-card rounded-3xl p-8 h-full border border-white/5 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
+                  {/* Background Gradient */}
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 blur-2xl transition-opacity duration-500`} />
+                  
+                  {/* Icon */}
+                  <motion.div 
+                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.color} p-0.5 mb-6`}
+                    whileHover={{ rotate: 5, scale: 1.1 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <div className="w-full h-full bg-card rounded-[14px] flex items-center justify-center">
+                      <stat.icon className="w-6 h-6 text-primary" />
+                    </div>
+                  </motion.div>
+                  
+                  {/* Animated Counter */}
+                  <AnimatedCounter 
+                    value={stat.value} 
+                    suffix={stat.suffix} 
+                    delay={i * 0.2}
+                  />
+                  
+                  {/* Label */}
+                  <p className="text-muted-foreground text-sm mt-2 group-hover:text-foreground/80 transition-colors">
+                    {stat.label}
+                  </p>
+                  
+                  {/* Decorative Line */}
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${stat.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

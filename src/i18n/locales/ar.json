@@ -21,6 +21,9 @@
     "users": "+500 ألف مستخدم"
   },
   "stats": {
+    "title": "موثوق من",
+    "titleHighlight": "الملايين",
+    "subtitle": "انضم إلى ملايين المستخدمين الذين يثقون بأدواتنا لتلبية احتياجاتهم من PDF",
     "filesProcessed": "ملفات تمت معالجتها",
     "satisfiedUsers": "مستخدمون راضون",
     "availableTools": "أدوات متاحة",

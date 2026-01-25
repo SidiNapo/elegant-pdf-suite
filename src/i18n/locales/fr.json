@@ -21,6 +21,9 @@
     "users": "500K+ utilisateurs"
   },
   "stats": {
+    "title": "Approuvé par",
+    "titleHighlight": "des Millions",
+    "subtitle": "Rejoignez des millions d'utilisateurs qui font confiance à nos outils pour leurs besoins PDF",
     "filesProcessed": "Fichiers traités",
     "satisfiedUsers": "Utilisateurs satisfaits",
     "availableTools": "Outils disponibles",

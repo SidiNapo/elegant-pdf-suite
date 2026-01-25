@@ -783,7 +783,8 @@
   },
   "cookieConsent": {
     "title": "We value your privacy",
-    "description": "We use cookies to enhance your browsing experience, serve personalized ads, and analyze our traffic. By clicking 'Accept All', you consent to our use of cookies.",
+    "description": "We use cookies to enhance your browsing experience, serve personalized ads, and analyze our traffic.",
+    "shortDesc": "Cookies help us improve your experience",
     "essential": "Essential",
     "essentialDesc": "Required for basic functionality",
     "analytics": "Analytics",
@@ -793,6 +794,7 @@
     "acceptAll": "Accept All",
     "essentialOnly": "Essential Only",
     "learnMore": "Learn more",
+    "customize": "Customize preferences",
     "close": "Close"
   },
   "trustBadges": {

@@ -50,7 +50,7 @@ const AnimatedCounter = ({ value, suffix, delay = 0 }: { value: number; suffix: 
   }, [value, delay, hasAnimated]);
 
   return (
-    <div className="text-4xl md:text-5xl font-bold gradient-text">
+    <div className="text-2xl md:text-3xl font-bold gradient-text tracking-tight">
       {displayValue}{suffix}
     </div>
   );
@@ -267,75 +267,56 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats Section - Modern Glass Cards */}
-      <section className="py-24 relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-card/30 to-background" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-coral/10 via-rose/10 to-violet/10 blur-[120px] rounded-full" />
+      {/* Stats Section - Compact Modern Design */}
+      <section className="py-12 relative overflow-hidden">
+        {/* Subtle Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-coral/5 via-transparent to-violet/5" />
         
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
+          {/* Compact inline stats bar */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="flex flex-wrap justify-center items-center gap-3 md:gap-4"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('stats.title') || 'Trusted by'} <span className="gradient-text">{t('stats.titleHighlight') || 'Millions'}</span>
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              {t('stats.subtitle') || 'Join millions of users who trust our tools for their PDF needs'}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 40, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, type: 'spring', stiffness: 100 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ delay: i * 0.08, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 className="group relative"
               >
-                {/* Card Glow Effect */}
-                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-3xl blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-500`} />
+                {/* Glow on hover */}
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-2xl blur opacity-0 group-hover:opacity-30 transition-all duration-300`} />
                 
-                {/* Card */}
-                <div className="relative glass-card rounded-3xl p-8 h-full border border-white/5 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
-                  {/* Background Gradient */}
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 blur-2xl transition-opacity duration-500`} />
-                  
+                {/* Compact Card */}
+                <div className="relative flex items-center gap-3 px-5 py-3 rounded-2xl bg-card/50 backdrop-blur-sm border border-white/5 group-hover:border-white/15 group-hover:bg-card/80 transition-all duration-300">
                   {/* Icon */}
-                  <motion.div 
-                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.color} p-0.5 mb-6`}
-                    whileHover={{ rotate: 5, scale: 1.1 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                  >
-                    <div className="w-full h-full bg-card rounded-[14px] flex items-center justify-center">
-                      <stat.icon className="w-6 h-6 text-primary" />
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${stat.color} p-[2px] shrink-0`}>
+                    <div className="w-full h-full bg-card rounded-[10px] flex items-center justify-center">
+                      <stat.icon className="w-4 h-4 text-primary" />
                     </div>
-                  </motion.div>
+                  </div>
                   
-                  {/* Animated Counter */}
-                  <AnimatedCounter 
-                    value={stat.value} 
-                    suffix={stat.suffix} 
-                    delay={i * 0.2}
-                  />
-                  
-                  {/* Label */}
-                  <p className="text-muted-foreground text-sm mt-2 group-hover:text-foreground/80 transition-colors">
-                    {stat.label}
-                  </p>
-                  
-                  {/* Decorative Line */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${stat.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
+                  {/* Content */}
+                  <div className="flex flex-col">
+                    <AnimatedCounter 
+                      value={stat.value} 
+                      suffix={stat.suffix} 
+                      delay={i * 0.15}
+                    />
+                    <span className="text-[11px] text-muted-foreground/80 uppercase tracking-wider font-medium">
+                      {stat.label}
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 

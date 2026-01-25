@@ -66,6 +66,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://obetkqazuirhntzpjzou.supabase.co" />
+    <link rel="dns-prefetch" href="https://obetkqazuirhntzpjzou.supabase.co" />
+    
+    <!-- Critical CSS for immediate render - prevents render blocking -->
+    <style>
+      :root{--background:0 0% 4%;--foreground:0 0% 98%;--primary:12 100% 62%;--card:0 0% 7%;--border:0 0% 15%}
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:Inter,system-ui,-apple-system,sans-serif;background:hsl(0 0% 4%);color:hsl(0 0% 98%);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+      .container{max-width:1280px;margin:0 auto;padding:0 1rem}
+      header{position:fixed;top:0;left:0;right:0;z-index:50;background:#000;height:80px}
+      #root{min-height:100vh;overflow-x:hidden}
+    </style>
     
     <!-- Preload critical assets for faster LCP -->
     <link rel="preload" as="image" href="/favicon.png" type="image/png" />

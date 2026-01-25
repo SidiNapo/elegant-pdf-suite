@@ -51,6 +51,9 @@ const Header = () => {
               <img 
                 src={logo} 
                 alt="E-Pdfs - Outils PDF en ligne gratuits" 
+                width={138}
+                height={84}
+                fetchPriority="high"
                 className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_25px_rgba(236,72,153,0.7)]" 
               />
             </motion.div>
@@ -92,6 +95,8 @@ const Header = () => {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
+              aria-expanded={isMenuOpen}
               className="relative p-3 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
             >
               <AnimatePresence mode="wait">

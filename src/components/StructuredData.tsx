@@ -44,7 +44,13 @@ export const OrganizationSchema = ({ name, url, logo, description }: Organizatio
       '@type': 'Organization',
       name,
       url,
-      logo,
+      logo: {
+        '@type': 'ImageObject',
+        url: logo,
+        width: 512,
+        height: 512
+      },
+      image: logo,
       description,
       sameAs: [],
       contactPoint: {
@@ -221,7 +227,7 @@ const StructuredData = () => {
       <OrganizationSchema
         name="E-PDF's"
         url="https://e-pdfs.com"
-        logo="https://e-pdfs.com/logo.png"
+        logo="https://e-pdfs.com/favicon.png"
         description="Free online PDF tools - Merge, split, compress, and convert PDF files instantly in your browser. No registration required, 100% secure browser-based processing."
       />
       <WebsiteSchema />

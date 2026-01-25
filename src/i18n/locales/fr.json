@@ -797,7 +797,8 @@
   },
   "cookieConsent": {
     "title": "Nous respectons votre vie privée",
-    "description": "Nous utilisons des cookies pour améliorer votre expérience de navigation, afficher des publicités personnalisées et analyser notre trafic. En cliquant sur 'Tout accepter', vous consentez à notre utilisation des cookies.",
+    "description": "Nous utilisons des cookies pour améliorer votre expérience de navigation, afficher des publicités personnalisées et analyser notre trafic.",
+    "shortDesc": "Les cookies nous aident à améliorer votre expérience",
     "essential": "Essentiels",
     "essentialDesc": "Requis pour le fonctionnement de base",
     "analytics": "Analytiques",
@@ -807,6 +808,7 @@
     "acceptAll": "Tout accepter",
     "essentialOnly": "Essentiels uniquement",
     "learnMore": "En savoir plus",
+    "customize": "Personnaliser les préférences",
     "close": "Fermer"
   },
   "trustBadges": {

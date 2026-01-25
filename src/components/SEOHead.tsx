@@ -41,6 +41,29 @@ const SEOHead = ({
       meta.setAttribute('content', content);
     };
 
+    // Helper to update or create link tag
+    const setLinkTag = (rel: string, href: string, type?: string, sizes?: string) => {
+      let selector = `link[rel="${rel}"]`;
+      if (sizes) selector += `[sizes="${sizes}"]`;
+      
+      let link = document.querySelector(selector) as HTMLLinkElement;
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = rel;
+        if (type) link.type = type;
+        if (sizes) link.setAttribute('sizes', sizes);
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    };
+
+    // Ensure favicon is always set to our custom icon (for Google indexing)
+    const faviconUrl = 'https://e-pdfs.com/favicon.png';
+    setLinkTag('icon', '/favicon.png', 'image/png', '32x32');
+    setLinkTag('icon', '/favicon.png', 'image/png', '16x16');
+    setLinkTag('apple-touch-icon', '/favicon.png', undefined, '180x180');
+    setLinkTag('shortcut icon', '/favicon.png', 'image/png');
+
     // Basic meta tags
     setMetaTag('description', description);
     if (keywords) setMetaTag('keywords', keywords);

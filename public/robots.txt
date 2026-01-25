@@ -1,7 +1,11 @@
 # E-PDF's Robots.txt
 # https://e-pdfs.com
 
+# Allow Google to crawl favicon
 User-agent: Googlebot
+Allow: /favicon.png
+Allow: /favicon.ico
+Allow: /site.webmanifest
 Allow: /
 Crawl-delay: 1
 

@@ -196,7 +196,14 @@ const Index = () => {
       <section className="pt-32 md:pt-40 pb-20 relative overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
-          <img src={heroPdf} alt="E-PDF's - Outils PDF en ligne gratuits pour fusionner, diviser et compresser vos documents" className="w-full h-full object-cover" />
+          <img 
+            src={heroPdf} 
+            alt="E-PDF's - Outils PDF en ligne gratuits pour fusionner, diviser et compresser vos documents" 
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            className="w-full h-full object-cover" 
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/70" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
         </div>
@@ -260,7 +267,15 @@ const Index = () => {
           }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-rose/20 rounded-3xl blur-3xl" />
-                <img src={heroPdf} alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" className="relative rounded-2xl shadow-2xl border border-white/10" />
+                <img 
+                  src={heroPdf} 
+                  alt="Gestion de documents PDF - Fusionner, diviser, compresser et convertir vos fichiers PDF en ligne" 
+                  width={800}
+                  height={600}
+                  loading="eager"
+                  decoding="async"
+                  className="relative rounded-2xl shadow-2xl border border-white/10" 
+                />
               </div>
             </motion.div>
           </div>
@@ -339,19 +354,25 @@ const Index = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, i) => <motion.div key={feature.title} initial={{
-            opacity: 0,
-            y: 30
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            delay: i * 0.15
-          }} className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
+            {features.map((feature, i) => (
+              <motion.div 
+                key={feature.title} 
+                initial={{ opacity: 0, y: 30 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true }} 
+                transition={{ delay: i * 0.15 }} 
+                className="group relative overflow-hidden rounded-3xl bg-card border border-border hover:border-primary/50 transition-all duration-500"
+              >
                 <div className="aspect-square overflow-hidden">
-                  <img src={feature.image} alt={`${feature.title} - ${feature.description}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img 
+                    src={feature.image} 
+                    alt={`${feature.title} - ${feature.description}`} 
+                    width={662}
+                    height={662}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/80 to-transparent" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -361,7 +382,8 @@ const Index = () => {
                   <h3 className="font-bold text-2xl mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </div>
-              </motion.div>)}
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -385,40 +407,48 @@ const Index = () => {
           </motion.div>
           
           <div className="space-y-32">
-            {showcaseTools.map((tool, i) => <motion.div key={tool.title} initial={{
-            opacity: 0,
-            y: 50
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true,
-            margin: "-100px"
-          }} transition={{
-            duration: 0.6
-          }} className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+            {showcaseTools.map((tool, i) => (
+              <motion.div 
+                key={tool.title} 
+                initial={{ opacity: 0, y: 50 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true, margin: "-100px" }} 
+                transition={{ duration: 0.6 }} 
+                className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
+              >
                 <div className={`${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                   <div className="relative group">
                     <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-rose/30 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <img src={tool.image} alt={`${tool.title} - ${tool.description} - Outil PDF en ligne gratuit`} className="relative rounded-2xl shadow-2xl border border-white/10 w-full" />
+                    <img 
+                      src={tool.image} 
+                      alt={`${tool.title} - ${tool.description} - Outil PDF en ligne gratuit`} 
+                      width={662}
+                      height={662}
+                      loading="lazy"
+                      decoding="async"
+                      className="relative rounded-2xl shadow-2xl border border-white/10 w-full" 
+                    />
                   </div>
                 </div>
                 <div className={`${i % 2 === 1 ? 'lg:order-1' : ''}`}>
                   <h3 className="text-3xl md:text-4xl font-bold mb-4">{tool.title}</h3>
                   <p className="text-lg text-muted-foreground mb-8">{tool.description}</p>
                   <ul className="space-y-4 mb-8">
-                    {tool.features.map(feature => <li key={feature} className="flex items-center gap-3">
+                    {tool.features.map(feature => (
+                      <li key={feature} className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
                           <CheckCircle2 className="w-4 h-4 text-primary" />
                         </div>
                         <span>{feature}</span>
-                      </li>)}
+                      </li>
+                    ))}
                   </ul>
                   <Link to={tool.href} className="btn-primary inline-flex items-center gap-2">
                     {t('showcase.tryNow')} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-              </motion.div>)}
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -493,19 +523,24 @@ const Index = () => {
       {/* CTA Section */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroPdf} alt="Commencez à utiliser E-PDF's - Outils PDF gratuits en ligne" className="w-full h-full object-cover opacity-20" />
+          <img 
+            src={heroPdf} 
+            alt="Commencez à utiliser E-PDF's - Outils PDF gratuits en ligne" 
+            width={1200}
+            height={800}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover opacity-20" 
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-background to-rose/20" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} className="text-center max-w-3xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            className="text-center max-w-3xl mx-auto"
+          >
             <FileText className="w-16 h-16 text-primary mx-auto mb-6" />
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
               {t('cta.title')} <span className="gradient-text">{t('cta.titleHighlight')}</span> ?

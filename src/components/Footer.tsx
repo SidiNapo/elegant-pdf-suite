@@ -79,7 +79,7 @@ const Footer = () => {
     <footer className="border-t border-border mt-24 relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img src={heroPdf} alt="E-PDF's" className="w-full h-full object-cover opacity-5" />
+        <img src={heroPdf} alt="E-PDF's" width={1200} height={800} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background to-background/95" />
       </div>
       
@@ -91,6 +91,10 @@ const Footer = () => {
               <img 
                 src={logo} 
                 alt="E-Pdfs" 
+                width={200}
+                height={122}
+                loading="lazy"
+                decoding="async"
                 className="h-24 md:h-28 lg:h-32 w-auto object-contain drop-shadow-[0_0_25px_rgba(236,72,153,0.6)] transition-all duration-300 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.8)] group-hover:scale-105" 
               />
             </Link>

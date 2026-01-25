@@ -6,7 +6,9 @@
     "allTools": "Tous les outils",
     "about": "À propos",
     "blog": "Blog",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "hero": {
     "badge": "#1 Outil PDF en ligne gratuit",

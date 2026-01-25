@@ -25,7 +25,7 @@ const ArticleSchema = ({
       '@type': 'Article',
       headline: title,
       description: description,
-      image: image || 'https://e-pdfs.com/og-image.jpg',
+      image: image || 'https://e-pdfs.com/favicon.png',
       author: {
         '@type': 'Person',
         name: authorName,
@@ -35,7 +35,9 @@ const ArticleSchema = ({
         name: "E-Pdf's",
         logo: {
           '@type': 'ImageObject',
-          url: 'https://e-pdfs.com/logo.png',
+          url: 'https://e-pdfs.com/favicon.png',
+          width: 512,
+          height: 512
         },
       },
       datePublished: publishedAt,

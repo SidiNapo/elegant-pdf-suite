@@ -77,7 +77,12 @@ const SEOHead = ({
     setMetaTag('og:title', title, true);
     setMetaTag('og:description', description, true);
     setMetaTag('og:type', ogType, true);
-    if (ogImage) setMetaTag('og:image', ogImage, true);
+    // Always set og:image - use provided image or fallback to favicon
+    const effectiveOgImage = ogImage || 'https://e-pdfs.com/favicon.png';
+    setMetaTag('og:image', effectiveOgImage, true);
+    setMetaTag('og:image:width', '512', true);
+    setMetaTag('og:image:height', '512', true);
+    setMetaTag('og:image:alt', 'E-Pdf\'s Logo', true);
     if (canonicalUrl) {
       setMetaTag('og:url', canonicalUrl, true);
       // Update or create canonical link
@@ -94,7 +99,7 @@ const SEOHead = ({
     setMetaTag('twitter:card', 'summary_large_image');
     setMetaTag('twitter:title', title);
     setMetaTag('twitter:description', description);
-    if (ogImage) setMetaTag('twitter:image', ogImage);
+    setMetaTag('twitter:image', effectiveOgImage);
 
     // Article specific meta tags
     if (ogType === 'article') {

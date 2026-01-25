@@ -166,6 +166,12 @@
   }
 }
 
+/* Shimmer animation for cookie consent */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 /* RTL Support */
 [dir="rtl"] {
   text-align: right;

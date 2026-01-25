@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { ArrowRight, Merge, Split, Minimize2, Image, RotateCw, Droplets, Zap, Shield, Globe, CheckCircle2, Users, FileText, Files, Smile, Wrench, Gift } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -186,7 +186,8 @@ const Index = () => {
     role: t('testimonials.testimonial3.role'),
     text: t('testimonials.testimonial3.text')
   }];
-  return <div className="min-h-screen flex flex-col">
+  return <LazyMotion features={domAnimation} strict>
+    <div className="min-h-screen flex flex-col">
       <SEOHead 
         title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
         description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
@@ -214,19 +215,12 @@ const Index = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div initial={{
-            opacity: 0,
-            x: -50
-          }} animate={{
-            opacity: 1,
-            x: 0
-          }} transition={{
-            duration: 0.8
-          }} className="text-left">
+            {/* Hero content - NO animation on h1 for LCP optimization */}
+            <div className="text-left hero-animate">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-sm font-medium mb-6">
-                
                 <span>{t('hero.badge')}</span>
               </span>
+              {/* Critical LCP element - render immediately without JS animation */}
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
                 {t('hero.title')} <span className="gradient-text">{t('hero.titleHighlight')}</span> {t('hero.titleEnd')}
               </h1>
@@ -257,18 +251,14 @@ const Index = () => {
                   <span className="text-sm text-muted-foreground">{t('hero.users')}</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
             
-            <motion.div initial={{
-            opacity: 0,
-            scale: 0.8
-          }} animate={{
-            opacity: 1,
-            scale: 1
-          }} transition={{
-            duration: 0.8,
-            delay: 0.2
-          }} className="hidden lg:block">
+            <m.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="hidden lg:block"
+            >
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-rose/20 rounded-3xl blur-3xl" />
                 <div style={{ aspectRatio: '16/9' }} className="w-full">
@@ -283,7 +273,7 @@ const Index = () => {
                   />
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>
@@ -295,14 +285,14 @@ const Index = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           {/* Compact inline stats bar */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="flex flex-wrap justify-center items-center gap-3 md:gap-4"
           >
             {stats.map((stat, i) => (
-              <motion.div
+              <m.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -335,16 +325,16 @@ const Index = () => {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
       {/* Features with Images */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div initial={{
+          <m.div initial={{
           opacity: 0
         }} whileInView={{
           opacity: 1
@@ -357,11 +347,11 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {t('features.subtitle')}
             </p>
-          </motion.div>
+          </m.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, i) => (
-              <motion.div 
+              <m.div 
                 key={feature.title} 
                 initial={{ opacity: 0, y: 30 }} 
                 whileInView={{ opacity: 1, y: 0 }} 
@@ -388,7 +378,7 @@ const Index = () => {
                   <h3 className="font-bold text-2xl mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -397,7 +387,7 @@ const Index = () => {
       {/* Showcase Tools with Images - Alternating Layout */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div initial={{
+          <m.div initial={{
           opacity: 0
         }} whileInView={{
           opacity: 1
@@ -410,11 +400,11 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {t('showcase.subtitle')}
             </p>
-          </motion.div>
+          </m.div>
           
           <div className="space-y-32">
             {showcaseTools.map((tool, i) => (
-              <motion.div 
+              <m.div 
                 key={tool.title} 
                 initial={{ opacity: 0, y: 50 }} 
                 whileInView={{ opacity: 1, y: 0 }} 
@@ -453,7 +443,7 @@ const Index = () => {
                     {t(`showcase.${tool.ctaKey}.cta`)} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -462,7 +452,7 @@ const Index = () => {
       {/* Popular Tools */}
       <section className="py-24">
         <div className="container mx-auto px-4">
-          <motion.div initial={{
+          <m.div initial={{
           opacity: 0
         }} whileInView={{
           opacity: 1
@@ -471,7 +461,7 @@ const Index = () => {
         }} className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">{t('popularTools.title')} <span className="gradient-text">{t('popularTools.titleHighlight')}</span></h2>
             <p className="text-xl text-muted-foreground">{t('popularTools.subtitle')}</p>
-          </motion.div>
+          </m.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {popularTools.map(tool => <ToolCard key={tool.title} {...tool} />)}
           </div>
@@ -486,7 +476,7 @@ const Index = () => {
       {/* Testimonials */}
       <section className="py-24 bg-gradient-to-b from-card/30 to-background">
         <div className="container mx-auto px-4">
-          <motion.div initial={{
+          <m.div initial={{
           opacity: 0
         }} whileInView={{
           opacity: 1
@@ -497,10 +487,10 @@ const Index = () => {
               {t('testimonials.title')} <span className="gradient-text">{t('testimonials.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-muted-foreground">{t('testimonials.subtitle')}</p>
-          </motion.div>
+          </m.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, i) => <motion.div key={testimonial.name} initial={{
+            {testimonials.map((testimonial, i) => <m.div key={testimonial.name} initial={{
             opacity: 0,
             y: 20
           }} whileInView={{
@@ -521,7 +511,7 @@ const Index = () => {
                     <div className="text-sm text-muted-foreground">{testimonial.role}</div>
                   </div>
                 </div>
-              </motion.div>)}
+              </m.div>)}
           </div>
         </div>
       </section>
@@ -541,7 +531,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-background to-rose/20" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 30 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             viewport={{ once: true }} 
@@ -557,7 +547,7 @@ const Index = () => {
             <Link to="/tools" className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4">
               {t('cta.button')} <ArrowRight className="w-5 h-5" />
             </Link>
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -576,6 +566,7 @@ const Index = () => {
       </section>
 
       <Footer />
-    </div>;
+    </div>
+  </LazyMotion>;
 };
 export default Index;

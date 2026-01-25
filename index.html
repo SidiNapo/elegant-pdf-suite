@@ -71,12 +71,22 @@
     
     <!-- Critical CSS for immediate render - prevents render blocking -->
     <style>
-      :root{--background:0 0% 4%;--foreground:0 0% 98%;--primary:12 100% 62%;--card:0 0% 7%;--border:0 0% 15%}
+      :root{--background:0 0% 4%;--foreground:0 0% 98%;--primary:12 100% 62%;--card:0 0% 7%;--border:0 0% 15%;--muted-foreground:0 0% 65%}
       *{margin:0;padding:0;box-sizing:border-box}
       body{font-family:Inter,system-ui,-apple-system,sans-serif;background:hsl(0 0% 4%);color:hsl(0 0% 98%);-webkit-font-smoothing:antialiased;overflow-x:hidden}
       .container{max-width:1280px;margin:0 auto;padding:0 1rem}
       header{position:fixed;top:0;left:0;right:0;z-index:50;background:#000;height:80px}
       #root{min-height:100vh;overflow-x:hidden}
+      /* Hero critical styles for instant LCP */
+      .gradient-text{background:linear-gradient(135deg,hsl(12 100% 62%),hsl(330 100% 65%));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+      .text-5xl{font-size:3rem;line-height:1}
+      .font-bold{font-weight:700}
+      .mb-6{margin-bottom:1.5rem}
+      .leading-tight{line-height:1.25}
+      /* CSS animation instead of JS for above-the-fold content */
+      @keyframes heroFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+      .hero-animate{animation:heroFadeIn 0.5s ease-out forwards}
+      @media(min-width:768px){.md\:text-7xl{font-size:4.5rem;line-height:1}}
     </style>
     
     <!-- Preload critical assets for faster LCP -->

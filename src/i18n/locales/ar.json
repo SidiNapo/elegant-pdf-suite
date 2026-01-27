@@ -660,5 +660,19 @@
     "freeDesc": "لا تكاليف خفية",
     "noAccount": "لا حاجة لحساب",
     "noAccountDesc": "ابدأ فوراً"
+  },
+  "seoKeywords": {
+    "mergePdf": "دمج pdf مجانا",
+    "splitPdf": "تقسيم pdf اون لاين",
+    "compressPdf": "ضغط ملفات pdf",
+    "convertPdf": "تحويل pdf",
+    "pdfToWord": "تحويل pdf الى word",
+    "wordToPdf": "تحويل word الى pdf مجاناً",
+    "jpgToPdf": "تحويل صور الى pdf",
+    "pdfToJpg": "تحويل pdf الى صور",
+    "editPdf": "تعديل ملفات pdf",
+    "freePdfTools": "ادوات pdf مجانية",
+    "onlinePdf": "pdf اون لاين",
+    "pdfMorocco": "pdf المغرب"
   }
 }

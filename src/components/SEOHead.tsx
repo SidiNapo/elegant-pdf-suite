@@ -42,9 +42,10 @@ const SEOHead = ({
     };
 
     // Helper to update or create link tag
-    const setLinkTag = (rel: string, href: string, type?: string, sizes?: string) => {
+    const setLinkTag = (rel: string, href: string, type?: string, sizes?: string, hreflang?: string) => {
       let selector = `link[rel="${rel}"]`;
       if (sizes) selector += `[sizes="${sizes}"]`;
+      if (hreflang) selector += `[hreflang="${hreflang}"]`;
       
       let link = document.querySelector(selector) as HTMLLinkElement;
       if (!link) {
@@ -52,10 +53,26 @@ const SEOHead = ({
         link.rel = rel;
         if (type) link.type = type;
         if (sizes) link.setAttribute('sizes', sizes);
+        if (hreflang) link.setAttribute('hreflang', hreflang);
         document.head.appendChild(link);
       }
       link.href = href;
     };
+
+    // Set dynamic hreflang tags for international SEO
+    if (canonicalUrl) {
+      const baseUrl = canonicalUrl.split('?')[0];
+      const languages = [
+        { code: 'fr', suffix: '' },
+        { code: 'en', suffix: '?lang=en' },
+        { code: 'ar', suffix: '?lang=ar' },
+        { code: 'x-default', suffix: '' }
+      ];
+      
+      languages.forEach(({ code, suffix }) => {
+        setLinkTag('alternate', `${baseUrl}${suffix}`, undefined, undefined, code);
+      });
+    }
 
     // Ensure favicon is always set to our custom icon (for Google indexing)
     const faviconUrl = 'https://e-pdfs.com/favicon.png';

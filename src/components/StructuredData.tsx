@@ -52,7 +52,19 @@ export const OrganizationSchema = ({ name, url, logo, description }: Organizatio
       },
       image: logo,
       description,
-      sameAs: [],
+      sameAs: [
+        'https://facebook.com/epdfs',
+        'https://twitter.com/epdfs',
+        'https://linkedin.com/company/epdfs'
+      ],
+      areaServed: [
+        { '@type': 'Country', name: 'Morocco' },
+        { '@type': 'Country', name: 'France' },
+        { '@type': 'Country', name: 'Algeria' },
+        { '@type': 'Country', name: 'Tunisia' },
+        { '@type': 'Country', name: 'United States' },
+        { '@type': 'Country', name: 'Canada' }
+      ],
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer service',

@@ -75,9 +75,6 @@ const AdminPosts = React.forwardRef<HTMLDivElement>((_, ref) => {
                   <th className="text-left p-4 text-sm font-medium text-muted-foreground hidden md:table-cell">
                     Catégorie
                   </th>
-                  <th className="text-left p-4 text-sm font-medium text-muted-foreground hidden lg:table-cell">
-                    Vues
-                  </th>
                   <th className="text-left p-4 text-sm font-medium text-muted-foreground">
                     Statut
                   </th>
@@ -106,12 +103,6 @@ const AdminPosts = React.forwardRef<HTMLDivElement>((_, ref) => {
                     <td className="p-4 hidden md:table-cell">
                       <span className="text-sm text-muted-foreground">
                         {post.category?.name || '-'}
-                      </span>
-                    </td>
-                    <td className="p-4 hidden lg:table-cell">
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Eye className="w-4 h-4" />
-                        {post.views_count}
                       </span>
                     </td>
                     <td className="p-4">

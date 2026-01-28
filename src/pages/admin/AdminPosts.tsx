@@ -7,27 +7,16 @@ import { Input } from '@/components/ui/input';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAllPosts, useDeletePost } from '@/hooks/useBlogPosts';
 import { toast } from 'sonner';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { adminRoutes } from '@/config/adminRoutes';
 const AdminPosts = () => {
-  const { data: posts, isLoading } = useAllPosts();
+  const {
+    data: posts,
+    isLoading
+  } = useAllPosts();
   const deletePost = useDeletePost();
   const [search, setSearch] = useState('');
-
-  const filteredPosts = posts?.filter((post) =>
-    post.title.toLowerCase().includes(search.toLowerCase())
-  );
-
+  const filteredPosts = posts?.filter(post => post.title.toLowerCase().includes(search.toLowerCase()));
   const handleDelete = async (id: string) => {
     try {
       await deletePost.mutateAsync(id);
@@ -36,19 +25,12 @@ const AdminPosts = () => {
       toast.error('Erreur lors de la suppression');
     }
   };
-
-  return (
-    <AdminLayout title="Articles">
+  return <AdminLayout title="Articles">
       {/* Header Actions */}
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Rechercher un article..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
+          <Input placeholder="Rechercher un article..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
         </div>
         <Link to={adminRoutes.postsNew}>
           <Button className="btn-primary gap-2 w-full sm:w-auto">
@@ -59,12 +41,9 @@ const AdminPosts = () => {
       </div>
 
       {/* Posts List */}
-      {isLoading ? (
-        <div className="flex justify-center py-12">
+      {isLoading ? <div className="flex justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      ) : filteredPosts && filteredPosts.length > 0 ? (
-        <div className="glass-card rounded-2xl overflow-hidden">
+        </div> : filteredPosts && filteredPosts.length > 0 ? <div className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -87,14 +66,15 @@ const AdminPosts = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredPosts.map((post, index) => (
-                  <motion.tr
-                    key={post.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors"
-                  >
+                {filteredPosts.map((post, index) => <motion.tr key={post.id} initial={{
+              opacity: 0,
+              y: 10
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              delay: index * 0.05
+            }} className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors">
                     <td className="p-4">
                       <div>
                         <p className="font-medium truncate max-w-xs">{post.title}</p>
@@ -115,31 +95,14 @@ const AdminPosts = () => {
                       </span>
                     </td>
                     <td className="p-4">
-                      <span
-                        className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                          post.is_published
-                            ? 'bg-green-500/10 text-green-500'
-                            : 'bg-yellow-500/10 text-yellow-500'
-                        }`}
-                      >
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${post.is_published ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}`}>
                         {post.is_published ? 'Publié' : 'Brouillon'}
                       </span>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-end gap-2">
-                        {post.is_published && (
-                          <Link
-                            to={`/blog/${post.slug}`}
-                            target="_blank"
-                            className="p-2 rounded-lg hover:bg-muted transition-colors"
-                          >
-                            <Eye className="w-4 h-4 text-muted-foreground" />
-                          </Link>
-                        )}
-                        <Link
-                          to={adminRoutes.postsEdit(post.id)}
-                          className="p-2 rounded-lg hover:bg-muted transition-colors"
-                        >
+                        {post.is_published}
+                        <Link to={adminRoutes.postsEdit(post.id)} className="p-2 rounded-lg hover:bg-muted transition-colors">
                           <Edit className="w-4 h-4 text-muted-foreground" />
                         </Link>
                         <AlertDialog>
@@ -157,10 +120,7 @@ const AdminPosts = () => {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Annuler</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(post.id)}
-                                className="bg-destructive hover:bg-destructive/90"
-                              >
+                              <AlertDialogAction onClick={() => handleDelete(post.id)} className="bg-destructive hover:bg-destructive/90">
                                 Supprimer
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -168,18 +128,15 @@ const AdminPosts = () => {
                         </AlertDialog>
                       </div>
                     </td>
-                  </motion.tr>
-                ))}
+                  </motion.tr>)}
               </tbody>
             </table>
           </div>
-        </div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-16 glass-card rounded-2xl"
-        >
+        </div> : <motion.div initial={{
+      opacity: 0
+    }} animate={{
+      opacity: 1
+    }} className="text-center py-16 glass-card rounded-2xl">
           <p className="text-muted-foreground mb-4">Aucun article trouvé</p>
           <Link to={adminRoutes.postsNew}>
             <Button className="btn-primary gap-2">
@@ -187,10 +144,7 @@ const AdminPosts = () => {
               Créer votre premier article
             </Button>
           </Link>
-        </motion.div>
-      )}
-    </AdminLayout>
-  );
+        </motion.div>}
+    </AdminLayout>;
 };
-
 export default AdminPosts;

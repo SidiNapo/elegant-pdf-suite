@@ -1,13 +1,6 @@
-// Get admin base path from environment variable
-// IMPORTANT: Set VITE_ADMIN_PATH in your environment to customize the admin path
-// If not set, generates a random secure path (not recommended for production)
-const generateSecureFallback = () => {
-  // Generate a deterministic but obscure path based on timestamp seed
-  // This ensures consistency during a session but differs between deployments
-  return 'panel-' + Math.random().toString(36).substring(2, 10);
-};
-
-export const ADMIN_BASE_PATH = import.meta.env.VITE_ADMIN_PATH || generateSecureFallback();
+// Secure admin path - change this to your preferred secret path
+// This path is NOT guessable by bots scanning for /admin
+export const ADMIN_BASE_PATH = import.meta.env.VITE_ADMIN_PATH || 'ctrl-x9k7m2p4q8n1';
 
 export const adminRoutes = {
   login: `/${ADMIN_BASE_PATH}`,

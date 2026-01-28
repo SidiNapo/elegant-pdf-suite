@@ -19,7 +19,7 @@ import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hook
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
-
+import { adminRoutes } from '@/config/adminRoutes';
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -156,7 +156,7 @@ const AdminPostEditor = () => {
         toast.success('Article créé');
       }
 
-      navigate('/admin/posts');
+      navigate(adminRoutes.posts);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Erreur lors de la sauvegarde';
       toast.error(message);

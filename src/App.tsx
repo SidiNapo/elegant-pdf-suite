@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollToTop from "./components/ScrollToTop";
 import PageLoader from "./components/PageLoader";
+import { ADMIN_BASE_PATH } from "@/config/adminRoutes";
 
 // Core pages - loaded immediately
 import Index from "./pages/Index";
@@ -73,28 +74,28 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={
+            <Route path={`/${ADMIN_BASE_PATH}`} element={<AdminLogin />} />
+            <Route path={`/${ADMIN_BASE_PATH}/dashboard`} element={
               <Suspense fallback={<PageLoader />}>
                 <AdminGuard><AdminDashboard /></AdminGuard>
               </Suspense>
             } />
-            <Route path="/admin/posts" element={
+            <Route path={`/${ADMIN_BASE_PATH}/posts`} element={
               <Suspense fallback={<PageLoader />}>
                 <AdminGuard><AdminPosts /></AdminGuard>
               </Suspense>
             } />
-            <Route path="/admin/posts/new" element={
+            <Route path={`/${ADMIN_BASE_PATH}/posts/new`} element={
               <Suspense fallback={<PageLoader />}>
                 <AdminGuard><AdminPostEditor /></AdminGuard>
               </Suspense>
             } />
-            <Route path="/admin/posts/:id/edit" element={
+            <Route path={`/${ADMIN_BASE_PATH}/posts/:id/edit`} element={
               <Suspense fallback={<PageLoader />}>
                 <AdminGuard><AdminPostEditor /></AdminGuard>
               </Suspense>
             } />
-            <Route path="/admin/categories" element={
+            <Route path={`/${ADMIN_BASE_PATH}/categories`} element={
               <Suspense fallback={<PageLoader />}>
                 <AdminGuard><AdminCategories /></AdminGuard>
               </Suspense>

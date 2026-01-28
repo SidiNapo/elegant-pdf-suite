@@ -1,10 +1,10 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { adminRoutes } from '@/config/adminRoutes';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -19,13 +19,13 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
   const handleSignOut = async () => {
     await signOut();
     toast.success('Déconnexion réussie');
-    navigate('/admin');
+    navigate(adminRoutes.login);
   };
 
   const navItems = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Articles', href: '/admin/posts', icon: FileEdit },
-    { name: 'Catégories', href: '/admin/categories', icon: FolderOpen },
+    { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard },
+    { name: 'Articles', href: adminRoutes.posts, icon: FileEdit },
+    { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen },
   ];
 
   return (
@@ -62,7 +62,7 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
         </nav>
 
         {/* Quick Action */}
-        <Link to="/admin/posts/new" className="mb-4">
+        <Link to={adminRoutes.postsNew} className="mb-4">
           <Button className="w-full btn-primary gap-2">
             <Plus className="w-4 h-4" />
             Nouvel article

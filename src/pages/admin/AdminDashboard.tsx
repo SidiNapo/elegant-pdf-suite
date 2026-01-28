@@ -3,7 +3,7 @@ import { FileText, Eye, TrendingUp, Clock } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAllPosts } from '@/hooks/useBlogPosts';
 import { Link } from 'react-router-dom';
-
+import { adminRoutes } from '@/config/adminRoutes';
 const AdminDashboard = () => {
   const { data: posts, isLoading } = useAllPosts();
 
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold">Articles récents</h2>
           <Link
-            to="/admin/posts"
+            to={adminRoutes.posts}
             className="text-sm text-primary hover:underline"
           >
             Voir tout
@@ -90,7 +90,7 @@ const AdminDashboard = () => {
             {recentPosts.map((post) => (
               <Link
                 key={post.id}
-                to={`/admin/posts/${post.id}/edit`}
+                to={adminRoutes.postsEdit(post.id)}
                 className="flex items-center justify-between p-4 rounded-xl hover:bg-muted transition-colors"
               >
                 <div className="flex-1 min-w-0">

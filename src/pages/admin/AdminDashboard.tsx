@@ -35,12 +35,6 @@ const AdminDashboard = () => {
       icon: Clock, 
       color: 'text-yellow-500' 
     },
-    { 
-      label: 'Vues totales', 
-      value: stats.totalViews, 
-      icon: Eye, 
-      color: 'text-blue-500' 
-    },
   ];
 
   return (

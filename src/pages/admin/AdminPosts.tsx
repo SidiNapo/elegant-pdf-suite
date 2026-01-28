@@ -18,7 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-
+import { adminRoutes } from '@/config/adminRoutes';
 const AdminPosts = () => {
   const { data: posts, isLoading } = useAllPosts();
   const deletePost = useDeletePost();
@@ -50,7 +50,7 @@ const AdminPosts = () => {
             className="pl-10"
           />
         </div>
-        <Link to="/admin/posts/new">
+        <Link to={adminRoutes.postsNew}>
           <Button className="btn-primary gap-2 w-full sm:w-auto">
             <Plus className="w-4 h-4" />
             Nouvel article
@@ -137,7 +137,7 @@ const AdminPosts = () => {
                           </Link>
                         )}
                         <Link
-                          to={`/admin/posts/${post.id}/edit`}
+                          to={adminRoutes.postsEdit(post.id)}
                           className="p-2 rounded-lg hover:bg-muted transition-colors"
                         >
                           <Edit className="w-4 h-4 text-muted-foreground" />
@@ -181,7 +181,7 @@ const AdminPosts = () => {
           className="text-center py-16 glass-card rounded-2xl"
         >
           <p className="text-muted-foreground mb-4">Aucun article trouvé</p>
-          <Link to="/admin/posts/new">
+          <Link to={adminRoutes.postsNew}>
             <Button className="btn-primary gap-2">
               <Plus className="w-4 h-4" />
               Créer votre premier article

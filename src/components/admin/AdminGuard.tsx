@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Loader2, ShieldX } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-
+import { adminRoutes } from '@/config/adminRoutes';
 interface AdminGuardProps {
   children: ReactNode;
 }
@@ -22,7 +22,7 @@ const AdminGuard = ({ children }: AdminGuardProps) => {
 
   // Redirect to login if not authenticated
   if (!user) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to={adminRoutes.login} replace />;
   }
 
   // Show not authorized if user is not admin

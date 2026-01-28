@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { z } from 'zod';
-
+import { adminRoutes } from '@/config/adminRoutes';
 const loginSchema = z.object({
   email: z.string().email('Email invalide'),
   password: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
@@ -25,7 +25,7 @@ const AdminLogin = () => {
   // Redirect if already logged in as admin
   useEffect(() => {
     if (!loading && adminChecked && user && isAdmin) {
-      navigate('/admin/dashboard', { replace: true });
+      navigate(adminRoutes.dashboard, { replace: true });
     }
   }, [user, isAdmin, loading, adminChecked, navigate]);
 

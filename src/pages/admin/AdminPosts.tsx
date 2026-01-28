@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Plus, Search, Eye, Edit, Trash2, Loader2 } from 'lucide-react';
@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { adminRoutes } from '@/config/adminRoutes';
-const AdminPosts = () => {
+const AdminPosts = React.forwardRef<HTMLDivElement>((_, ref) => {
   const { data: posts, isLoading } = useAllPosts();
   const deletePost = useDeletePost();
   const [search, setSearch] = useState('');
@@ -191,6 +191,8 @@ const AdminPosts = () => {
       )}
     </AdminLayout>
   );
-};
+});
+
+AdminPosts.displayName = 'AdminPosts';
 
 export default AdminPosts;

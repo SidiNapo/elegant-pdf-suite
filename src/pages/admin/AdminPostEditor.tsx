@@ -142,10 +142,14 @@ const AdminPostEditor = () => {
     setIsSaving(true);
 
     try {
+      // Preserve existing published_at if already set, otherwise set it when publishing
+      const shouldSetPublishedAt = formData.is_published && (!existingPost?.published_at || !existingPost?.is_published);
       const postData = {
         ...formData,
         category_id: formData.category_id || null,
-        published_at: formData.is_published ? new Date().toISOString() : null,
+        published_at: formData.is_published 
+          ? (existingPost?.published_at || new Date().toISOString())
+          : null,
       };
 
       if (isEditing && id) {
@@ -385,27 +389,36 @@ const AdminPostEditor = () => {
                 />
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col gap-3">
+                {/* Main Publish/Save Button */}
                 <Button
                   type="submit"
-                  className="flex-1 btn-primary gap-2"
+                  className={`w-full gap-2 ${formData.is_published ? 'bg-primary hover:bg-primary/90' : ''}`}
                   disabled={isSaving}
                 >
                   {isSaving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : formData.is_published ? (
+                    <>
+                      <Eye className="w-4 h-4" />
+                      Publier l'article
+                    </>
                   ) : (
-                    <Save className="w-4 h-4" />
+                    <>
+                      <Save className="w-4 h-4" />
+                      Enregistrer (brouillon)
+                    </>
                   )}
-                  Enregistrer
                 </Button>
                 {formData.is_published && formData.slug && (
                   <Button
                     type="button"
                     variant="outline"
-                    className="gap-2"
+                    className="w-full gap-2"
                     onClick={() => window.open(`/blog/${formData.slug}`, '_blank')}
                   >
                     <Eye className="w-4 h-4" />
+                    Voir l'article
                   </Button>
                 )}
               </div>

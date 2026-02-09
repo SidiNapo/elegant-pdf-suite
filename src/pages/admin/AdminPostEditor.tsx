@@ -30,28 +30,48 @@ const AdminPostEditor = () => {
   const createPost = useCreatePost();
   const updatePost = useUpdatePost();
 
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    featured_image: '',
-    author_name: "E-Pdf's",
-    meta_title: '',
-    meta_description: '',
-    meta_keywords: '',
-    og_image: '',
-    canonical_url: '',
-    is_published: false,
-    category_id: '',
-  });
+  const STORAGE_KEY = `admin-post-draft-${id || 'new'}`;
+
+  const getInitialFormData = () => {
+    const defaultData = {
+      title: '',
+      slug: '',
+      excerpt: '',
+      content: '',
+      featured_image: '',
+      author_name: "E-Pdf's",
+      meta_title: '',
+      meta_description: '',
+      meta_keywords: '',
+      og_image: '',
+      canonical_url: '',
+      is_published: false,
+      category_id: '',
+    };
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      if (saved) return { ...defaultData, ...JSON.parse(saved) };
+    } catch {}
+    return defaultData;
+  };
+
+  const [formData, setFormData] = useState(getInitialFormData);
 
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Persist form data to sessionStorage on every change
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    } catch {}
+  }, [formData, STORAGE_KEY]);
+
+  // Load existing post data when editing
   useEffect(() => {
     if (existingPost) {
-      setFormData({
+      setFormData(prev => ({
+        ...prev,
         title: existingPost.title,
         slug: existingPost.slug,
         excerpt: existingPost.excerpt || '',
@@ -65,7 +85,7 @@ const AdminPostEditor = () => {
         canonical_url: existingPost.canonical_url || '',
         is_published: existingPost.is_published,
         category_id: existingPost.category_id || '',
-      });
+      }));
     }
   }, [existingPost]);
 
@@ -151,6 +171,9 @@ const AdminPostEditor = () => {
           ? (existingPost?.published_at || new Date().toISOString())
           : null,
       };
+
+      // Clear draft from sessionStorage on successful save
+      sessionStorage.removeItem(STORAGE_KEY);
 
       if (isEditing && id) {
         await updatePost.mutateAsync({ id, ...postData });

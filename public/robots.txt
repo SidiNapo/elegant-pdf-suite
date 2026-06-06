@@ -34,7 +34,8 @@ User-agent: *
 Allow: /
 Crawl-delay: 2
 
-# Sitemap location
+# Sitemap location (dynamic - always includes latest blog posts)
+Sitemap: https://obetkqazuirhntzpjzou.supabase.co/functions/v1/sitemap
 Sitemap: https://e-pdfs.com/sitemap.xml
 
 # Disallow admin pages

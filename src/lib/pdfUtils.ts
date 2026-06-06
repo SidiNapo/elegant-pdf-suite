@@ -532,9 +532,8 @@ export const extractTextFromPDF = async (file: File): Promise<string[]> => {
     const loadingTask = pdfjs.getDocument({
       data: arrayBuffer,
       useWorkerFetch: false,
-      isEvalSupported: false,
       useSystemFonts: true,
-    });
+    } as Parameters<typeof pdfjs.getDocument>[0]);
     
     const pdf = await loadingTask.promise;
     const pages: string[] = [];

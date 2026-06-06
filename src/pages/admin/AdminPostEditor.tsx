@@ -183,6 +183,18 @@ const AdminPostEditor = () => {
         toast.success('Article créé');
       }
 
+      // Auto-submit to search engines (IndexNow + sitemap ping) when published
+      if (postData.is_published) {
+        try {
+          await supabase.functions.invoke('submit-url', {
+            body: { url: `/blog/${formData.slug}` },
+          });
+          toast.success('Article soumis aux moteurs de recherche pour indexation');
+        } catch {
+          // indexing is best-effort; never block saving
+        }
+      }
+
       navigate(adminRoutes.posts);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Erreur lors de la sauvegarde';

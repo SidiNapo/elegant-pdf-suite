@@ -189,7 +189,8 @@ export const useUpdatePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...post }: Partial<BlogPost> & { id: string }) => {
+    mutationFn: async ({ id, ...rest }: Partial<BlogPost> & { id: string }) => {
+      const { category, ...post } = rest;
       const { data, error } = await supabase
         .from('blog_posts')
         .update(post)

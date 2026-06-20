@@ -71,7 +71,7 @@ const ToolLayout = ({
       <SEOHead
         title={seoTitle}
         description={seoDescription}
-        keywords={seoKeywords || `${title}, PDF tools, free PDF, online PDF, PDF converter`}
+        keywords={seoKeywords || seo.keywords}
         canonicalUrl={canonicalUrl}
       />
       <div className="min-h-screen flex flex-col">

@@ -47,16 +47,18 @@ const ToolLayout = ({
   color = 'coral',
   seoKeywords,
 }: ToolLayoutProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const bgImage = backgroundImages[color];
 
   // Generate canonical URL from current path
   const canonicalUrl = `https://e-pdfs.com${location.pathname}`;
-  
-  // Generate SEO title and description
-  const seoTitle = `${title} - E-PDF's | Free Online PDF Tool`;
-  const seoDescription = `${description} Free, secure, and fast. No registration required. Process your PDF files directly in your browser.`;
+
+  // Per-tool, laser-focused SEO title/description (bilingual)
+  const lang = (i18n.language?.split('-')[0] as Lang) || 'fr';
+  const seo = getToolSeo(location.pathname, title, description)[lang === 'en' ? 'en' : 'fr'];
+  const seoTitle = seo.metaTitle;
+  const seoDescription = seo.metaDescription;
 
   const benefits = [
     { icon: Zap, text: t('toolLayout.benefits.instant') },

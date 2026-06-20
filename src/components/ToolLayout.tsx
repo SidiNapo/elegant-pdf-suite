@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Header from './Header';
 import Footer from './Footer';
 import SEOHead from './SEOHead';
+import ToolSeoContent from './ToolSeoContent';
+import { getToolSeo, type Lang } from '@/data/toolSeo';
 
 // Import background images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -45,16 +47,18 @@ const ToolLayout = ({
   color = 'coral',
   seoKeywords,
 }: ToolLayoutProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const bgImage = backgroundImages[color];
 
   // Generate canonical URL from current path
   const canonicalUrl = `https://e-pdfs.com${location.pathname}`;
-  
-  // Generate SEO title and description
-  const seoTitle = `${title} - E-PDF's | Free Online PDF Tool`;
-  const seoDescription = `${description} Free, secure, and fast. No registration required. Process your PDF files directly in your browser.`;
+
+  // Per-tool, laser-focused SEO title/description (bilingual)
+  const lang = (i18n.language?.split('-')[0] as Lang) || 'fr';
+  const seo = getToolSeo(location.pathname, title, description)[lang === 'en' ? 'en' : 'fr'];
+  const seoTitle = seo.metaTitle;
+  const seoDescription = seo.metaDescription;
 
   const benefits = [
     { icon: Zap, text: t('toolLayout.benefits.instant') },
@@ -67,7 +71,7 @@ const ToolLayout = ({
       <SEOHead
         title={seoTitle}
         description={seoDescription}
-        keywords={seoKeywords || `${title}, PDF tools, free PDF, online PDF, PDF converter`}
+        keywords={seoKeywords || seo.keywords}
         canonicalUrl={canonicalUrl}
       />
       <div className="min-h-screen flex flex-col">
@@ -193,6 +197,14 @@ const ToolLayout = ({
             </div>
           </div>
         </section>
+
+        {/* SEO copy + FAQ + structured data */}
+        <ToolSeoContent
+          pathname={location.pathname}
+          title={title}
+          description={description}
+          canonicalUrl={canonicalUrl}
+        />
       </main>
 
         <Footer />

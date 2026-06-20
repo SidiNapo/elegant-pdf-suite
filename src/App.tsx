@@ -21,6 +21,7 @@ const About = lazy(() => import("./pages/About"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Contact = lazy(() => import("./pages/Contact"));
+const ProgrammaticLanding = lazy(() => import("./pages/ProgrammaticLanding"));
 
 // Admin pages - lazy loaded
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -74,6 +75,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/p/:slug" element={<ProgrammaticLanding />} />
             <Route path={`/${ADMIN_BASE_PATH}`} element={<AdminLogin />} />
             <Route path={`/${ADMIN_BASE_PATH}/dashboard`} element={
               <Suspense fallback={<PageLoader />}>

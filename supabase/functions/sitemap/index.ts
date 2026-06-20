@@ -26,6 +26,14 @@ const TOOL_ROUTES = [
   "excel-to-pdf", "pdf-to-excel",
 ].map((t) => ({ path: `/${t}`, priority: "0.8", changefreq: "monthly" }));
 
+// Programmatic long-tail landing pages (/p/:slug).
+const PROGRAMMATIC_ROUTES = [
+  "compresser-pdf-pour-gmail",
+  "reduire-pdf-a-200ko",
+  "png-en-pdf",
+  "fusionner-pdf-sans-telechargement",
+].map((s) => ({ path: `/p/${s}`, priority: "0.7", changefreq: "monthly" }));
+
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -73,7 +81,7 @@ ${alts}
     };
 
     const entries: string[] = [];
-    for (const r of [...STATIC_ROUTES, ...TOOL_ROUTES]) {
+    for (const r of [...STATIC_ROUTES, ...TOOL_ROUTES, ...PROGRAMMATIC_ROUTES]) {
       entries.push(urlEntry(r.path, r.priority, r.changefreq));
     }
     for (const p of posts ?? []) {

@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Header from './Header';
 import Footer from './Footer';
 import SEOHead from './SEOHead';
+import ToolSeoContent from './ToolSeoContent';
+import { getToolSeo, type Lang } from '@/data/toolSeo';
 
 // Import background images
 import heroPdf from '@/assets/hero-pdf.jpg';

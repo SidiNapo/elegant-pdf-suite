@@ -81,7 +81,7 @@ ${alts}
     };
 
     const entries: string[] = [];
-    for (const r of [...STATIC_ROUTES, ...TOOL_ROUTES]) {
+    for (const r of [...STATIC_ROUTES, ...TOOL_ROUTES, ...PROGRAMMATIC_ROUTES]) {
       entries.push(urlEntry(r.path, r.priority, r.changefreq));
     }
     for (const p of posts ?? []) {

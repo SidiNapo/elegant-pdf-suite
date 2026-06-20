@@ -21,6 +21,7 @@ const About = lazy(() => import("./pages/About"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Contact = lazy(() => import("./pages/Contact"));
+const ProgrammaticLanding = lazy(() => import("./pages/ProgrammaticLanding"));
 
 // Admin pages - lazy loaded
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));

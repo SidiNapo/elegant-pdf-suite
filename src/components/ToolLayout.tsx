@@ -197,6 +197,14 @@ const ToolLayout = ({
             </div>
           </div>
         </section>
+
+        {/* SEO copy + FAQ + structured data */}
+        <ToolSeoContent
+          pathname={location.pathname}
+          title={title}
+          description={description}
+          canonicalUrl={canonicalUrl}
+        />
       </main>
 
         <Footer />

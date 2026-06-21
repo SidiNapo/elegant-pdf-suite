@@ -74,10 +74,9 @@ const Footer = () => {
       href: `/p/${page.slug}`,
     })),
   }];
-  
 
-  
   const features = [{
+
     icon: Shield,
     text: t('footer.secure')
   }, {

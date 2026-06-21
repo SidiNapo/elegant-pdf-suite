@@ -42,7 +42,14 @@ import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 
 const AllTools = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = ((i18n.language?.split('-')[0]) as Lang) === 'en' ? 'en' : 'fr';
+  const useCasesHeading = lang === 'en' ? 'Popular use cases' : "Cas d'usage populaires";
+  const useCasesSub =
+    lang === 'en'
+      ? 'Quick, security-first solutions for the most common PDF needs.'
+      : 'Des solutions rapides et 100 % sécurisées pour les besoins PDF les plus fréquents.';
+
 
   const toolCategories = [
     {

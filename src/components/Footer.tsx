@@ -4,9 +4,14 @@ import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroPdf from '@/assets/hero-pdf.jpg';
 import TrustBadges from '@/components/TrustBadges';
+import { programmaticPages } from '@/data/programmaticPages';
+import type { Lang } from '@/data/toolSeo';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = ((i18n.language?.split('-')[0]) as Lang) === 'en' ? 'en' : 'fr';
+  const useCasesTitle = lang === 'en' ? 'Use cases' : "Cas d'usage";
+
 
   const toolCategories = [{
     title: t('footer.organize'),

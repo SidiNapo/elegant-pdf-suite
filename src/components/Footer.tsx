@@ -4,9 +4,14 @@ import { useTranslation } from 'react-i18next';
 import logo from '@/assets/logo.png';
 import heroPdf from '@/assets/hero-pdf.jpg';
 import TrustBadges from '@/components/TrustBadges';
+import { programmaticPages } from '@/data/programmaticPages';
+import type { Lang } from '@/data/toolSeo';
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = ((i18n.language?.split('-')[0]) as Lang) === 'en' ? 'en' : 'fr';
+  const useCasesTitle = lang === 'en' ? 'Use cases' : "Cas d'usage";
+
 
   const toolCategories = [{
     title: t('footer.organize'),
@@ -62,9 +67,16 @@ const Footer = () => {
       name: t('nav.contact'),
       href: '/contact'
     }]
+  }, {
+    title: useCasesTitle,
+    links: programmaticPages.map((page) => ({
+      name: page[lang].h1,
+      href: `/p/${page.slug}`,
+    })),
   }];
-  
+
   const features = [{
+
     icon: Shield,
     text: t('footer.secure')
   }, {
@@ -84,7 +96,7 @@ const Footer = () => {
       </div>
       
       <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2 space-y-6">
             <Link to="/" className="inline-block group">

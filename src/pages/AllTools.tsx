@@ -30,6 +30,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
 import SEOHead from '@/components/SEOHead';
+import { programmaticPages } from '@/data/programmaticPages';
+import type { Lang } from '@/data/toolSeo';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -40,7 +42,14 @@ import convertPdfIllustration from '@/assets/convert-pdf-illustration.jpg';
 import securityIllustration from '@/assets/security-illustration.jpg';
 
 const AllTools = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = ((i18n.language?.split('-')[0]) as Lang) === 'en' ? 'en' : 'fr';
+  const useCasesHeading = lang === 'en' ? 'Popular use cases' : "Cas d'usage populaires";
+  const useCasesSub =
+    lang === 'en'
+      ? 'Quick, security-first solutions for the most common PDF needs.'
+      : 'Des solutions rapides et 100 % sécurisées pour les besoins PDF les plus fréquents.';
+
 
   const toolCategories = [
     {
@@ -342,7 +351,38 @@ const AllTools = () => {
           </div>
         </section>
 
+        {/* Popular Use Cases - links to programmatic landing pages */}
+        <section className="py-16 border-t border-border">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">{useCasesHeading}</h2>
+              <p className="text-lg text-muted-foreground">{useCasesSub}</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {programmaticPages.map((page) => {
+                const c = page[lang];
+                return (
+                  <Link
+                    key={page.slug}
+                    to={`/p/${page.slug}`}
+                    className="group relative rounded-2xl bg-card border border-border hover:border-primary/50 p-6 transition-all"
+                  >
+                    <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+                      {c.h1}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{c.intro}</p>
+                    <span className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+                      {c.ctaLabel} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
+
         <section className="py-24 relative overflow-hidden">
           <div className="absolute inset-0">
             <img 

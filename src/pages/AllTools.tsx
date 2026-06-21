@@ -30,6 +30,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
 import SEOHead from '@/components/SEOHead';
+import { programmaticPages } from '@/data/programmaticPages';
+import type { Lang } from '@/data/toolSeo';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';

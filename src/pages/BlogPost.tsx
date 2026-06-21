@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import ArticleSchema from '@/components/blog/ArticleSchema';
+import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
 import { usePostBySlug } from '@/hooks/useBlogPosts';
 import { Loader2 } from 'lucide-react';

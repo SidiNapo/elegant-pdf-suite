@@ -6,6 +6,9 @@ interface SEOHeadProps {
   keywords?: string;
   canonicalUrl?: string;
   ogImage?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  ogImageAlt?: string;
   ogType?: 'website' | 'article';
   author?: string;
   publishedTime?: string;
@@ -19,6 +22,9 @@ const SEOHead = ({
   keywords,
   canonicalUrl,
   ogImage,
+  ogImageWidth,
+  ogImageHeight,
+  ogImageAlt,
   ogType = 'website',
   author,
   publishedTime,
@@ -95,11 +101,15 @@ const SEOHead = ({
     setMetaTag('og:description', description, true);
     setMetaTag('og:type', ogType, true);
     // Always set og:image - use provided image or fallback to favicon
+    const hasCustomImage = !!ogImage;
     const effectiveOgImage = ogImage || 'https://e-pdfs.com/favicon.png';
+    // Custom article/featured images render as wide social cards; favicon stays square.
+    const effectiveWidth = ogImageWidth ?? (hasCustomImage ? 1200 : 512);
+    const effectiveHeight = ogImageHeight ?? (hasCustomImage ? 630 : 512);
     setMetaTag('og:image', effectiveOgImage, true);
-    setMetaTag('og:image:width', '512', true);
-    setMetaTag('og:image:height', '512', true);
-    setMetaTag('og:image:alt', 'E-Pdf\'s Logo', true);
+    setMetaTag('og:image:width', String(effectiveWidth), true);
+    setMetaTag('og:image:height', String(effectiveHeight), true);
+    setMetaTag('og:image:alt', ogImageAlt || (hasCustomImage ? title : "E-Pdf's Logo"), true);
     if (canonicalUrl) {
       setMetaTag('og:url', canonicalUrl, true);
       // Update or create canonical link
@@ -129,7 +139,7 @@ const SEOHead = ({
     return () => {
       document.title = "E-Pdf's - Outils PDF Gratuits en Ligne";
     };
-  }, [title, description, keywords, canonicalUrl, ogImage, ogType, author, publishedTime, modifiedTime, noIndex]);
+  }, [title, description, keywords, canonicalUrl, ogImage, ogImageWidth, ogImageHeight, ogImageAlt, ogType, author, publishedTime, modifiedTime, noIndex]);
 
   return null;
 };

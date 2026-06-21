@@ -67,7 +67,15 @@ const Footer = () => {
       name: t('nav.contact'),
       href: '/contact'
     }]
+  }, {
+    title: useCasesTitle,
+    links: programmaticPages.map((page) => ({
+      name: page[lang].h1,
+      href: `/p/${page.slug}`,
+    })),
   }];
+  
+
   
   const features = [{
     icon: Shield,

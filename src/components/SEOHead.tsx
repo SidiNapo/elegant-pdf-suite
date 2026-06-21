@@ -139,7 +139,7 @@ const SEOHead = ({
     return () => {
       document.title = "E-Pdf's - Outils PDF Gratuits en Ligne";
     };
-  }, [title, description, keywords, canonicalUrl, ogImage, ogType, author, publishedTime, modifiedTime, noIndex]);
+  }, [title, description, keywords, canonicalUrl, ogImage, ogImageWidth, ogImageHeight, ogImageAlt, ogType, author, publishedTime, modifiedTime, noIndex]);
 
   return null;
 };

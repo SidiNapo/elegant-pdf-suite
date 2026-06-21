@@ -75,9 +75,16 @@ const BlogPost = () => {
 
   const formattedContent = formatContent(post.content);
   return <>
-      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
+      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={post.title} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 
       <ArticleSchema title={post.title} description={post.meta_description || post.excerpt || ''} image={post.featured_image || undefined} authorName={post.author_name} publishedAt={post.published_at || post.created_at} modifiedAt={post.updated_at} url={canonicalUrl} />
+
+      <BreadcrumbSchema items={[
+        { name: 'Accueil', url: 'https://e-pdfs.com/' },
+        { name: 'Blog', url: 'https://e-pdfs.com/blog' },
+        { name: post.title, url: canonicalUrl },
+      ]} />
+
 
       <div className="min-h-screen bg-background">
         <Header />

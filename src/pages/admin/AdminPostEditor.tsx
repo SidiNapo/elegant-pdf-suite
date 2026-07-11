@@ -54,7 +54,7 @@ const AdminPostEditor = () => {
     try {
       const saved = sessionStorage.getItem(STORAGE_KEY);
       if (saved) return { ...defaultData, ...JSON.parse(saved) };
-    } catch {}
+    } catch { /* ignore malformed draft */ }
     return defaultData;
   };
 
@@ -67,7 +67,7 @@ const AdminPostEditor = () => {
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-    } catch {}
+    } catch { /* ignore quota errors */ }
   }, [formData, STORAGE_KEY]);
 
   // Load existing post data when editing

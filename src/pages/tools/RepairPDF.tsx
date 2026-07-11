@@ -51,7 +51,7 @@ const RepairPDF = () => {
             ignoreEncryption: true,
             updateMetadata: true,
             throwOnInvalidObject: false,
-          } as any);
+          } as never);
           details.push(`✓ ${t('tools.repair.partiallyRecovered')}`);
         } catch {
           setRepairStatus('failed');

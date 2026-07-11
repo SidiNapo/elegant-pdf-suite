@@ -97,7 +97,7 @@ export const usePostBySlug = (slug: string) => {
       // Increment view count (fire and forget)
       try {
         supabase.rpc('increment_post_views', { post_id: data.id });
-      } catch {}
+      } catch { /* ignore view-count failures */ }
       
       return data as BlogPost;
     },

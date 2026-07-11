@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
       await fetch(
         `https://www.bing.com/ping?sitemap=${encodeURIComponent(`${SITE}/sitemap.xml`)}`,
       );
-    } catch {}
+    } catch { /* ping is best-effort */ }
 
     return new Response(
       JSON.stringify({ success: true, submitted: urls.length, urls, results }),

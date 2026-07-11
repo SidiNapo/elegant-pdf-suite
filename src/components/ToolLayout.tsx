@@ -52,7 +52,7 @@ const ToolLayout = ({
   const bgImage = backgroundImages[color];
 
   // Generate canonical URL from current path
-  const canonicalUrl = `https://e-pdfs.com${location.pathname}`;
+  const canonicalUrl = `https://www.e-pdfs.com${location.pathname}`;
 
   // Per-tool, laser-focused SEO title/description (bilingual)
   const lang = (i18n.language?.split('-')[0] as Lang) || 'fr';

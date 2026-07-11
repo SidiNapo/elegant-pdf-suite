@@ -209,13 +209,13 @@ export const WebsiteSchema = () => {
       '@type': 'WebSite',
       name: 'E-PDF\'s',
       alternateName: 'E-PDFs',
-      url: 'https://e-pdfs.com',
+      url: 'https://www.e-pdfs.com',
       description: 'Free online PDF tools - Merge, split, compress, and convert PDF files instantly in your browser.',
       inLanguage: ['en', 'fr', 'ar'],
       publisher: {
         '@type': 'Organization',
         name: 'E-PDF\'s',
-        url: 'https://e-pdfs.com'
+        url: 'https://www.e-pdfs.com'
       }
     });
 
@@ -238,8 +238,8 @@ const StructuredData = () => {
     <>
       <OrganizationSchema
         name="E-PDF's"
-        url="https://e-pdfs.com"
-        logo="https://e-pdfs.com/favicon.png"
+        url="https://www.e-pdfs.com"
+        logo="https://www.e-pdfs.com/favicon.png"
         description="Free online PDF tools - Merge, split, compress, and convert PDF files instantly in your browser. No registration required, 100% secure browser-based processing."
       />
       <WebsiteSchema />

@@ -86,7 +86,7 @@ const Privacy = () => {
       <SEOHead
         title={t('privacy.seo.title')}
         description={t('privacy.seo.description')}
-        canonicalUrl="https://e-pdfs.com/privacy"
+        canonicalUrl="https://www.e-pdfs.com/privacy"
       />
 
       <div className="min-h-screen bg-background">

@@ -388,7 +388,7 @@ const AdminPostEditor = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
                   }
-                  placeholder="https://e-pdfs.com/blog/..."
+                  placeholder="https://www.e-pdfs.com/blog/..."
                 />
               </div>
 

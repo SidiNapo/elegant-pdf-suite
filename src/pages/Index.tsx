@@ -191,8 +191,8 @@ const Index = () => {
       <SEOHead 
         title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
         description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
-        canonicalUrl="https://e-pdfs.com"
-        ogImage="https://e-pdfs.com/og-image.jpg"
+        canonicalUrl="https://www.e-pdfs.com"
+        ogImage="https://www.e-pdfs.com/og-image.jpg"
       />
       <StructuredData />
       <Header />

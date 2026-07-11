@@ -17,7 +17,7 @@ const ProgrammaticLanding = () => {
 
   const lang = (i18n.language?.split('-')[0] as Lang) || 'fr';
   const c = page[lang === 'en' ? 'en' : 'fr'];
-  const canonicalUrl = `https://e-pdfs.com/p/${page.slug}`;
+  const canonicalUrl = `https://www.e-pdfs.com/p/${page.slug}`;
 
   return (
     <>

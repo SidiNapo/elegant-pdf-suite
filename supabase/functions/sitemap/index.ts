@@ -1,7 +1,7 @@
 // Generates sitemap.xml dynamically, always including every published blog post.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-const SITE = "https://e-pdfs.com";
+const SITE = "https://www.e-pdfs.com";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

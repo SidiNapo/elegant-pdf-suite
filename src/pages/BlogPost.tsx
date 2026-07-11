@@ -66,7 +66,7 @@ const BlogPost = () => {
   const featuredAlt = post.featured_image_alt || post.title;
 
   return <>
-      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={post.title} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
+      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 
       <ArticleSchema title={post.title} description={post.meta_description || post.excerpt || ''} image={post.featured_image || undefined} authorName={post.author_name} publishedAt={post.published_at || post.created_at} modifiedAt={post.updated_at} url={canonicalUrl} />
 
@@ -88,7 +88,7 @@ const BlogPost = () => {
           opacity: 1
         }} className="relative h-[50vh] min-h-[400px] mb-12">
               <div className="absolute inset-0">
-                <img src={post.featured_image} alt={post.meta_title || post.title} width={1200} height={630} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
+                <img src={post.featured_image} alt={featuredAlt} width={1200} height={630} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
               </div>
               

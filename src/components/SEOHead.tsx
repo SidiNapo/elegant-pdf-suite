@@ -65,20 +65,10 @@ const SEOHead = ({
       link.href = href;
     };
 
-    // Set dynamic hreflang tags for international SEO
-    if (canonicalUrl) {
-      const baseUrl = canonicalUrl.split('?')[0];
-      const languages = [
-        { code: 'fr', suffix: '' },
-        { code: 'en', suffix: '?lang=en' },
-        { code: 'ar', suffix: '?lang=ar' },
-        { code: 'x-default', suffix: '' }
-      ];
-      
-      languages.forEach(({ code, suffix }) => {
-        setLinkTag('alternate', `${baseUrl}${suffix}`, undefined, undefined, code);
-      });
-    }
+    // NOTE: No per-language hreflang alternates. The ?lang=en / ?lang=ar URLs
+    // serve identical HTML (i18next runs client-side), so declaring them as
+    // localized alternates would be false. Each page keeps only a single
+    // self-referencing canonical until real server-localized pages exist.
 
     // Ensure favicon is always set to our custom icon (for Google indexing)
     const faviconUrl = 'https://e-pdfs.com/favicon.png';
@@ -128,11 +118,21 @@ const SEOHead = ({
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', effectiveOgImage);
 
-    // Article specific meta tags
+    // Article specific meta tags. On non-article pages, strip any leftover
+    // article/author meta so pages don't carry stale article metadata.
+    const removeMeta = (name: string, property = false) => {
+      const attr = property ? 'property' : 'name';
+      const el = document.querySelector(`meta[${attr}="${name}"]`);
+      if (el) el.remove();
+    };
     if (ogType === 'article') {
       if (author) setMetaTag('author', author);
       if (publishedTime) setMetaTag('article:published_time', publishedTime, true);
       if (modifiedTime) setMetaTag('article:modified_time', modifiedTime, true);
+    } else {
+      removeMeta('article:published_time', true);
+      removeMeta('article:modified_time', true);
+      removeMeta('author');
     }
 
     // Cleanup function to reset to default

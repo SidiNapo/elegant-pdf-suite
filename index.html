@@ -27,11 +27,10 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://e-pdfs.com/" />
     
-    <!-- Hreflang for International SEO -->
-    <link rel="alternate" hreflang="fr" href="https://e-pdfs.com/" />
-    <link rel="alternate" hreflang="en" href="https://e-pdfs.com/?lang=en" />
-    <link rel="alternate" hreflang="ar" href="https://e-pdfs.com/?lang=ar" />
-    <link rel="alternate" hreflang="x-default" href="https://e-pdfs.com/" />
+    <!-- Single self-referencing canonical only. No per-language hreflang
+         alternates: ?lang=en / ?lang=ar serve identical client-rendered HTML,
+         so declaring them as localized alternates would be false. -->
+
     
     <!-- Morocco & MENA Geo-Targeting -->
     <meta name="geo.region" content="MA" />
@@ -109,6 +108,38 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
     <!-- Google AdSense placeholder - Replace with your AdSense code when approved -->
     <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+    <!-- Core structured data (static, present before JS) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "E-Pdf's",
+      "url": "https://e-pdfs.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://e-pdfs.com/favicon.png",
+        "width": 512,
+        "height": 512
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "E-Pdf's",
+      "url": "https://e-pdfs.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://e-pdfs.com/blog?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
 
   <body class="overflow-x-hidden">

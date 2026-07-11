@@ -52,13 +52,6 @@ Deno.serve(async (req) => {
       .eq("is_published", true)
       .order("published_at", { ascending: false });
 
-    const langs = [
-      { code: "fr", suffix: "?lang=fr" },
-      { code: "en", suffix: "?lang=en" },
-      { code: "ar", suffix: "?lang=ar" },
-      { code: "x-default", suffix: "" },
-    ];
-
     const urlEntry = (
       path: string,
       priority: string,
@@ -66,17 +59,10 @@ Deno.serve(async (req) => {
       lastmod?: string,
     ) => {
       const loc = `${SITE}${path}`;
-      const alts = langs
-        .map(
-          (l) =>
-            `    <xhtml:link rel="alternate" hreflang="${l.code}" href="${esc(loc + l.suffix)}"/>`,
-        )
-        .join("\n");
       return `  <url>
     <loc>${esc(loc)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
-${alts}
   </url>`;
     };
 
@@ -90,8 +76,7 @@ ${alts}
     }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.join("\n")}
 </urlset>`;
 

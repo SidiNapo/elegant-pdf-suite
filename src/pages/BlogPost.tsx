@@ -8,13 +8,14 @@ import SEOHead from '@/components/SEOHead';
 import ArticleSchema from '@/components/blog/ArticleSchema';
 import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
-import { usePostBySlug } from '@/hooks/useBlogPosts';
+import { usePostBySlug, usePublishedPosts } from '@/hooks/useBlogPosts';
 import { Loader2 } from 'lucide-react';
 
 const BlogPost = () => {
   const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug || '');
+  const { data: allPosts } = usePublishedPosts();
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -64,6 +65,13 @@ const BlogPost = () => {
   // so render it directly.
   const formattedContent = post.content;
   const featuredAlt = post.featured_image_alt || post.title;
+
+  // Related posts: same category first, then fill with recent posts (max 6).
+  const otherPosts = (allPosts || []).filter((p) => p.slug !== post.slug);
+  const relatedPosts = [
+    ...otherPosts.filter((p) => post.category_id && p.category_id === post.category_id),
+    ...otherPosts.filter((p) => !post.category_id || p.category_id !== post.category_id),
+  ].slice(0, 6);
 
   return <>
       <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
@@ -260,6 +268,47 @@ const BlogPost = () => {
                 description={post.excerpt || post.meta_description || ''}
               />
             </div>
+
+            {/* Related articles - real <a href> links for crawl discovery */}
+            {relatedPosts.length > 0 && (
+              <section className="mt-16" aria-labelledby="related-articles-heading">
+                <h2 id="related-articles-heading" className="text-2xl font-bold mb-6">
+                  {t('blog.relatedArticles')}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {relatedPosts.map((rp) => (
+                    <a
+                      key={rp.id}
+                      href={`/blog/${rp.slug}`}
+                      className="group glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
+                    >
+                      {rp.featured_image && (
+                        <img
+                          src={rp.featured_image}
+                          alt={rp.title}
+                          width={400}
+                          height={225}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full aspect-video object-cover"
+                        />
+                      )}
+                      <div className="p-4">
+                        <h3 className="font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                          {rp.title}
+                        </h3>
+                        {rp.excerpt && (
+                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                            {rp.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
 
             {/* Article Info Footer */}
             <motion.div

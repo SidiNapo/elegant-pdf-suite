@@ -6,6 +6,10 @@
   },
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "https://obetkqazuirhntzpjzou.supabase.co/functions/v1/sitemap"
+    },
+    {
       "source": "/((?!api/|assets/|.*\\.).*)",
       "destination": "/api/render"
     }

@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-import { useEditor, EditorContent, Editor } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import BaseImage from '@tiptap/extension-image';

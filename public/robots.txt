@@ -1,5 +1,5 @@
 # E-PDF's Robots.txt
-# https://e-pdfs.com
+# https://www.e-pdfs.com
 
 # Allow Google to crawl favicon and branding assets
 User-agent: Googlebot

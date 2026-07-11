@@ -202,7 +202,10 @@ function renderStatic(html, route) {
 function renderPost(html, slug, post) {
   const title = post.meta_title || post.title;
   const description = post.meta_description || post.excerpt || DEFAULT_DESC;
-  const canonical = post.canonical_url || `${SITE_URL}/blog/${slug}`;
+  let canonical = post.canonical_url || `${SITE_URL}/blog/${slug}`;
+  if (canonical && !/^https?:\/\//i.test(canonical)) {
+    canonical = `https://${canonical.replace(/^\/+/, "")}`;
+  }
   const image =
     post.og_image || post.featured_image || `${SITE_URL}/og-image.jpg`;
   const published = post.published_at || post.created_at || "";

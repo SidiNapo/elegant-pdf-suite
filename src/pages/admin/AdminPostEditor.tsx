@@ -458,6 +458,25 @@ const AdminPostEditor = () => {
               </div>
 
               <div className="space-y-2">
+                <Label>Langue de l'article</Label>
+                <Select
+                  value={formData.language}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, language: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Langue..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="author_name">Auteur</Label>
                 <Input
                   id="author_name"

@@ -66,6 +66,13 @@ const BlogPost = () => {
   const formattedContent = post.content;
   const featuredAlt = post.featured_image_alt || post.title;
 
+  // Related posts: same category first, then fill with recent posts (max 6).
+  const otherPosts = (allPosts || []).filter((p) => p.slug !== post.slug);
+  const relatedPosts = [
+    ...otherPosts.filter((p) => post.category_id && p.category_id === post.category_id),
+    ...otherPosts.filter((p) => !post.category_id || p.category_id !== post.category_id),
+  ].slice(0, 6);
+
   return <>
       <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 

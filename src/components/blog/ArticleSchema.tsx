@@ -20,12 +20,19 @@ const ArticleSchema = ({
   url,
 }: ArticleSchemaProps) => {
   useEffect(() => {
+    const imageUrl = image || 'https://e-pdfs.com/og-image.jpg';
     const schema = {
       '@context': 'https://schema.org',
-      '@type': 'Article',
+      '@type': 'BlogPosting',
       headline: title,
       description: description,
-      image: image || 'https://e-pdfs.com/favicon.png',
+      inLanguage: 'fr',
+      image: {
+        '@type': 'ImageObject',
+        url: imageUrl,
+        width: 1200,
+        height: 630,
+      },
       author: {
         '@type': 'Person',
         name: authorName,

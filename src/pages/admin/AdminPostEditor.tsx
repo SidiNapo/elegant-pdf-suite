@@ -41,6 +41,7 @@ const AdminPostEditor = () => {
       excerpt: '',
       content: '',
       featured_image: '',
+      featured_image_alt: '',
       author_name: "E-Pdf's",
       meta_title: '',
       meta_description: '',

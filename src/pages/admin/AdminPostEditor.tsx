@@ -143,6 +143,7 @@ const AdminPostEditor = () => {
         ...prev,
         featured_image: data.publicUrl,
         og_image: data.publicUrl,
+        featured_image_alt: prev.featured_image_alt || prev.title || '',
       }));
       
       const originalSize = (file.size / 1024).toFixed(1);

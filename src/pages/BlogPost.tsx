@@ -269,6 +269,47 @@ const BlogPost = () => {
               />
             </div>
 
+            {/* Related articles - real <a href> links for crawl discovery */}
+            {relatedPosts.length > 0 && (
+              <section className="mt-16" aria-labelledby="related-articles-heading">
+                <h2 id="related-articles-heading" className="text-2xl font-bold mb-6">
+                  {t('blog.relatedArticles')}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {relatedPosts.map((rp) => (
+                    <a
+                      key={rp.id}
+                      href={`/blog/${rp.slug}`}
+                      className="group glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
+                    >
+                      {rp.featured_image && (
+                        <img
+                          src={rp.featured_image}
+                          alt={rp.title}
+                          width={400}
+                          height={225}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full aspect-video object-cover"
+                        />
+                      )}
+                      <div className="p-4">
+                        <h3 className="font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                          {rp.title}
+                        </h3>
+                        {rp.excerpt && (
+                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                            {rp.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
+
             {/* Article Info Footer */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}

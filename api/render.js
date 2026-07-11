@@ -549,9 +549,12 @@ export default async function handler(req, res) {
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
     res.end(renderNotFound(template, route));
   } catch (err) {
+    // Safe server-side logging only. Never expose error/stack/secrets in response.
+    console.error({ route, error: err?.message, stack: err?.stack });
     // Supabase/transient failure: do NOT mislabel as 404. Serve the shell so
     // the SPA can recover, with a temporary status and no-cache.
     res.statusCode = 503;
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("Retry-After", "30");
     res.end(template);

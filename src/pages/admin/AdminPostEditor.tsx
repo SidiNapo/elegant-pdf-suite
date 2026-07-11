@@ -552,6 +552,23 @@ const AdminPostEditor = () => {
                   placeholder="https://..."
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="featured_image_alt">Texte alternatif (alt)</Label>
+                <Input
+                  id="featured_image_alt"
+                  value={formData.featured_image_alt}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, featured_image_alt: e.target.value }))
+                  }
+                  placeholder="Décrivez l'image (SEO & accessibilité)"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Utilisé comme texte alternatif de l'image et og:image:alt. Par défaut,
+                  le titre de l'article.
+                </p>
+              </div>
+
             </motion.div>
           </div>
         </div>

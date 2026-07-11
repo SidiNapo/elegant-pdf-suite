@@ -242,7 +242,7 @@ function renderPost(html, slug, post) {
     "@type": "BlogPosting",
     headline: title,
     description: description,
-    image: image,
+    image: { "@type": "ImageObject", url: image, width: 1200, height: 630 },
     author: { "@type": "Person", name: post.author_name || "E-Pdf's" },
     publisher: {
       "@type": "Organization",

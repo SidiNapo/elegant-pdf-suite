@@ -273,19 +273,38 @@ const AdminPostEditor = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="content">Contenu *</Label>
-                <Textarea
-                  id="content"
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
-                  placeholder="Le contenu de votre article (HTML supporté)..."
-                  rows={15}
-                  className="font-mono text-sm"
+                  onChange={(html) => setFormData((prev) => ({ ...prev, content: html }))}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Vous pouvez utiliser du HTML pour le formatage.
+                  Utilisez la barre d'outils pour formater. Les titres commencent au H2
+                  (le titre de l'article est le seul H1 de la page).
                 </p>
               </div>
+
+              {/* Live content preview with public prose styles */}
+              {formData.content && (
+                <div className="space-y-2">
+                  <Label>Aperçu du contenu</Label>
+                  <div
+                    className="prose prose-lg max-w-none rounded-xl border border-border bg-background p-6
+                      prose-headings:font-bold prose-headings:text-foreground
+                      prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+                      prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                      prose-h4:text-lg prose-h4:mt-4 prose-h4:mb-2
+                      prose-p:text-foreground/85 prose-p:leading-relaxed
+                      prose-a:text-primary prose-a:underline
+                      prose-strong:text-foreground
+                      prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1
+                      prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:italic
+                      prose-img:rounded-xl"
+                    dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(formData.content) }}
+                  />
+                </div>
+              )}
             </motion.div>
+
 
             {/* SEO Section */}
             <motion.div

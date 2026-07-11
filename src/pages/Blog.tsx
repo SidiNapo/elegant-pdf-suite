@@ -43,7 +43,7 @@ const Blog = () => {
         title={t('blog.seo.title')}
         description={t('blog.seo.description')}
         keywords={t('blog.seo.keywords')}
-        canonicalUrl="https://e-pdfs.com/blog"
+        canonicalUrl="https://www.e-pdfs.com/blog"
       />
 
       <div className="min-h-screen bg-background">

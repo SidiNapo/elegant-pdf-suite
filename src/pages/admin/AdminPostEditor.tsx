@@ -42,7 +42,10 @@ const AdminPostEditor = () => {
       content: '',
       featured_image: '',
       featured_image_alt: '',
+      featured_image_width: 1200,
+      featured_image_height: 630,
       author_name: "E-Pdf's",
+      language: 'fr',
       meta_title: '',
       meta_description: '',
       meta_keywords: '',
@@ -54,7 +57,7 @@ const AdminPostEditor = () => {
     try {
       const saved = sessionStorage.getItem(STORAGE_KEY);
       if (saved) return { ...defaultData, ...JSON.parse(saved) };
-    } catch {}
+    } catch { /* ignore malformed draft */ }
     return defaultData;
   };
 
@@ -67,7 +70,7 @@ const AdminPostEditor = () => {
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-    } catch {}
+    } catch { /* ignore quota errors */ }
   }, [formData, STORAGE_KEY]);
 
   // Load existing post data when editing
@@ -81,7 +84,10 @@ const AdminPostEditor = () => {
         content: existingPost.content,
         featured_image: existingPost.featured_image || '',
         featured_image_alt: existingPost.featured_image_alt || existingPost.title || '',
+        featured_image_width: existingPost.featured_image_width || 1200,
+        featured_image_height: existingPost.featured_image_height || 630,
         author_name: existingPost.author_name,
+        language: existingPost.language || 'fr',
         meta_title: existingPost.meta_title || '',
         meta_description: existingPost.meta_description || '',
         meta_keywords: existingPost.meta_keywords || '',
@@ -139,11 +145,21 @@ const AdminPostEditor = () => {
 
       const { data } = supabase.storage.from('blog-images').getPublicUrl(filePath);
 
+      // Measure natural dimensions for og:image / ImageObject width & height.
+      const dims = await new Promise<{ w: number; h: number }>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+        img.onerror = () => resolve({ w: 1200, h: 630 });
+        img.src = data.publicUrl;
+      });
+
       setFormData((prev) => ({
         ...prev,
         featured_image: data.publicUrl,
         og_image: data.publicUrl,
         featured_image_alt: prev.featured_image_alt || prev.title || '',
+        featured_image_width: dims.w,
+        featured_image_height: dims.h,
       }));
       
       const originalSize = (file.size / 1024).toFixed(1);
@@ -372,7 +388,7 @@ const AdminPostEditor = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
                   }
-                  placeholder="https://e-pdfs.com/blog/..."
+                  placeholder="https://www.e-pdfs.com/blog/..."
                 />
               </div>
 
@@ -437,6 +453,25 @@ const AdminPostEditor = () => {
                         {cat.name}
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Langue de l'article</Label>
+                <Select
+                  value={formData.language}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, language: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Langue..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

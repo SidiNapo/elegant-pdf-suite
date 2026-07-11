@@ -239,7 +239,7 @@ export const pdfToImages = async (file: File): Promise<string[]> => {
         canvasContext: context,
         viewport: viewport,
         canvas: canvas,
-      } as any).promise;
+      } as never).promise;
       
       images.push(canvas.toDataURL('image/jpeg', 0.9));
     }
@@ -430,7 +430,7 @@ export const excelToPDF = async (file: File): Promise<Uint8Array> => {
     document.body.appendChild(container);
     
     const html2canvas = (await import('html2canvas')).default;
-    const canvas = await html2canvas(container, {} as any);
+    const canvas = await html2canvas(container, {} as Parameters<typeof html2canvas>[1]);
     
     document.body.removeChild(container);
     
@@ -488,7 +488,7 @@ export const htmlToPDF = async (htmlContent: string): Promise<Uint8Array> => {
   container.style.cssText = 'position: absolute; left: -9999px; width: 595px; padding: 40px; font-family: Arial, sans-serif; background: white;';
   document.body.appendChild(container);
   
-  const canvas = await html2canvas(container, { useCORS: true } as any);
+  const canvas = await html2canvas(container, { useCORS: true } as Parameters<typeof html2canvas>[1]);
   document.body.removeChild(container);
   
   const pdf = new jsPDF('p', 'mm', 'a4');

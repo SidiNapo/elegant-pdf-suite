@@ -1,5 +1,5 @@
 # E-PDF's Robots.txt
-# https://e-pdfs.com
+# https://www.e-pdfs.com
 
 # Allow Google to crawl favicon and branding assets
 User-agent: Googlebot
@@ -35,7 +35,7 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap location (dynamic - always includes latest blog posts)
-Sitemap: https://e-pdfs.com/sitemap.xml
+Sitemap: https://www.e-pdfs.com/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin/

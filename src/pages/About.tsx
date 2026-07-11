@@ -71,7 +71,7 @@ const About = () => {
         title={t('about.seo.title')}
         description={t('about.seo.description')}
         keywords={t('about.seo.keywords')}
-        canonicalUrl="https://e-pdfs.com/about"
+        canonicalUrl="https://www.e-pdfs.com/about"
       />
 
       <div className="min-h-screen bg-background">

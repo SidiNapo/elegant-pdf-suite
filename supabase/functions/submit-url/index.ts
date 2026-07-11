@@ -2,7 +2,7 @@
 // and pings the sitemap so Google rediscovers it. No external auth required.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-const SITE = "https://e-pdfs.com";
+const SITE = "https://www.e-pdfs.com";
 const INDEXNOW_KEY = "31f111445d5743948a69faa4683de47f941608e23f4a438d946133376f8f64a7";
 
 const corsHeaders = {
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify({
-        host: "e-pdfs.com",
+        host: "www.e-pdfs.com",
         key: INDEXNOW_KEY,
         keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`,
         urlList: urls,
@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
       await fetch(
         `https://www.bing.com/ping?sitemap=${encodeURIComponent(`${SITE}/sitemap.xml`)}`,
       );
-    } catch {}
+    } catch { /* ping is best-effort */ }
 
     return new Response(
       JSON.stringify({ success: true, submitted: urls.length, urls, results }),

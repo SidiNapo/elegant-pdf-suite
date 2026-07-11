@@ -48,8 +48,11 @@ export type Database = {
           excerpt: string | null
           featured_image: string | null
           featured_image_alt: string | null
+          featured_image_height: number | null
+          featured_image_width: number | null
           id: string
           is_published: boolean
+          language: string
           meta_description: string | null
           meta_keywords: string | null
           meta_title: string | null
@@ -69,8 +72,11 @@ export type Database = {
           excerpt?: string | null
           featured_image?: string | null
           featured_image_alt?: string | null
+          featured_image_height?: number | null
+          featured_image_width?: number | null
           id?: string
           is_published?: boolean
+          language?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null
@@ -90,8 +96,11 @@ export type Database = {
           excerpt?: string | null
           featured_image?: string | null
           featured_image_alt?: string | null
+          featured_image_height?: number | null
+          featured_image_width?: number | null
           id?: string
           is_published?: boolean
+          language?: string
           meta_description?: string | null
           meta_keywords?: string | null
           meta_title?: string | null

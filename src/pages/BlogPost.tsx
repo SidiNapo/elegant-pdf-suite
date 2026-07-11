@@ -59,12 +59,16 @@ const BlogPost = () => {
   // Calculate reading time (approx 200 words per minute)
   const wordCount = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-  const canonicalUrl = `https://e-pdfs.com/blog/${post.slug}`;
+  const canonicalUrl = `https://www.e-pdfs.com/blog/${post.slug}`;
 
   // Content is now always stored as clean HTML from the rich-text editor,
   // so render it directly.
   const formattedContent = post.content;
   const featuredAlt = post.featured_image_alt || post.title;
+  const imgWidth = post.featured_image_width || 1200;
+  const imgHeight = post.featured_image_height || 630;
+  const postLang = post.language || 'fr';
+  const categoryName = post.category?.name;
 
   // Related posts: same category first, then fill with recent posts (max 6).
   const otherPosts = (allPosts || []).filter((p) => p.slug !== post.slug);
@@ -74,15 +78,16 @@ const BlogPost = () => {
   ].slice(0, 6);
 
   return <>
-      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
+      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageWidth={imgWidth} ogImageHeight={imgHeight} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 
-      <ArticleSchema title={post.title} description={post.meta_description || post.excerpt || ''} image={post.featured_image || undefined} authorName={post.author_name} publishedAt={post.published_at || post.created_at} modifiedAt={post.updated_at} url={canonicalUrl} />
+      <ArticleSchema title={post.title} description={post.meta_description || post.excerpt || ''} image={post.featured_image || undefined} imageWidth={imgWidth} imageHeight={imgHeight} authorName={post.author_name} publishedAt={post.published_at || post.created_at} modifiedAt={post.updated_at} url={canonicalUrl} inLanguage={postLang} section={categoryName} keywords={post.meta_keywords || undefined} />
 
       <BreadcrumbSchema items={[
-        { name: 'Accueil', url: 'https://e-pdfs.com/' },
-        { name: 'Blog', url: 'https://e-pdfs.com/blog' },
+        { name: 'Accueil', url: 'https://www.e-pdfs.com/' },
+        { name: 'Blog', url: 'https://www.e-pdfs.com/blog' },
         { name: post.title, url: canonicalUrl },
       ]} />
+
 
 
       <div className="min-h-screen bg-background">

@@ -262,7 +262,7 @@ const AllTools = () => {
         title="All PDF Tools - E-PDF's | Free Online PDF Tools"
         description="Complete collection of free online PDF tools. Merge, split, compress, convert, rotate, watermark and edit PDF files. 100% free, secure, and browser-based."
         keywords="PDF tools, all PDF tools, free PDF tools, online PDF, merge PDF, split PDF, compress PDF, convert PDF, PDF editor"
-        canonicalUrl="https://e-pdfs.com/tools"
+        canonicalUrl="https://www.e-pdfs.com/tools"
       />
       <div className="min-h-screen flex flex-col">
         <Header />

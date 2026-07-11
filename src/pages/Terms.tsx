@@ -68,7 +68,7 @@ const Terms = () => {
       <SEOHead
         title={t('terms.seo.title')}
         description={t('terms.seo.description')}
-        canonicalUrl="https://e-pdfs.com/terms"
+        canonicalUrl="https://www.e-pdfs.com/terms"
       />
 
       <div className="min-h-screen bg-background">

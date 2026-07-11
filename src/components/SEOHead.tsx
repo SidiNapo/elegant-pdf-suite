@@ -71,7 +71,7 @@ const SEOHead = ({
     // self-referencing canonical until real server-localized pages exist.
 
     // Ensure favicon is always set to our custom icon (for Google indexing)
-    const faviconUrl = 'https://e-pdfs.com/favicon.png';
+    const faviconUrl = 'https://www.e-pdfs.com/favicon.png';
     setLinkTag('icon', '/favicon.png', 'image/png', '32x32');
     setLinkTag('icon', '/favicon.png', 'image/png', '16x16');
     setLinkTag('apple-touch-icon', '/favicon.png', undefined, '180x180');
@@ -92,7 +92,7 @@ const SEOHead = ({
     setMetaTag('og:type', ogType, true);
     // Always set og:image - use provided image or fallback to favicon
     const hasCustomImage = !!ogImage;
-    const effectiveOgImage = ogImage || 'https://e-pdfs.com/favicon.png';
+    const effectiveOgImage = ogImage || 'https://www.e-pdfs.com/favicon.png';
     // Custom article/featured images render as wide social cards; favicon stays square.
     const effectiveWidth = ogImageWidth ?? (hasCustomImage ? 1200 : 512);
     const effectiveHeight = ogImageHeight ?? (hasCustomImage ? 630 : 512);

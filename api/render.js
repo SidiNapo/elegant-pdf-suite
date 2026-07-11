@@ -3,8 +3,12 @@
 // <head> and a server-rendered <article> inside #root. The React SPA then hydrates
 // and replaces the snapshot on the client — client behaviour is unchanged.
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const SITE_URL = "https://e-pdfs.com";
 const SUPABASE_URL =

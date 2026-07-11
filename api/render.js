@@ -299,7 +299,7 @@ function renderNotFound(html, route) {
 }
 
 // ---- Handler ---------------------------------------------------------------
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   const template = loadTemplate();
   if (!template) {
     res.statusCode = 500;

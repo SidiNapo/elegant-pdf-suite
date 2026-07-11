@@ -8,6 +8,7 @@ export interface BlogPost {
   excerpt: string | null;
   content: string;
   featured_image: string | null;
+  featured_image_alt: string | null;
   author_name: string;
   meta_title: string | null;
   meta_description: string | null;

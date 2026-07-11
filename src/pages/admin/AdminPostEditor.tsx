@@ -15,10 +15,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import AdminLayout from '@/components/admin/AdminLayout';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
+import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { adminRoutes } from '@/config/adminRoutes';
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +41,7 @@ const AdminPostEditor = () => {
       excerpt: '',
       content: '',
       featured_image: '',
+      featured_image_alt: '',
       author_name: "E-Pdf's",
       meta_title: '',
       meta_description: '',
@@ -77,6 +80,7 @@ const AdminPostEditor = () => {
         excerpt: existingPost.excerpt || '',
         content: existingPost.content,
         featured_image: existingPost.featured_image || '',
+        featured_image_alt: existingPost.featured_image_alt || existingPost.title || '',
         author_name: existingPost.author_name,
         meta_title: existingPost.meta_title || '',
         meta_description: existingPost.meta_description || '',
@@ -139,6 +143,7 @@ const AdminPostEditor = () => {
         ...prev,
         featured_image: data.publicUrl,
         og_image: data.publicUrl,
+        featured_image_alt: prev.featured_image_alt || prev.title || '',
       }));
       
       const originalSize = (file.size / 1024).toFixed(1);
@@ -166,6 +171,10 @@ const AdminPostEditor = () => {
       const shouldSetPublishedAt = formData.is_published && (!existingPost?.published_at || !existingPost?.is_published);
       const postData = {
         ...formData,
+        content: sanitizeBlogHtml(formData.content),
+        featured_image_alt: formData.featured_image
+          ? (formData.featured_image_alt || formData.title)
+          : null,
         category_id: formData.category_id || null,
         published_at: formData.is_published 
           ? (existingPost?.published_at || new Date().toISOString())
@@ -264,19 +273,38 @@ const AdminPostEditor = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="content">Contenu *</Label>
-                <Textarea
-                  id="content"
+                <RichTextEditor
                   value={formData.content}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
-                  placeholder="Le contenu de votre article (HTML supporté)..."
-                  rows={15}
-                  className="font-mono text-sm"
+                  onChange={(html) => setFormData((prev) => ({ ...prev, content: html }))}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Vous pouvez utiliser du HTML pour le formatage.
+                  Utilisez la barre d'outils pour formater. Les titres commencent au H2
+                  (le titre de l'article est le seul H1 de la page).
                 </p>
               </div>
+
+              {/* Live content preview with public prose styles */}
+              {formData.content && (
+                <div className="space-y-2">
+                  <Label>Aperçu du contenu</Label>
+                  <div
+                    className="prose prose-lg max-w-none rounded-xl border border-border bg-background p-6
+                      prose-headings:font-bold prose-headings:text-foreground
+                      prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
+                      prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                      prose-h4:text-lg prose-h4:mt-4 prose-h4:mb-2
+                      prose-p:text-foreground/85 prose-p:leading-relaxed
+                      prose-a:text-primary prose-a:underline
+                      prose-strong:text-foreground
+                      prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-1
+                      prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:italic
+                      prose-img:rounded-xl"
+                    dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(formData.content) }}
+                  />
+                </div>
+              )}
             </motion.div>
+
 
             {/* SEO Section */}
             <motion.div
@@ -472,7 +500,7 @@ const AdminPostEditor = () => {
                 <div className="relative">
                   <img
                     src={formData.featured_image}
-                    alt="Featured"
+                    alt={formData.featured_image_alt || 'Aperçu'}
                     className="w-full aspect-video object-cover rounded-xl"
                   />
                   <button
@@ -524,6 +552,23 @@ const AdminPostEditor = () => {
                   placeholder="https://..."
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="featured_image_alt">Texte alternatif (alt)</Label>
+                <Input
+                  id="featured_image_alt"
+                  value={formData.featured_image_alt}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, featured_image_alt: e.target.value }))
+                  }
+                  placeholder="Décrivez l'image (SEO & accessibilité)"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Utilisé comme texte alternatif de l'image et og:image:alt. Par défaut,
+                  le titre de l'article.
+                </p>
+              </div>
+
             </motion.div>
           </div>
         </div>

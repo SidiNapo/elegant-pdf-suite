@@ -2,7 +2,19 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image';
+import BaseImage from '@tiptap/extension-image';
+
+const Image = BaseImage.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      width: { default: null },
+      height: { default: null },
+      loading: { default: 'lazy' },
+      decoding: { default: 'async' },
+    };
+  },
+});
 import {
   Bold, Italic, List, ListOrdered, Quote, Link as LinkIcon,
   Image as ImageIcon, Heading2, Heading3, Heading4, Pilcrow, Loader2,

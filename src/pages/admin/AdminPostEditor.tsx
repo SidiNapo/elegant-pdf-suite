@@ -80,6 +80,7 @@ const AdminPostEditor = () => {
         excerpt: existingPost.excerpt || '',
         content: existingPost.content,
         featured_image: existingPost.featured_image || '',
+        featured_image_alt: existingPost.featured_image_alt || existingPost.title || '',
         author_name: existingPost.author_name,
         meta_title: existingPost.meta_title || '',
         meta_description: existingPost.meta_description || '',

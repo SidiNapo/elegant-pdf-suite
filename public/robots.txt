@@ -35,7 +35,7 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap location (dynamic - always includes latest blog posts)
-Sitemap: https://e-pdfs.com/sitemap.xml
+Sitemap: https://www.e-pdfs.com/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin/

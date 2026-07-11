@@ -15,6 +15,7 @@ const BlogPost = () => {
   const { t, i18n } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug || '');
+  const { data: allPosts } = usePublishedPosts();
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">

@@ -145,11 +145,21 @@ const AdminPostEditor = () => {
 
       const { data } = supabase.storage.from('blog-images').getPublicUrl(filePath);
 
+      // Measure natural dimensions for og:image / ImageObject width & height.
+      const dims = await new Promise<{ w: number; h: number }>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+        img.onerror = () => resolve({ w: 1200, h: 630 });
+        img.src = data.publicUrl;
+      });
+
       setFormData((prev) => ({
         ...prev,
         featured_image: data.publicUrl,
         og_image: data.publicUrl,
         featured_image_alt: prev.featured_image_alt || prev.title || '',
+        featured_image_width: dims.w,
+        featured_image_height: dims.h,
       }));
       
       const originalSize = (file.size / 1024).toFixed(1);

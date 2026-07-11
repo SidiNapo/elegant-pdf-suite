@@ -500,7 +500,7 @@ const AdminPostEditor = () => {
                 <div className="relative">
                   <img
                     src={formData.featured_image}
-                    alt="Featured"
+                    alt={formData.featured_image_alt || 'Aperçu'}
                     className="w-full aspect-video object-cover rounded-xl"
                   />
                   <button

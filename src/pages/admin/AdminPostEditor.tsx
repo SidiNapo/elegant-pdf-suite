@@ -171,6 +171,10 @@ const AdminPostEditor = () => {
       const shouldSetPublishedAt = formData.is_published && (!existingPost?.published_at || !existingPost?.is_published);
       const postData = {
         ...formData,
+        content: sanitizeBlogHtml(formData.content),
+        featured_image_alt: formData.featured_image
+          ? (formData.featured_image_alt || formData.title)
+          : null,
         category_id: formData.category_id || null,
         published_at: formData.is_published 
           ? (existingPost?.published_at || new Date().toISOString())

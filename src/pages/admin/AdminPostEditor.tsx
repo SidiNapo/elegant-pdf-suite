@@ -15,10 +15,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import AdminLayout from '@/components/admin/AdminLayout';
+import RichTextEditor from '@/components/admin/RichTextEditor';
 import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
+import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { adminRoutes } from '@/config/adminRoutes';
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();

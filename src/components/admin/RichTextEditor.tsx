@@ -119,18 +119,13 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
           img.src = data.publicUrl;
         });
 
+        const altEsc = alt.trim().replace(/"/g, '&quot;');
         editor
           .chain()
           .focus()
-          .setImage({
-            src: data.publicUrl,
-            alt: alt.trim(),
-            // @ts-expect-error tiptap image supports arbitrary HTML attributes
-            width: dims.w,
-            height: dims.h,
-            loading: 'lazy',
-            decoding: 'async',
-          })
+          .insertContent(
+            `<img src="${data.publicUrl}" alt="${altEsc}" width="${dims.w}" height="${dims.h}" loading="lazy" decoding="async" />`
+          )
           .run();
         toast.success('Image insérée', { id: toastId });
       } catch (err) {

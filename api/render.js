@@ -255,7 +255,7 @@ function renderPost(html, slug, post) {
     dateModified: modified,
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     inLanguage: "fr",
-  };
+}
   html = injectHead(
     html,
     `  <script type="application/ld+json">${escapeJsonLd(

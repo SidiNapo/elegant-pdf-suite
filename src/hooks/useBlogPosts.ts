@@ -9,7 +9,10 @@ export interface BlogPost {
   content: string;
   featured_image: string | null;
   featured_image_alt: string | null;
+  featured_image_width: number | null;
+  featured_image_height: number | null;
   author_name: string;
+  language: string;
   meta_title: string | null;
   meta_description: string | null;
   meta_keywords: string | null;

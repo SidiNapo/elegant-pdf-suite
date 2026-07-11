@@ -118,11 +118,21 @@ const SEOHead = ({
     setMetaTag('twitter:description', description);
     setMetaTag('twitter:image', effectiveOgImage);
 
-    // Article specific meta tags
+    // Article specific meta tags. On non-article pages, strip any leftover
+    // article/author meta so pages don't carry stale article metadata.
+    const removeMeta = (name: string, property = false) => {
+      const attr = property ? 'property' : 'name';
+      const el = document.querySelector(`meta[${attr}="${name}"]`);
+      if (el) el.remove();
+    };
     if (ogType === 'article') {
       if (author) setMetaTag('author', author);
       if (publishedTime) setMetaTag('article:published_time', publishedTime, true);
       if (modifiedTime) setMetaTag('article:modified_time', modifiedTime, true);
+    } else {
+      removeMeta('article:published_time', true);
+      removeMeta('article:modified_time', true);
+      removeMeta('author');
     }
 
     // Cleanup function to reset to default

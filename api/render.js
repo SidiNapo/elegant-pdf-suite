@@ -364,10 +364,38 @@ function renderProgrammatic(html, page) {
   html = applyHead(html, {
     title: page.metaTitle, description: page.metaDescription, canonical, keywords: page.keywords,
   });
-  const snapshot = `<article><h1>${escapeHtml(page.h1)}</h1><p>${escapeHtml(page.intro)}</p></article>`;
+
+  // HowTo JSON-LD from the steps for richer indexing.
+  const steps = page.steps || [];
+  if (steps.length) {
+    const howTo = {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: page.h1,
+      description: page.metaDescription,
+      step: steps.map((s, i) => ({ "@type": "HowToStep", position: i + 1, name: s })),
+    };
+    html = injectHead(html, `  <script type="application/ld+json">${escapeJsonLd(JSON.stringify(howTo))}</script>`);
+  }
+
+  const paragraphs = (page.paragraphs || []).map((p) => `<p>${escapeHtml(p)}</p>`).join("");
+  const stepsHtml = steps.length
+    ? `<h2>Comment faire</h2><ol>${steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>`
+    : "";
+  const cta = page.toolPath
+    ? `<p><a href="${escapeHtml(page.toolPath)}">${escapeHtml(page.ctaLabel || "Ouvrir l'outil")}</a></p>`
+    : "";
+  const snapshot =
+    `<article><h1>${escapeHtml(page.h1)}</h1>` +
+    `<p>${escapeHtml(page.intro)}</p>` +
+    paragraphs +
+    stepsHtml +
+    cta +
+    `</article>`;
   html = injectIntoRoot(html, snapshot);
   return html;
 }
+
 
 function langName(code) {
   return code === "en" ? "en" : code === "ar" ? "ar" : "fr";

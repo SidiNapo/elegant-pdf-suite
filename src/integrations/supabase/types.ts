@@ -121,6 +121,21 @@ export type Database = {
           },
         ]
       }
+      heartbeat_log: {
+        Row: {
+          id: string
+          pinged_at: string
+        }
+        Insert: {
+          id?: string
+          pinged_at?: string
+        }
+        Update: {
+          id?: string
+          pinged_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

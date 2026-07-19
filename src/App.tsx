@@ -103,6 +103,11 @@ const App = () => (
                 <AdminGuard><AdminCategories /></AdminGuard>
               </Suspense>
             } />
+            <Route path={`/${ADMIN_BASE_PATH}/messages`} element={
+              <Suspense fallback={<PageLoader />}>
+                <AdminGuard><AdminMessages /></AdminGuard>
+              </Suspense>
+            } />
             <Route path="/merge" element={<MergePDF />} />
             <Route path="/split" element={<SplitPDF />} />
             <Route path="/delete-pages" element={<DeletePages />} />

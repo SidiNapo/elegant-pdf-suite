@@ -301,6 +301,32 @@ const AdminPostEditor = () => {
 
   return (
     <AdminLayout title={isEditing ? 'Modifier l\'article' : 'Nouvel article'}>
+      {/* Autosave indicator + media library shortcut. Sticky so it stays
+          visible while scrolling the long form. */}
+      <div className="sticky top-0 z-10 -mx-4 md:mx-0 px-4 py-2 mb-4 flex items-center justify-between gap-3 rounded-xl bg-background/80 backdrop-blur border border-border">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+          <span>
+            Brouillon enregistré {draftSavedAt ? formatAgo(draftSavedAt, now) : ''}
+          </span>
+          <span className="hidden md:inline opacity-60">·</span>
+          <span className="hidden md:inline opacity-60">
+            Astuce : <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px]">Ctrl</kbd>
+            <span className="mx-0.5">+</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px]">S</kbd> pour sauvegarder
+          </span>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => { setMediaTarget('featured'); setMediaOpen(true); }}
+        >
+          <FolderOpen className="w-4 h-4" /> Médiathèque
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}

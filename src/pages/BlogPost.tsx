@@ -31,7 +31,7 @@ const BlogPost = () => {
         <SEOHead
           title={t('blog.notFound', { defaultValue: 'Article introuvable' }) + " — E-PDF's"}
           description={t('blog.notFoundDescription', { defaultValue: "Cet article n'existe pas ou a été supprimé." })}
-          noindex
+          noIndex
         />
         <Header />
         <main id="main-content" className="pt-24 pb-16">

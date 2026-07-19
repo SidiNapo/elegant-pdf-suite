@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:seo": "node scripts/seo-smoke.mjs",
+    "test:canonical": "node scripts/canonical.test.mjs",
     "preview": "vite preview"
   },
   "packageManager": "npm@10.0.0",

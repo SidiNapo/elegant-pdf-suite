@@ -251,6 +251,44 @@ const AdminPostEditor = () => {
     }
   };
 
+  // Media library picker — reused for both the featured image and the
+  // per-post OG override. The library returns measured dimensions so the
+  // saved record always carries accurate og:image:width/height.
+  const handleMediaPick = useCallback(
+    (item: { url: string; width: number; height: number }) => {
+      if (mediaTarget === 'og') {
+        setFormData((prev) => ({ ...prev, og_image: item.url }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          featured_image: item.url,
+          og_image: prev.og_image || item.url,
+          featured_image_alt: prev.featured_image_alt || prev.title || '',
+          featured_image_width: item.width,
+          featured_image_height: item.height,
+        }));
+      }
+    },
+    [mediaTarget]
+  );
+
+  // Ctrl/Cmd+S saves without going through the browser's Save Page dialog.
+  // We hook the form's submit handler via a ref to keep the effect stable
+  // regardless of formData churn.
+  const submitRef = useRef<((e: React.FormEvent) => Promise<void>) | null>(null);
+  submitRef.current = handleSubmit;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        submitRef.current?.(new Event('submit') as unknown as React.FormEvent);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+
   if (isEditing && isLoadingPost) {
     return (
       <AdminLayout title="Chargement...">

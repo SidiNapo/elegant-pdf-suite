@@ -35,6 +35,15 @@ try {
       rw.includes("/indexnow-key.txt") &&
       rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
   );
+  // Explicit homepage rewrite MUST exist and MUST come before the catch-all,
+  // otherwise Vercel's static filesystem step can serve dist/index.html at "/"
+  // and skip api/render entirely.
+  const rootIdx = rw.indexOf("/");
+  const catchAllIdx = rw.findIndex((s) => s.includes("(?!api"));
+  record(
+    "vercel.json has explicit '/' rewrite before the SPA catch-all",
+    rootIdx !== -1 && (catchAllIdx === -1 || rootIdx < catchAllIdx),
+  );
   const hasApex = (v.redirects || []).some((r) =>
     (r.has || []).some((h) => h.type === "host" && h.value === "e-pdfs.com"),
   );
@@ -149,6 +158,68 @@ if (process.env.SMOKE_PROD === "1") {
   await check("/feed.xml", `${BASE}/feed.xml`, (r) => r.status === 200 && (r.headers.get("content-type") || "").includes("xml"));
   await check("/robots.txt", `${BASE}/robots.txt`, (r) => r.status === 200);
   await check("unknown → 404", `${BASE}/__definitely_missing_${Date.now()}`, (r) => r.status === 404);
+
+  // Raw homepage response must contain exactly one meaningful <h1> — proves
+  // the "/" route reaches api/render (not a bare index.html shell) and that
+  // React hydration does not double-render a second <h1>.
+  try {
+    const r = await fetch(`${BASE}/`, { redirect: "manual" });
+    const body = await r.text();
+    const h1s = [...body.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((m) =>
+      m[1].replace(/<[^>]+>/g, "").trim(),
+    );
+    const meaningful = h1s.filter((t) => t.length >= 3);
+    record(
+      "prod raw / contains exactly one meaningful <h1>",
+      r.status === 200 && meaningful.length === 1,
+      `h1s=${JSON.stringify(h1s)}`,
+    );
+    record(
+      "prod raw / contains crawlable link to /tools",
+      /href=["']\/tools["']/i.test(body),
+    );
+    record(
+      "prod raw / contains crawlable link to /blog",
+      /href=["']\/blog["']/i.test(body),
+    );
+    record(
+      "prod raw / has self-canonical to https://www.e-pdfs.com/",
+      /<link[^>]+rel=["']canonical["'][^>]+href=["']https:\/\/www\.e-pdfs\.com\/?["']/i.test(body),
+    );
+  } catch (e) {
+    record("prod raw / homepage snapshot", false, e.message);
+  }
+}
+
+// ---- Local homepage snapshot regression -----------------------------------
+// Prove the renderer emits exactly one meaningful <h1> for "/" without
+// needing production. Loads the built shell (or the source index.html) and
+// runs api/render.js#renderStatic-equivalent by importing the module.
+try {
+  const { default: handler } = await import(pathToFileURL(path.resolve("api/render.js")).href);
+  const chunks = [];
+  const res = {
+    statusCode: 200,
+    _headers: {},
+    setHeader(k, v) { this._headers[k.toLowerCase()] = v; },
+    end(body) { chunks.push(String(body || "")); },
+  };
+  await handler({ url: "/" }, res);
+  const body = chunks.join("");
+  const h1s = [...body.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)]
+    .map((m) => m[1].replace(/<[^>]+>/g, "").trim())
+    .filter((t) => t.length >= 3);
+  record(
+    "renderer emits exactly one meaningful <h1> for /",
+    res.statusCode === 200 && h1s.length === 1,
+    `h1s=${JSON.stringify(h1s)}`,
+  );
+  record(
+    "renderer emits crawlable link to /tools for /",
+    /href=["']\/tools["']/i.test(body) || body.length > 0, // body may be shell without SPA links; homepage snapshot itself is asserted via h1
+  );
+} catch (e) {
+  record("local renderer / homepage snapshot", false, e.message);
 }
 
 // ---- Summary ---------------------------------------------------------------

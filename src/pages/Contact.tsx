@@ -311,6 +311,11 @@ const Contact = () => {
               duration: 0.8
             }}>
                 <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-xl border border-border/50 space-y-6">
+                  {/* Honeypot — hidden from users, catches bots */}
+                  <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', top: 'auto', width: 1, height: 1, overflow: 'hidden' }}>
+                    <label htmlFor="website">Website</label>
+                    <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="firstName" className="text-foreground font-medium">

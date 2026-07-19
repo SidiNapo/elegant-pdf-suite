@@ -29,6 +29,7 @@ const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminPosts = lazy(() => import("./pages/admin/AdminPosts"));
 const AdminPostEditor = lazy(() => import("./pages/admin/AdminPostEditor"));
 const AdminCategories = lazy(() => import("./pages/admin/AdminCategories"));
+const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminGuard = lazy(() => import("./components/admin/AdminGuard"));
 
 // Tool pages - lazy loaded for optimal bundle splitting

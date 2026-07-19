@@ -46,10 +46,10 @@ const Blog = () => {
         canonicalUrl="https://www.e-pdfs.com/blog"
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
 
-        <main className="pt-24 pb-16">
+        <main id="main-content" className="pt-24 pb-16">
           <div className="container mx-auto px-4">
             {/* Hero Section - No animations for speed */}
             <div className="text-center mb-12">

@@ -66,7 +66,7 @@ const AdminLogin = () => {
   // Show loading while checking auth state
   if (loading || !adminChecked) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -75,7 +75,7 @@ const AdminLogin = () => {
   // If user is logged in but not admin, show message
   if (user && !isAdmin) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="text-muted-foreground">Vous n'avez pas les droits d'administrateur.</p>
           <Button onClick={() => navigate('/')} variant="outline">
@@ -87,7 +87,7 @@ const AdminLogin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-dvh bg-background flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

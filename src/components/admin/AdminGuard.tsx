@@ -14,7 +14,7 @@ const AdminGuard = ({ children }: AdminGuardProps) => {
   // Show loading while auth state is being determined
   if (loading || !adminChecked) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -28,7 +28,7 @@ const AdminGuard = ({ children }: AdminGuardProps) => {
   // Show not authorized if user is not admin
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <div className="text-center space-y-6 p-8">
           <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
             <ShieldX className="w-8 h-8 text-destructive" />

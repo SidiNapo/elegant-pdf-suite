@@ -89,10 +89,10 @@ const Privacy = () => {
         canonicalUrl="https://www.e-pdfs.com/privacy"
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
 
-        <main className="pt-20">
+        <main id="main-content" className="pt-20">
           {/* Hero Section */}
           <section className="relative py-20 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-background to-primary/5" />

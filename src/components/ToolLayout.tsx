@@ -74,10 +74,10 @@ const ToolLayout = ({
         keywords={seoKeywords || seo.keywords}
         canonicalUrl={canonicalUrl}
       />
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-dvh flex flex-col">
         <Header />
       
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section with Background Image */}
         <section className="pt-24 pb-12 relative overflow-hidden">
           <div className="absolute inset-0">

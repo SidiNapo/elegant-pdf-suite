@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CookieConsent from "@/components/CookieConsent";
+import SkipToContent from "@/components/SkipToContent";
 import ScrollToTop from "./components/ScrollToTop";
 import PageLoader from "./components/PageLoader";
 import { ADMIN_BASE_PATH } from "@/config/adminRoutes";
@@ -67,6 +68,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <SkipToContent />
         <CookieConsent />
         <Suspense fallback={<PageLoader />}>
           <Routes>

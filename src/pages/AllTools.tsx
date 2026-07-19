@@ -264,10 +264,10 @@ const AllTools = () => {
         keywords="PDF tools, all PDF tools, free PDF tools, online PDF, merge PDF, split PDF, compress PDF, convert PDF, PDF editor"
         canonicalUrl="https://www.e-pdfs.com/tools"
       />
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-dvh flex flex-col">
         <Header />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section with Image */}
         <section className="pt-24 pb-16 relative overflow-hidden">
           <div className="absolute inset-0">

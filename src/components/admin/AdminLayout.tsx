@@ -95,7 +95,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     );
 
     return (
-      <div ref={ref} className="min-h-screen bg-background flex flex-col md:flex-row">
+      <div ref={ref} className="min-h-dvh bg-background flex flex-col md:flex-row">
         {/* Mobile Header */}
         {isMobile && (
           <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-background border-b border-border flex items-center justify-between px-4">
@@ -128,7 +128,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 overflow-auto ${isMobile ? 'pt-16' : 'ml-64'}`}>
+        <main id="main-content" className={`flex-1 overflow-auto ${isMobile ? 'pt-16' : 'ml-64'}`}>
           <div className="p-4 md:p-8">
             <motion.div
               initial={{ opacity: 0, y: 10 }}

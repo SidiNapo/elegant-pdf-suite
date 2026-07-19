@@ -475,20 +475,16 @@ const AdminPostEditor = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="canonical_url">URL canonique</Label>
-                <Input
-                  id="canonical_url"
-                  value={formData.canonical_url}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
-                  }
-                  placeholder={`https://www.e-pdfs.com/blog/${formData.slug || 'slug'}`}
-                />
+                <Label>URL canonique</Label>
+                <p className="text-sm font-mono text-muted-foreground break-all">
+                  https://www.e-pdfs.com/blog/{formData.slug || 'slug'}
+                </p>
                 <p className="text-xs text-muted-foreground">
-                  Laissez vide pour utiliser l'URL automatique. Sinon, saisissez exactement{' '}
-                  <code>https://www.e-pdfs.com/blog/{formData.slug || 'slug'}</code> (sans paramètres ni ancre).
+                  Générée automatiquement à partir du slug — non modifiable.
                 </p>
               </div>
+
+
 
 
               {/* SEO Preview */}

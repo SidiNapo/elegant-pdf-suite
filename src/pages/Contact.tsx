@@ -34,6 +34,8 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  // Honeypot field — real users leave empty; bots fill everything.
+  const [website, setWebsite] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -44,45 +46,34 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // Validate form data
       const validatedData = contactSchema.parse(formData);
 
-      // Call edge function to send email
-      const {
-        error
-      } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          firstName: validatedData.firstName,
-          lastName: validatedData.lastName,
-          email: validatedData.email,
-          subject: validatedData.subject,
-          message: validatedData.message
-        }
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: { ...validatedData, website }
       });
       if (error) {
-        throw error;
+        const details = (error as { context?: Response }).context
+          ? await (error as { context: Response }).context.clone().text().catch(() => '')
+          : '';
+        if (details.includes('Too many requests')) {
+          toast.error(t('contact.rateLimitMessage', { defaultValue: 'Too many requests. Please try again in a few minutes.' }));
+        } else {
+          toast.error(t('contact.errorMessage', { defaultValue: 'Could not send your message. Please try again.' }));
+        }
+        return;
+      }
+      if (data && (data as { error?: string }).error) {
+        toast.error((data as { error: string }).error);
+        return;
       }
       toast.success(t('contact.successMessage'));
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
+      setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
+      setWebsite('');
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        // Still show success for now (form submission logged)
-        toast.success(t('contact.successMessage'));
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
+        toast.error(t('contact.errorMessage', { defaultValue: 'Could not send your message. Please try again.' }));
       }
     } finally {
       setIsSubmitting(false);

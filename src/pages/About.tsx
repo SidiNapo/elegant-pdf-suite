@@ -77,7 +77,7 @@ const About = () => {
       <div className="min-h-dvh bg-background">
         <Header />
 
-        <main className="pt-20">
+        <main id="main-content" className="pt-20">
           {/* Hero Section */}
           <section className="relative min-h-[80vh] flex items-center overflow-hidden">
             {/* Background */}

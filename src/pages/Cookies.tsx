@@ -110,7 +110,7 @@ const Cookies = () => {
       />
       <div className="min-h-dvh bg-background">
         <Header />
-        <main>
+        <main id="main-content">
           <section className="container mx-auto px-4 py-16 max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 12 }}

@@ -267,7 +267,7 @@ const AllTools = () => {
       <div className="min-h-dvh flex flex-col">
         <Header />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero Section with Image */}
         <section className="pt-24 pb-16 relative overflow-hidden">
           <div className="absolute inset-0">

@@ -74,7 +74,7 @@ const Terms = () => {
       <div className="min-h-dvh bg-background">
         <Header />
 
-        <main className="pt-20">
+        <main id="main-content" className="pt-20">
           {/* Hero Section */}
           <section className="relative py-20 overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />

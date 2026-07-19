@@ -128,7 +128,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 overflow-auto ${isMobile ? 'pt-16' : 'ml-64'}`}>
+        <main id="main-content" className={`flex-1 overflow-auto ${isMobile ? 'pt-16' : 'ml-64'}`}>
           <div className="p-4 md:p-8">
             <motion.div
               initial={{ opacity: 0, y: 10 }}

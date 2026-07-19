@@ -154,7 +154,7 @@ const Contact = () => {
       <FAQSchema questions={faqData} />
       <Header />
       
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow">
         {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background Elements */}

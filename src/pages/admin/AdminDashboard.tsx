@@ -39,13 +39,14 @@ const AdminDashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-6"
           >
-            <div className="flex items-center justify-between mb-4">
-              <stat.icon className={`w-8 h-8 ${stat.color}`} />
-            </div>
-            <p className="text-3xl font-bold mb-1">{stat.value}</p>
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
+            <Link to={stat.href} className="glass-card rounded-2xl p-6 block hover:bg-muted/40 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <stat.icon className={`w-8 h-8 ${stat.color}`} />
+              </div>
+              <p className="text-3xl font-bold mb-1">{stat.value}</p>
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+            </Link>
           </motion.div>
         ))}
       </div>

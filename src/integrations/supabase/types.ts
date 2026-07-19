@@ -136,6 +136,38 @@ export type Database = {
         }
         Relationships: []
       }
+      post_views: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          viewed_on: string
+          visitor_hash: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          viewed_on?: string
+          visitor_hash: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          viewed_on?: string
+          visitor_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_views_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -162,6 +194,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_post_views: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -170,6 +203,10 @@ export type Database = {
         Returns: boolean
       }
       increment_post_views: { Args: { post_id: string }; Returns: undefined }
+      record_post_view: {
+        Args: { _post_id: string; _visitor_hash: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

@@ -674,6 +674,16 @@ const AdminPostEditor = () => {
                 />
               </div>
 
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => { setMediaTarget('featured'); setMediaOpen(true); }}
+              >
+                <FolderOpen className="w-4 h-4" /> Choisir depuis la médiathèque
+              </Button>
+
               <div className="space-y-2">
                 <Label htmlFor="featured_image_alt">Texte alternatif (alt)</Label>
                 <Input
@@ -689,13 +699,74 @@ const AdminPostEditor = () => {
                   le titre de l'article.
                 </p>
               </div>
+            </motion.div>
 
+            {/* Per-post Open Graph image override.
+                Defaults to featured_image via the SEOHead component if left
+                empty; setting it here lets the admin ship a dedicated 1200x630
+                social preview without changing the in-page hero. */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="glass-card rounded-2xl p-6 space-y-4"
+            >
+              <div className="flex items-center gap-2">
+                <Share2 className="w-4 h-4 text-primary" />
+                <h2 className="text-lg font-bold">Image sociale (og:image)</h2>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Facultatif. Utilisée par Facebook, LinkedIn, X et l'aperçu de messagerie.
+                Recommandé : 1200×630 px. Laissez vide pour réutiliser l'image à la une.
+              </p>
+
+              {formData.og_image && formData.og_image !== formData.featured_image && (
+                <div className="relative">
+                  <img
+                    src={formData.og_image}
+                    alt="Aperçu og:image"
+                    className="w-full aspect-[1200/630] object-cover rounded-xl border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, og_image: '' }))}
+                    className="absolute top-2 right-2 p-2 bg-destructive rounded-lg text-white"
+                    aria-label="Retirer l'image sociale"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              <Input
+                value={formData.og_image}
+                onChange={(e) => setFormData((prev) => ({ ...prev, og_image: e.target.value }))}
+                placeholder="https://..."
+              />
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => { setMediaTarget('og'); setMediaOpen(true); }}
+              >
+                <FolderOpen className="w-4 h-4" /> Choisir depuis la médiathèque
+              </Button>
             </motion.div>
           </div>
         </div>
       </form>
+
+      <MediaLibrary
+        open={mediaOpen}
+        onOpenChange={setMediaOpen}
+        onPick={handleMediaPick}
+        pickLabel={mediaTarget === 'og' ? 'Utiliser comme og:image' : 'Utiliser comme image à la une'}
+      />
     </AdminLayout>
   );
 };
 
 export default AdminPostEditor;
+

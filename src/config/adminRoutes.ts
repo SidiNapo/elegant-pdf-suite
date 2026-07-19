@@ -9,6 +9,7 @@ export const adminRoutes = {
   postsNew: `/${ADMIN_BASE_PATH}/posts/new`,
   postsEdit: (id: string) => `/${ADMIN_BASE_PATH}/posts/${id}/edit`,
   categories: `/${ADMIN_BASE_PATH}/categories`,
+  messages: `/${ADMIN_BASE_PATH}/messages`,
 };
 
 // Helper to check if a path is an admin path

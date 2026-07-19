@@ -34,6 +34,8 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  // Honeypot field — real users leave empty; bots fill everything.
+  const [website, setWebsite] = useState('');
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -44,45 +46,34 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // Validate form data
       const validatedData = contactSchema.parse(formData);
 
-      // Call edge function to send email
-      const {
-        error
-      } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          firstName: validatedData.firstName,
-          lastName: validatedData.lastName,
-          email: validatedData.email,
-          subject: validatedData.subject,
-          message: validatedData.message
-        }
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: { ...validatedData, website }
       });
       if (error) {
-        throw error;
+        const details = (error as { context?: Response }).context
+          ? await (error as { context: Response }).context.clone().text().catch(() => '')
+          : '';
+        if (details.includes('Too many requests')) {
+          toast.error(t('contact.rateLimitMessage', { defaultValue: 'Too many requests. Please try again in a few minutes.' }));
+        } else {
+          toast.error(t('contact.errorMessage', { defaultValue: 'Could not send your message. Please try again.' }));
+        }
+        return;
+      }
+      if (data && (data as { error?: string }).error) {
+        toast.error((data as { error: string }).error);
+        return;
       }
       toast.success(t('contact.successMessage'));
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
+      setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
+      setWebsite('');
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        // Still show success for now (form submission logged)
-        toast.success(t('contact.successMessage'));
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
+        toast.error(t('contact.errorMessage', { defaultValue: 'Could not send your message. Please try again.' }));
       }
     } finally {
       setIsSubmitting(false);
@@ -320,6 +311,11 @@ const Contact = () => {
               duration: 0.8
             }}>
                 <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-xl border border-border/50 space-y-6">
+                  {/* Honeypot — hidden from users, catches bots */}
+                  <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', top: 'auto', width: 1, height: 1, overflow: 'hidden' }}>
+                    <label htmlFor="website">Website</label>
+                    <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="firstName" className="text-foreground font-medium">

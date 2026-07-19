@@ -121,6 +121,48 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          ip_hash: string | null
+          last_name: string
+          message: string
+          status: Database["public"]["Enums"]["contact_status"]
+          subject: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          ip_hash?: string | null
+          last_name: string
+          message: string
+          status?: Database["public"]["Enums"]["contact_status"]
+          subject: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          ip_hash?: string | null
+          last_name?: string
+          message?: string
+          status?: Database["public"]["Enums"]["contact_status"]
+          subject?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       heartbeat_log: {
         Row: {
           id: string
@@ -210,6 +252,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      contact_status: "new" | "read" | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -338,6 +381,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      contact_status: ["new", "read", "archived"],
     },
   },
 } as const

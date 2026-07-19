@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen, Menu, X } from 'lucide-react';
+import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen, Menu, X, Inbox } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { adminRoutes } from '@/config/adminRoutes';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useUnreadContactCount } from '@/hooks/useContactMessages';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     const { signOut } = useAuth();
     const isMobile = useIsMobile();
     const [isOpen, setIsOpen] = useState(false);
+    const { data: unread = 0 } = useUnreadContactCount();
 
     const handleSignOut = async () => {
       await signOut();
@@ -29,9 +31,10 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     };
 
     const navItems = [
-      { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard },
-      { name: 'Articles', href: adminRoutes.posts, icon: FileEdit },
-      { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen },
+      { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard, badge: 0 },
+      { name: 'Articles', href: adminRoutes.posts, icon: FileEdit, badge: 0 },
+      { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen, badge: 0 },
+      { name: 'Messages', href: adminRoutes.messages, icon: Inbox, badge: unread },
     ];
 
     const SidebarContent = () => (
@@ -60,7 +63,12 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                {item.name}
+                <span className="flex-1">{item.name}</span>
+                {item.badge > 0 && (
+                  <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             );
           })}

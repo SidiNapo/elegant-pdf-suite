@@ -3,7 +3,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const SITE = "https://www.e-pdfs.com";
-const INDEXNOW_KEY = "31f111445d5743948a69faa4683de47f941608e23f4a438d946133376f8f64a7";
+// Same value as the Vercel INDEXNOW_KEY env var. Served at /indexnow-key.txt
+// via api/indexnow-key.js — the keyLocation below MUST match that path exactly.
+const INDEXNOW_KEY = (Deno.env.get("INDEXNOW_KEY") ?? "").trim();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -49,18 +51,23 @@ Deno.serve(async (req) => {
 
     const results: Record<string, unknown> = {};
 
-    // 1) IndexNow — instantly notifies Bing, Yandex, Seznam, Naver
-    const indexNowRes = await fetch("https://api.indexnow.org/indexnow", {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        host: "www.e-pdfs.com",
-        key: INDEXNOW_KEY,
-        keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`,
-        urlList: urls,
-      }),
-    });
-    results.indexnow = { status: indexNowRes.status };
+    // 1) IndexNow — instantly notifies Bing, Yandex, Seznam, Naver.
+    // Skip cleanly if the key is not configured; sitemap ping below still runs.
+    if (INDEXNOW_KEY) {
+      const indexNowRes = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          host: "www.e-pdfs.com",
+          key: INDEXNOW_KEY,
+          keyLocation: `${SITE}/indexnow-key.txt`,
+          urlList: urls,
+        }),
+      });
+      results.indexnow = { status: indexNowRes.status };
+    } else {
+      results.indexnow = { skipped: "INDEXNOW_KEY not configured" };
+    }
 
     // 2) Ping Bing webmaster ping (extra signal)
     try {

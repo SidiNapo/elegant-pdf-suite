@@ -4,15 +4,10 @@ import { PROGRAMMATIC_PAGES } from "./_programmatic.js";
 
 const SITE_URL = "https://www.e-pdfs.com";
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  "https://obetkqazuirhntzpjzou.supabase.co";
-const SUPABASE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9iZXRrcWF6dWlyaG50enBqem91Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3MjE2NjcsImV4cCI6MjA4MzI5NzY2N30.IhL7av9GynEuMDTkVYV8g-yOUHYutySu3KcD_H8Vrzk";
+// Public rendering uses ONLY the anon key. Never fall back to the service-role
+// key here — it's reserved for privileged server jobs.
+const SUPABASE_URL = process.env.SUPABASE_URL || "";
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || "";
 
 const STATIC_ROUTES = [
   { path: "/", priority: "1.0", changefreq: "daily" },

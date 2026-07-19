@@ -28,8 +28,12 @@ try {
   const rw = (v.rewrites || []).map((r) => r.source);
   record("vercel.json parses", true);
   record(
-    "vercel.json rewrites /sitemap.xml, /feed.xml, /ads.txt, SPA",
-    rw.includes("/sitemap.xml") && rw.includes("/feed.xml") && rw.includes("/ads.txt") && rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
+    "vercel.json rewrites /sitemap.xml, /feed.xml, /ads.txt, /indexnow-key.txt, SPA",
+    rw.includes("/sitemap.xml") &&
+      rw.includes("/feed.xml") &&
+      rw.includes("/ads.txt") &&
+      rw.includes("/indexnow-key.txt") &&
+      rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
   );
   const hasApex = (v.redirects || []).some((r) =>
     (r.has || []).some((h) => h.type === "host" && h.value === "e-pdfs.com"),
@@ -79,10 +83,50 @@ try {
   record("robots.txt readable", false, e.message);
 }
 
-// ---- IndexNow key files ----------------------------------------------------
-const inFiles = fs.readdirSync("public").filter((f) => /^[0-9a-f]{64}\.txt$/i.test(f));
-record("IndexNow raw key file present", inFiles.length > 0, inFiles.join(","));
-record("IndexNow alias /indexnow-key.txt present", fs.existsSync("public/indexnow-key.txt"));
+// ---- IndexNow ownership: dynamic handler, no static key files -------------
+record(
+  "IndexNow handler api/indexnow-key.js exists",
+  fs.existsSync("api/indexnow-key.js"),
+);
+const strayIn = fs
+  .readdirSync("public")
+  .filter((f) => /^[0-9a-f]{40,}\.txt$/i.test(f) || f === "indexnow-key.txt");
+record(
+  "no obsolete IndexNow key files under public/",
+  strayIn.length === 0,
+  strayIn.join(","),
+);
+
+// ---- No service-role key referenced in public render functions ------------
+for (const f of ["api/render.js", "api/sitemap.js", "api/feed.js"]) {
+  const src = fs.readFileSync(f, "utf8");
+  record(
+    `${f} does not reference SUPABASE_SERVICE_ROLE_KEY`,
+    !/SUPABASE_SERVICE_ROLE_KEY/.test(src),
+  );
+}
+
+// ---- Cookies + DMCA coverage ----------------------------------------------
+const renderSrc = fs.readFileSync("api/render.js", "utf8");
+record("api/render.js handles /cookies", /"\/cookies"/.test(renderSrc));
+record("api/render.js handles /dmca", /"\/dmca"/.test(renderSrc));
+const sitemapSrc = fs.readFileSync("api/sitemap.js", "utf8");
+record("api/sitemap.js lists /cookies", /"\/cookies"/.test(sitemapSrc));
+record("api/sitemap.js lists /dmca", /"\/dmca"/.test(sitemapSrc));
+const footerSrc = fs.readFileSync("src/components/Footer.tsx", "utf8");
+record("Footer links to /cookies", /['"]\/cookies['"]/.test(footerSrc));
+record("Footer links to /dmca", /['"]\/dmca['"]/.test(footerSrc));
+
+// ---- ads.txt: no committed placeholder publisher id -----------------------
+const adsSrc = fs.readFileSync("api/ads.js", "utf8");
+record(
+  "api/ads.js gates on real ADSENSE_PUBLISHER_ID (pub-XXXXXXXXXXXXXXXX)",
+  /pub-\\d\{16\}/.test(adsSrc) || /pub-\\\\d\{16\}/.test(adsSrc) || /\/\^pub-\\d\{16\}\$\//.test(adsSrc) || /pub-\d{16}/.test(adsSrc),
+);
+record(
+  "no committed placeholder pub-id string in ads.js",
+  !/pub-0{16}|pub-1{16}|pub-1234567890123456/.test(adsSrc),
+);
 
 // ---- Optional production HEAD/GET checks -----------------------------------
 if (process.env.SMOKE_PROD === "1") {
@@ -99,6 +143,8 @@ if (process.env.SMOKE_PROD === "1") {
   await check("apex→www redirect", "https://e-pdfs.com/", (r) => [301, 308].includes(r.status));
   await check("/ 200", `${BASE}/`, (r) => r.status === 200);
   await check("/blog 200", `${BASE}/blog`, (r) => r.status === 200);
+  await check("/cookies 200", `${BASE}/cookies`, (r) => r.status === 200);
+  await check("/dmca 200", `${BASE}/dmca`, (r) => r.status === 200);
   await check("/sitemap.xml", `${BASE}/sitemap.xml`, (r) => r.status === 200 && (r.headers.get("content-type") || "").includes("xml"));
   await check("/feed.xml", `${BASE}/feed.xml`, (r) => r.status === 200 && (r.headers.get("content-type") || "").includes("xml"));
   await check("/robots.txt", `${BASE}/robots.txt`, (r) => r.status === 200);

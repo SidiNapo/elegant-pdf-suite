@@ -333,7 +333,7 @@ function langName(code) {
 
 function renderBlogIndex(html, posts) {
   const meta = STATIC_ROUTES["/blog"];
-  const canonical = `${SITE_URL}/blog`;
+  const canonical = safeCanonical("/blog");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
 
   const cards = (posts || []).map((p) => {

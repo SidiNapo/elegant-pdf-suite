@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Save, Eye, Image, Loader2, AlertCircle } from 'lucide-react';
+import { Save, Eye, Image, Loader2, AlertCircle, CheckCircle2, FolderOpen, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,12 +16,25 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/components/admin/AdminLayout';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import MediaLibrary from '@/components/admin/MediaLibrary';
 import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
 import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { adminRoutes } from '@/config/adminRoutes';
+
+// Small helper: humanize "seconds ago" for the draft-saved indicator.
+function formatAgo(ms: number, now: number): string {
+  const seconds = Math.max(0, Math.floor((now - ms) / 1000));
+  if (seconds < 5) return "à l'instant";
+  if (seconds < 60) return `il y a ${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `il y a ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  return `il y a ${hours}h`;
+}
+
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -65,13 +78,27 @@ const AdminPostEditor = () => {
 
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
+  const [mediaTarget, setMediaTarget] = useState<'featured' | 'og'>('featured');
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
 
-  // Persist form data to sessionStorage on every change
+  // Persist form data to sessionStorage on every change, and remember the
+  // last-persisted timestamp so we can render a "Draft saved …" indicator.
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+      setDraftSavedAt(Date.now());
     } catch { /* ignore quota errors */ }
   }, [formData, STORAGE_KEY]);
+
+  // Tick every 10s so the "saved Xs ago" label stays fresh without churning
+  // on every keystroke.
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 10000);
+    return () => window.clearInterval(t);
+  }, []);
+
 
   // Load existing post data when editing
   useEffect(() => {
@@ -224,6 +251,44 @@ const AdminPostEditor = () => {
     }
   };
 
+  // Media library picker — reused for both the featured image and the
+  // per-post OG override. The library returns measured dimensions so the
+  // saved record always carries accurate og:image:width/height.
+  const handleMediaPick = useCallback(
+    (item: { url: string; width: number; height: number }) => {
+      if (mediaTarget === 'og') {
+        setFormData((prev) => ({ ...prev, og_image: item.url }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          featured_image: item.url,
+          og_image: prev.og_image || item.url,
+          featured_image_alt: prev.featured_image_alt || prev.title || '',
+          featured_image_width: item.width,
+          featured_image_height: item.height,
+        }));
+      }
+    },
+    [mediaTarget]
+  );
+
+  // Ctrl/Cmd+S saves without going through the browser's Save Page dialog.
+  // We hook the form's submit handler via a ref to keep the effect stable
+  // regardless of formData churn.
+  const submitRef = useRef<((e: React.FormEvent) => Promise<void>) | null>(null);
+  submitRef.current = handleSubmit;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        submitRef.current?.(new Event('submit') as unknown as React.FormEvent);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+
   if (isEditing && isLoadingPost) {
     return (
       <AdminLayout title="Chargement...">
@@ -236,6 +301,32 @@ const AdminPostEditor = () => {
 
   return (
     <AdminLayout title={isEditing ? 'Modifier l\'article' : 'Nouvel article'}>
+      {/* Autosave indicator + media library shortcut. Sticky so it stays
+          visible while scrolling the long form. */}
+      <div className="sticky top-0 z-10 -mx-4 md:mx-0 px-4 py-2 mb-4 flex items-center justify-between gap-3 rounded-xl bg-background/80 backdrop-blur border border-border">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+          <span>
+            Brouillon enregistré {draftSavedAt ? formatAgo(draftSavedAt, now) : ''}
+          </span>
+          <span className="hidden md:inline opacity-60">·</span>
+          <span className="hidden md:inline opacity-60">
+            Astuce : <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px]">Ctrl</kbd>
+            <span className="mx-0.5">+</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border text-[10px]">S</kbd> pour sauvegarder
+          </span>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => { setMediaTarget('featured'); setMediaOpen(true); }}
+        >
+          <FolderOpen className="w-4 h-4" /> Médiathèque
+        </Button>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -583,6 +674,16 @@ const AdminPostEditor = () => {
                 />
               </div>
 
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => { setMediaTarget('featured'); setMediaOpen(true); }}
+              >
+                <FolderOpen className="w-4 h-4" /> Choisir depuis la médiathèque
+              </Button>
+
               <div className="space-y-2">
                 <Label htmlFor="featured_image_alt">Texte alternatif (alt)</Label>
                 <Input
@@ -598,13 +699,74 @@ const AdminPostEditor = () => {
                   le titre de l'article.
                 </p>
               </div>
+            </motion.div>
 
+            {/* Per-post Open Graph image override.
+                Defaults to featured_image via the SEOHead component if left
+                empty; setting it here lets the admin ship a dedicated 1200x630
+                social preview without changing the in-page hero. */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="glass-card rounded-2xl p-6 space-y-4"
+            >
+              <div className="flex items-center gap-2">
+                <Share2 className="w-4 h-4 text-primary" />
+                <h2 className="text-lg font-bold">Image sociale (og:image)</h2>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Facultatif. Utilisée par Facebook, LinkedIn, X et l'aperçu de messagerie.
+                Recommandé : 1200×630 px. Laissez vide pour réutiliser l'image à la une.
+              </p>
+
+              {formData.og_image && formData.og_image !== formData.featured_image && (
+                <div className="relative">
+                  <img
+                    src={formData.og_image}
+                    alt="Aperçu og:image"
+                    className="w-full aspect-[1200/630] object-cover rounded-xl border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, og_image: '' }))}
+                    className="absolute top-2 right-2 p-2 bg-destructive rounded-lg text-white"
+                    aria-label="Retirer l'image sociale"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              <Input
+                value={formData.og_image}
+                onChange={(e) => setFormData((prev) => ({ ...prev, og_image: e.target.value }))}
+                placeholder="https://..."
+              />
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => { setMediaTarget('og'); setMediaOpen(true); }}
+              >
+                <FolderOpen className="w-4 h-4" /> Choisir depuis la médiathèque
+              </Button>
             </motion.div>
           </div>
         </div>
       </form>
+
+      <MediaLibrary
+        open={mediaOpen}
+        onOpenChange={setMediaOpen}
+        onPick={handleMediaPick}
+        pickLabel={mediaTarget === 'og' ? 'Utiliser comme og:image' : 'Utiliser comme image à la une'}
+      />
     </AdminLayout>
   );
 };
 
 export default AdminPostEditor;
+

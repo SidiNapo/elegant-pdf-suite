@@ -229,7 +229,7 @@ const CookieConsent = () => {
               </Button>
               <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
-                  onClick={handleAccept}
+                  onClick={showDetails ? handleSaveChoices : handleAcceptAll}
                   size="sm"
                   className="w-full h-10 text-xs font-semibold bg-gradient-to-r from-primary via-rose-500 to-violet-500 hover:opacity-90 text-white shadow-lg shadow-primary/25 border-0"
                 >

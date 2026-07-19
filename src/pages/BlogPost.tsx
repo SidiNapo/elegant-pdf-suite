@@ -59,7 +59,9 @@ const BlogPost = () => {
   // Calculate reading time (approx 200 words per minute)
   const wordCount = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-  const canonicalUrl = `https://www.e-pdfs.com/blog/${post.slug}`;
+  // Canonical is derived from slug and hardened against any external host /
+  // query / fragment that may have been saved into post.canonical_url.
+  const canonicalUrl = sanitizeCanonical(post.canonical_url, `/blog/${post.slug}`);
 
   // Content is now always stored as clean HTML from the rich-text editor,
   // so render it directly.

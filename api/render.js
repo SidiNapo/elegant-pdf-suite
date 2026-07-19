@@ -386,8 +386,9 @@ function renderBlogIndex(html, posts) {
 function renderPost(html, slug, post, related) {
   const title = post.meta_title || post.title;
   const description = post.meta_description || post.excerpt || DEFAULT_DESC;
-  // Sanitize any stored canonical (strip external hosts, query, fragment).
-  const canonical = safeCanonical(post.canonical_url, `/blog/${slug}`);
+  // Strict validator: only accept the exact expected canonical URL for this
+  // slug, otherwise force the derived fallback.
+  const canonical = strictBlogCanonical(post.canonical_url, slug);
 
   const image = post.og_image || post.featured_image || DEFAULT_OG_IMAGE;
   const imageAlt = post.featured_image_alt || post.title;

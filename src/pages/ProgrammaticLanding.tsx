@@ -35,7 +35,7 @@ const ProgrammaticLanding = () => {
           },
         ]}
       />
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-dvh flex flex-col">
         <Header />
         <main className="flex-1">
           <section className="pt-28 pb-16">

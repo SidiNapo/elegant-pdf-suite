@@ -264,7 +264,7 @@ const AllTools = () => {
         keywords="PDF tools, all PDF tools, free PDF tools, online PDF, merge PDF, split PDF, compress PDF, convert PDF, PDF editor"
         canonicalUrl="https://www.e-pdfs.com/tools"
       />
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-dvh flex flex-col">
         <Header />
 
       <main className="flex-1">

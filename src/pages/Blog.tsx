@@ -46,7 +46,7 @@ const Blog = () => {
         canonicalUrl="https://www.e-pdfs.com/blog"
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
 
         <main className="pt-24 pb-16">

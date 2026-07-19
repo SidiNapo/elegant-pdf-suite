@@ -149,7 +149,7 @@ const Contact = () => {
     question: t('contact.faq4Question'),
     answer: t('contact.faq4Answer')
   }];
-  return <div className="min-h-screen flex flex-col bg-background">
+  return <div className="min-h-dvh flex flex-col bg-background">
       <SEOHead title={t('contact.metaTitle')} description={t('contact.metaDescription')} canonicalUrl="https://www.e-pdfs.com/contact" />
       <FAQSchema questions={faqData} />
       <Header />

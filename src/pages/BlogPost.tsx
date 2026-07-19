@@ -19,7 +19,7 @@ const BlogPost = () => {
   const { data: allPosts } = usePublishedPosts();
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -27,7 +27,7 @@ const BlogPost = () => {
   
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
         <main className="pt-24 pb-16">
           <div className="container mx-auto px-4 text-center">
@@ -93,7 +93,7 @@ const BlogPost = () => {
 
 
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
 
         <main className="pt-24 pb-16">

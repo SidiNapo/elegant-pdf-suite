@@ -290,7 +290,7 @@ function renderStatic(html, route) {
 }
 
 function renderProgrammatic(html, page) {
-  const canonical = `${SITE_URL}/p/${page.slug}`;
+  const canonical = safeCanonical(`/p/${page.slug}`);
   html = applyHead(html, {
     title: page.metaTitle, description: page.metaDescription, canonical, keywords: page.keywords,
   });

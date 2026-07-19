@@ -78,13 +78,27 @@ const AdminPostEditor = () => {
 
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
+  const [mediaTarget, setMediaTarget] = useState<'featured' | 'og'>('featured');
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
 
-  // Persist form data to sessionStorage on every change
+  // Persist form data to sessionStorage on every change, and remember the
+  // last-persisted timestamp so we can render a "Draft saved …" indicator.
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+      setDraftSavedAt(Date.now());
     } catch { /* ignore quota errors */ }
   }, [formData, STORAGE_KEY]);
+
+  // Tick every 10s so the "saved Xs ago" label stays fresh without churning
+  // on every keystroke.
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 10000);
+    return () => window.clearInterval(t);
+  }, []);
+
 
   // Load existing post data when editing
   useEffect(() => {

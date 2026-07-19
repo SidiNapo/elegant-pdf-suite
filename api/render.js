@@ -77,6 +77,8 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const ADMIN_PATH = process.env.ADMIN_PATH || process.env.VITE_ADMIN_PATH || "ctrl-x9k7m2p4q8n1";
 
 // Canonical sanitizer — strips external hosts, query strings, and fragments.
+// Only used for non-blog routes. Blog posts use strictBlogCanonical below,
+// which refuses anything that isn't the exact expected URL for the slug.
 function safeCanonical(input, fallbackPath) {
   let p = fallbackPath || "/";
   if (input) {
@@ -91,6 +93,29 @@ function safeCanonical(input, fallbackPath) {
   if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
   return SITE_URL + p;
 }
+
+// Strict canonical validator for blog posts. Rejects anything that isn't
+// EXACTLY https://www.e-pdfs.com/blog/{slug} with no query string and no
+// fragment. Any invalid, relative, or off-host value falls back to the
+// derived-from-slug URL — this is what prevents stored values like
+// "e-pdfs.com/blog/slug" (which URL parsing would resolve to
+// "https://www.e-pdfs.com/e-pdfs.com/blog/slug") from ever being emitted.
+function strictBlogCanonical(input, slug) {
+  const fallback = `${SITE_URL}/blog/${slug}`;
+  if (!input) return fallback;
+  const raw = String(input).trim();
+  if (!raw) return fallback;
+  // Must be an absolute URL — no relative paths, no scheme-less hosts.
+  if (!/^https?:\/\//i.test(raw)) return fallback;
+  let u;
+  try { u = new URL(raw); } catch { return fallback; }
+  if (u.origin !== SITE_URL) return fallback;
+  if (u.search || u.hash) return fallback;
+  if (u.pathname !== `/blog/${slug}`) return fallback;
+  return `${SITE_URL}/blog/${slug}`;
+}
+
+export { safeCanonical, strictBlogCanonical, SITE_URL };
 
 // Public rendering uses ONLY the anon key. The service-role key MUST NEVER be
 // referenced here — it's reserved for privileged jobs (api/cleanup, protected

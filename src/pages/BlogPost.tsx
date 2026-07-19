@@ -9,7 +9,7 @@ import ArticleSchema from '@/components/blog/ArticleSchema';
 import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
 import { usePostBySlug, usePublishedPosts } from '@/hooks/useBlogPosts';
-import { sanitizeCanonical } from '@/lib/canonical';
+import { blogCanonicalFromSlug } from '@/lib/canonical';
 import { Loader2 } from 'lucide-react';
 
 const BlogPost = () => {
@@ -65,9 +65,9 @@ const BlogPost = () => {
   // Calculate reading time (approx 200 words per minute)
   const wordCount = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-  // Canonical is derived from slug and hardened against any external host /
-  // query / fragment that may have been saved into post.canonical_url.
-  const canonicalUrl = sanitizeCanonical(post.canonical_url, `/blog/${post.slug}`);
+  // Canonical is ALWAYS derived from the slug. Any value stored in
+  // post.canonical_url is ignored so bad data cannot leak into <link rel="canonical">.
+  const canonicalUrl = blogCanonicalFromSlug(post.slug) ?? `${window.location.origin}/blog/${post.slug}`;
 
   // Content is now always stored as clean HTML from the rich-text editor,
   // so render it directly.

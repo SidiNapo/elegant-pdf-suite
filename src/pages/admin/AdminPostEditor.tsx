@@ -207,6 +207,31 @@ const AdminPostEditor = () => {
       return;
     }
 
+    // Canonical URL must be empty OR exactly https://www.e-pdfs.com/blog/{slug}
+    // (no query string, no fragment, no other host). Anything else — including
+    // "e-pdfs.com/blog/slug" or a mismatched slug — is rejected here so we
+    // never persist a value that server rendering would have to discard.
+    const canonical = (formData.canonical_url || '').trim();
+    if (canonical) {
+      const expected = `https://www.e-pdfs.com/blog/${formData.slug}`;
+      let ok = false;
+      try {
+        const u = new URL(canonical);
+        ok =
+          u.origin === 'https://www.e-pdfs.com' &&
+          u.pathname === `/blog/${formData.slug}` &&
+          !u.search &&
+          !u.hash;
+      } catch {
+        ok = false;
+      }
+      if (!ok) {
+        toast.error(`URL canonique invalide. Laissez vide ou utilisez exactement: ${expected}`);
+        return;
+      }
+    }
+
+
     setIsSaving(true);
 
     try {
@@ -474,9 +499,14 @@ const AdminPostEditor = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
                   }
-                  placeholder="https://www.e-pdfs.com/blog/..."
+                  placeholder={`https://www.e-pdfs.com/blog/${formData.slug || 'slug'}`}
                 />
+                <p className="text-xs text-muted-foreground">
+                  Laissez vide pour utiliser l'URL automatique. Sinon, saisissez exactement{' '}
+                  <code>https://www.e-pdfs.com/blog/{formData.slug || 'slug'}</code> (sans paramètres ni ancre).
+                </p>
               </div>
+
 
               {/* SEO Preview */}
               <div className="p-4 bg-muted rounded-xl">

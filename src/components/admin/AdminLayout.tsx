@@ -95,7 +95,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     );
 
     return (
-      <div ref={ref} className="min-h-screen bg-background flex flex-col md:flex-row">
+      <div ref={ref} className="min-h-dvh bg-background flex flex-col md:flex-row">
         {/* Mobile Header */}
         {isMobile && (
           <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-background border-b border-border flex items-center justify-between px-4">

@@ -91,7 +91,7 @@ const DMCA = () => {
         description={c.description}
         canonicalUrl="/dmca"
       />
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <Header />
         <main>
           <section className="container mx-auto px-4 py-16 max-w-3xl">

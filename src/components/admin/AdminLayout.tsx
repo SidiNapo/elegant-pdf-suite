@@ -63,7 +63,12 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                {item.name}
+                <span className="flex-1">{item.name}</span>
+                {item.badge > 0 && (
+                  <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             );
           })}

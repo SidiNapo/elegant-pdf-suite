@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Save, Eye, Image, Loader2, AlertCircle } from 'lucide-react';
+import { Save, Eye, Image, Loader2, AlertCircle, CheckCircle2, FolderOpen, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,12 +16,25 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/components/admin/AdminLayout';
 import RichTextEditor from '@/components/admin/RichTextEditor';
+import MediaLibrary from '@/components/admin/MediaLibrary';
 import { usePostById, useCreatePost, useUpdatePost, useCategories } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
 import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { adminRoutes } from '@/config/adminRoutes';
+
+// Small helper: humanize "seconds ago" for the draft-saved indicator.
+function formatAgo(ms: number, now: number): string {
+  const seconds = Math.max(0, Math.floor((now - ms) / 1000));
+  if (seconds < 5) return "à l'instant";
+  if (seconds < 60) return `il y a ${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `il y a ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  return `il y a ${hours}h`;
+}
+
 const AdminPostEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

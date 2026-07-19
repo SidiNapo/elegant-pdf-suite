@@ -550,6 +550,14 @@ export default async function handler(req, res) {
     const blogMatch = route.match(/^\/blog\/([^/]+)$/);
     if (blogMatch) {
       const slug = decodeURIComponent(blogMatch[1]);
+      // Slug shape gate — anything outside [a-z0-9-] cannot map to a real
+      // article and must never reach the DB or the canonical builder.
+      if (!isValidBlogSlug(slug)) {
+        res.statusCode = 404;
+        res.setHeader("X-Robots-Tag", "noindex, nofollow");
+        res.end(renderNotFound(template, route));
+        return;
+      }
       const post = await fetchPost(slug);
       if (post) {
         let related = [];

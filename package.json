@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test:seo": "node scripts/seo-smoke.mjs",
     "preview": "vite preview"
   },
   "packageManager": "npm@10.0.0",

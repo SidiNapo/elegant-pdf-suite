@@ -499,9 +499,14 @@ const AdminPostEditor = () => {
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
                   }
-                  placeholder="https://www.e-pdfs.com/blog/..."
+                  placeholder={`https://www.e-pdfs.com/blog/${formData.slug || 'slug'}`}
                 />
+                <p className="text-xs text-muted-foreground">
+                  Laissez vide pour utiliser l'URL automatique. Sinon, saisissez exactement{' '}
+                  <code>https://www.e-pdfs.com/blog/{formData.slug || 'slug'}</code> (sans paramètres ni ancre).
+                </p>
               </div>
+
 
               {/* SEO Preview */}
               <div className="p-4 bg-muted rounded-xl">

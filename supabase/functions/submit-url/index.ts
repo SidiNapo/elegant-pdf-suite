@@ -51,18 +51,23 @@ Deno.serve(async (req) => {
 
     const results: Record<string, unknown> = {};
 
-    // 1) IndexNow — instantly notifies Bing, Yandex, Seznam, Naver
-    const indexNowRes = await fetch("https://api.indexnow.org/indexnow", {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        host: "www.e-pdfs.com",
-        key: INDEXNOW_KEY,
-        keyLocation: `${SITE}/${INDEXNOW_KEY}.txt`,
-        urlList: urls,
-      }),
-    });
-    results.indexnow = { status: indexNowRes.status };
+    // 1) IndexNow — instantly notifies Bing, Yandex, Seznam, Naver.
+    // Skip cleanly if the key is not configured; sitemap ping below still runs.
+    if (INDEXNOW_KEY) {
+      const indexNowRes = await fetch("https://api.indexnow.org/indexnow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          host: "www.e-pdfs.com",
+          key: INDEXNOW_KEY,
+          keyLocation: `${SITE}/indexnow-key.txt`,
+          urlList: urls,
+        }),
+      });
+      results.indexnow = { status: indexNowRes.status };
+    } else {
+      results.indexnow = { skipped: "INDEXNOW_KEY not configured" };
+    }
 
     // 2) Ping Bing webmaster ping (extra signal)
     try {

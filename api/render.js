@@ -6,97 +6,11 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { PROGRAMMATIC_PAGES } from "./_programmatic.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ---- Self-contained programmatic route map (mirror of src/data/programmaticPages.ts FR fields) ----
-const PROGRAMMATIC_PAGES = [
-  {
-    slug: "compresser-pdf-pour-gmail",
-    toolPath: "/compress",
-    metaTitle: "Compresser un PDF pour Gmail (réduire la taille) | E-Pdf's",
-    metaDescription:
-      "Réduisez votre PDF pour l'envoyer par Gmail sans dépasser la limite de 25 Mo. Gratuit, 100 % local, sans téléversement.",
-    keywords: "compresser pdf pour gmail, réduire pdf email, pdf trop volumineux gmail",
-    h1: "Compresser un PDF pour l'envoyer par Gmail",
-    intro:
-      "Gmail limite les pièces jointes à 25 Mo. Réduisez la taille de votre PDF en quelques secondes, directement dans votre navigateur, sans téléverser vos fichiers nulle part.",
-    paragraphs: [
-      "Un PDF trop lourd est l'une des raisons les plus fréquentes d'échec d'envoi par email. Notre compresseur allège votre fichier tout en gardant un texte net et lisible.",
-      "Tout se passe localement sur votre appareil : vos documents ne quittent jamais votre navigateur, ce qui en fait la solution la plus sûre pour des fichiers confidentiels.",
-    ],
-    steps: [
-      "Importez votre PDF dans l'outil de compression.",
-      "Lancez la compression et patientez quelques secondes.",
-      "Téléchargez la version allégée, prête pour Gmail.",
-    ],
-    ctaLabel: "Compresser mon PDF",
-  },
-  {
-    slug: "reduire-pdf-a-200ko",
-    toolPath: "/compress",
-    metaTitle: "Réduire un PDF à 200 Ko en ligne gratuit | E-Pdf's",
-    metaDescription:
-      "Compressez votre PDF jusqu'à environ 200 Ko pour les formulaires en ligne. Gratuit, 100 % local, sans téléversement.",
-    keywords: "réduire pdf 200ko, compresser pdf 200 ko, pdf 200kb formulaire",
-    h1: "Réduire un PDF à environ 200 Ko",
-    intro:
-      "De nombreux portails administratifs exigent des PDF légers. Réduisez votre fichier pour respecter ces limites strictes, sans installation.",
-    paragraphs: [
-      "Les sites de candidature, de visa ou d'inscription imposent souvent une taille maximale. Notre outil compresse efficacement vos documents pour passer ces contrôles.",
-      "La compression est réalisée dans votre navigateur, vos fichiers restent privés et ne sont jamais envoyés sur un serveur.",
-    ],
-    steps: [
-      "Importez votre PDF.",
-      "Compressez le fichier.",
-      "Téléchargez la version réduite et vérifiez la taille obtenue.",
-    ],
-    ctaLabel: "Réduire mon PDF",
-  },
-  {
-    slug: "png-en-pdf",
-    toolPath: "/jpg-to-pdf",
-    metaTitle: "Convertir PNG en PDF gratuit en ligne | E-Pdf's",
-    metaDescription:
-      "Transformez vos images PNG en PDF gratuitement. 100 % local dans le navigateur, sans téléversement ni filigrane.",
-    keywords: "png en pdf, convertir png pdf, image png en pdf gratuit",
-    h1: "Convertir une image PNG en PDF",
-    intro:
-      "Réunissez une ou plusieurs images PNG dans un PDF propre, idéal pour partager des captures d'écran ou des documents numérisés.",
-    paragraphs: [
-      "Les fichiers PNG sont parfaits pour les captures, mais peu pratiques à partager en lot. Convertissez-les en un seul PDF organisé.",
-      "La conversion se fait sur votre appareil : aucune image n'est téléversée, votre confidentialité est totale.",
-    ],
-    steps: [
-      "Importez vos images PNG.",
-      "Réorganisez-les dans l'ordre voulu.",
-      "Générez et téléchargez votre PDF.",
-    ],
-    ctaLabel: "Convertir PNG en PDF",
-  },
-  {
-    slug: "fusionner-pdf-sans-telechargement",
-    toolPath: "/merge",
-    metaTitle: "Fusionner PDF sans téléversement (100 % sécurisé) | E-Pdf's",
-    metaDescription:
-      "Combinez vos PDF sans les envoyer sur un serveur. Traitement 100 % local dans le navigateur, idéal pour documents confidentiels.",
-    keywords: "fusionner pdf sans téléversement, fusion pdf sécurisé, merge pdf no upload",
-    h1: "Fusionner des PDF sans téléversement sur un serveur",
-    intro:
-      "Pour les documents sensibles, le plus sûr est de ne jamais les envoyer en ligne. Notre outil fusionne vos PDF entièrement dans votre navigateur.",
-    paragraphs: [
-      "Contrairement aux services qui téléversent vos fichiers vers le cloud, E-Pdf's effectue tout le traitement localement. Vos données ne quittent jamais votre ordinateur.",
-      "C'est l'option idéale pour les services RH, juridiques et financiers qui manipulent des documents confidentiels.",
-    ],
-    steps: [
-      "Importez vos fichiers PDF.",
-      "Organisez l'ordre des documents.",
-      "Fusionnez et téléchargez, sans aucun envoi serveur.",
-    ],
-    ctaLabel: "Fusionner en sécurité",
-  },
-];
 
 
 // ---- Self-contained, dependency-free HTML sanitizer -------------------------
@@ -161,6 +75,22 @@ const SITE_URL = "https://www.e-pdfs.com";
 const SITE_NAME = "E-Pdf's";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const ADMIN_PATH = process.env.ADMIN_PATH || process.env.VITE_ADMIN_PATH || "ctrl-x9k7m2p4q8n1";
+
+// Canonical sanitizer — strips external hosts, query strings, and fragments.
+function safeCanonical(input, fallbackPath) {
+  let p = fallbackPath || "/";
+  if (input) {
+    try {
+      const u = new URL(String(input), SITE_URL);
+      p = u.pathname || "/";
+    } catch {
+      p = String(input).split("?")[0].split("#")[0] || p;
+    }
+  }
+  if (!p.startsWith("/")) p = "/" + p;
+  if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+  return SITE_URL + p;
+}
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL ||
@@ -353,14 +283,14 @@ async function fetchPublishedList() {
 // ---- Renderers -------------------------------------------------------------
 function renderStatic(html, route) {
   const meta = STATIC_ROUTES[route];
-  const canonical = route === "/" ? `${SITE_URL}/` : `${SITE_URL}${route}`;
+  const canonical = safeCanonical(route, "/");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
   html = injectIntoRoot(html, `<h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>`);
   return html;
 }
 
 function renderProgrammatic(html, page) {
-  const canonical = `${SITE_URL}/p/${page.slug}`;
+  const canonical = safeCanonical(`/p/${page.slug}`);
   html = applyHead(html, {
     title: page.metaTitle, description: page.metaDescription, canonical, keywords: page.keywords,
   });
@@ -403,7 +333,7 @@ function langName(code) {
 
 function renderBlogIndex(html, posts) {
   const meta = STATIC_ROUTES["/blog"];
-  const canonical = `${SITE_URL}/blog`;
+  const canonical = safeCanonical("/blog");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
 
   const cards = (posts || []).map((p) => {
@@ -434,8 +364,8 @@ function renderBlogIndex(html, posts) {
 function renderPost(html, slug, post, related) {
   const title = post.meta_title || post.title;
   const description = post.meta_description || post.excerpt || DEFAULT_DESC;
-  let canonical = post.canonical_url || `${SITE_URL}/blog/${slug}`;
-  if (canonical && !/^https?:\/\//i.test(canonical)) canonical = `${SITE_URL}/${canonical.replace(/^\/+/, "")}`;
+  // Sanitize any stored canonical (strip external hosts, query, fragment).
+  const canonical = safeCanonical(post.canonical_url, `/blog/${slug}`);
 
   const image = post.og_image || post.featured_image || DEFAULT_OG_IMAGE;
   const imageAlt = post.featured_image_alt || post.title;
@@ -518,7 +448,7 @@ function renderNotFound(html, route) {
   html = applyHead(html, {
     title: "Page introuvable (404) | E-Pdf's",
     description: "La page que vous recherchez est introuvable.",
-    canonical: `${SITE_URL}${route}`,
+    canonical: safeCanonical(route),
     robots: "noindex, nofollow",
   });
   html = injectIntoRoot(html, `<h1>Page introuvable</h1>`);
@@ -529,7 +459,7 @@ function renderAdmin(html, route) {
   html = applyHead(html, {
     title: "Administration | E-Pdf's",
     description: "Espace d'administration.",
-    canonical: `${SITE_URL}${route}`,
+    canonical: safeCanonical(route),
     robots: "noindex, nofollow, noarchive",
   });
   return html;

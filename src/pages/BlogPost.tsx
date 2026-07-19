@@ -9,6 +9,7 @@ import ArticleSchema from '@/components/blog/ArticleSchema';
 import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
 import { usePostBySlug, usePublishedPosts } from '@/hooks/useBlogPosts';
+import { sanitizeCanonical } from '@/lib/canonical';
 import { Loader2 } from 'lucide-react';
 
 const BlogPost = () => {
@@ -59,7 +60,9 @@ const BlogPost = () => {
   // Calculate reading time (approx 200 words per minute)
   const wordCount = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
-  const canonicalUrl = `https://www.e-pdfs.com/blog/${post.slug}`;
+  // Canonical is derived from slug and hardened against any external host /
+  // query / fragment that may have been saved into post.canonical_url.
+  const canonicalUrl = sanitizeCanonical(post.canonical_url, `/blog/${post.slug}`);
 
   // Content is now always stored as clean HTML from the rich-text editor,
   // so render it directly.
@@ -78,7 +81,7 @@ const BlogPost = () => {
   ].slice(0, 6);
 
   return <>
-      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={post.canonical_url || canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageWidth={imgWidth} ogImageHeight={imgHeight} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
+      <SEOHead title={post.meta_title || post.title} description={post.meta_description || post.excerpt || ''} keywords={post.meta_keywords || undefined} canonicalUrl={canonicalUrl} ogImage={post.og_image || post.featured_image || undefined} ogImageWidth={imgWidth} ogImageHeight={imgHeight} ogImageAlt={featuredAlt} ogType="article" author={post.author_name} publishedTime={post.published_at || undefined} modifiedTime={post.updated_at} />
 
       <ArticleSchema title={post.title} description={post.meta_description || post.excerpt || ''} image={post.featured_image || undefined} imageWidth={imgWidth} imageHeight={imgHeight} authorName={post.author_name} publishedAt={post.published_at || post.created_at} modifiedAt={post.updated_at} url={canonicalUrl} inLanguage={postLang} section={categoryName} keywords={post.meta_keywords || undefined} />
 

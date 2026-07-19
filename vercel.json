@@ -5,13 +5,16 @@
     }
   },
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/feed.xml", "destination": "/api/feed" },
+    { "source": "/((?!api/|assets/|.*\\.).*)", "destination": "/api/render" }
+  ],
+  "redirects": [
     {
-      "source": "/sitemap.xml",
-      "destination": "/api/sitemap"
-    },
-    {
-      "source": "/((?!api/|assets/|.*\\.).*)",
-      "destination": "/api/render"
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "e-pdfs.com" }],
+      "destination": "https://www.e-pdfs.com/:path*",
+      "permanent": true
     }
   ]
 }

@@ -448,7 +448,7 @@ function renderNotFound(html, route) {
   html = applyHead(html, {
     title: "Page introuvable (404) | E-Pdf's",
     description: "La page que vous recherchez est introuvable.",
-    canonical: `${SITE_URL}${route}`,
+    canonical: safeCanonical(route),
     robots: "noindex, nofollow",
   });
   html = injectIntoRoot(html, `<h1>Page introuvable</h1>`);

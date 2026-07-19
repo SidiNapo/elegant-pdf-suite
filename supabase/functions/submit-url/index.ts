@@ -3,7 +3,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const SITE = "https://www.e-pdfs.com";
-const INDEXNOW_KEY = "31f111445d5743948a69faa4683de47f941608e23f4a438d946133376f8f64a7";
+// Same value as the Vercel INDEXNOW_KEY env var. Served at /indexnow-key.txt
+// via api/indexnow-key.js — the keyLocation below MUST match that path exactly.
+const INDEXNOW_KEY = (Deno.env.get("INDEXNOW_KEY") ?? "").trim();
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

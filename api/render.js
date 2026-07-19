@@ -364,8 +364,8 @@ function renderBlogIndex(html, posts) {
 function renderPost(html, slug, post, related) {
   const title = post.meta_title || post.title;
   const description = post.meta_description || post.excerpt || DEFAULT_DESC;
-  let canonical = post.canonical_url || `${SITE_URL}/blog/${slug}`;
-  if (canonical && !/^https?:\/\//i.test(canonical)) canonical = `${SITE_URL}/${canonical.replace(/^\/+/, "")}`;
+  // Sanitize any stored canonical (strip external hosts, query, fragment).
+  const canonical = safeCanonical(post.canonical_url, `/blog/${slug}`);
 
   const image = post.og_image || post.featured_image || DEFAULT_OG_IMAGE;
   const imageAlt = post.featured_image_alt || post.title;

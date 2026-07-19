@@ -187,7 +187,7 @@ const Index = () => {
     text: t('testimonials.testimonial3.text')
   }];
   return <LazyMotion features={domAnimation} strict>
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <SEOHead 
         title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
         description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
@@ -196,6 +196,7 @@ const Index = () => {
       />
       <StructuredData />
       <Header />
+      <main id="main-content">
       
       {/* Hero Section with Background Image */}
       <section className="pt-32 md:pt-40 pb-20 relative overflow-hidden min-h-[90vh] flex items-center">
@@ -564,6 +565,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

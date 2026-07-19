@@ -178,7 +178,12 @@ const STATIC_ROUTES = {
 
 // ---- index.html template loading ------------------------------------------
 function loadTemplate() {
+  // Prefer the renamed shell (dist/__shell.html) — post-build.mjs moves
+  // dist/index.html out of the way so Vercel's static filesystem step
+  // cannot short-circuit the renderer for `/`.
   const candidates = [
+    path.join(process.cwd(), "dist", "__shell.html"),
+    path.join(__dirname, "..", "dist", "__shell.html"),
     path.join(process.cwd(), "dist", "index.html"),
     path.join(process.cwd(), "index.html"),
     path.join(__dirname, "..", "dist", "index.html"),

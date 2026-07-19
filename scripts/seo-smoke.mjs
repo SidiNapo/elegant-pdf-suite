@@ -28,8 +28,12 @@ try {
   const rw = (v.rewrites || []).map((r) => r.source);
   record("vercel.json parses", true);
   record(
-    "vercel.json rewrites /sitemap.xml, /feed.xml, /ads.txt, SPA",
-    rw.includes("/sitemap.xml") && rw.includes("/feed.xml") && rw.includes("/ads.txt") && rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
+    "vercel.json rewrites /sitemap.xml, /feed.xml, /ads.txt, /indexnow-key.txt, SPA",
+    rw.includes("/sitemap.xml") &&
+      rw.includes("/feed.xml") &&
+      rw.includes("/ads.txt") &&
+      rw.includes("/indexnow-key.txt") &&
+      rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
   );
   const hasApex = (v.redirects || []).some((r) =>
     (r.has || []).some((h) => h.type === "host" && h.value === "e-pdfs.com"),

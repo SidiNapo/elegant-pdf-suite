@@ -129,6 +129,8 @@ const STATIC_ROUTES = {
   "/contact": { title: "Contact | E-Pdf's", description: "Une question ou une suggestion ? Contactez l'équipe E-Pdf's, nous vous répondrons rapidement.", h1: "Nous contacter" },
   "/privacy": { title: "Politique de Confidentialité | E-Pdf's", description: "Notre politique de confidentialité : vos fichiers sont traités localement et ne sont jamais téléversés sur nos serveurs.", h1: "Politique de confidentialité" },
   "/terms": { title: "Conditions d'Utilisation | E-Pdf's", description: "Conditions générales d'utilisation des outils PDF gratuits E-Pdf's.", h1: "Conditions d'utilisation" },
+  "/cookies": { title: "Politique de Cookies | E-Pdf's", description: "Comment E-Pdf's utilise les cookies : cookies essentiels par défaut, aucune publicité ni analytics sans votre consentement.", h1: "Politique de cookies" },
+  "/dmca": { title: "Politique DMCA | E-Pdf's", description: "Procédure DMCA pour signaler un contenu prétendument illicite. E-Pdf's respecte les droits d'auteur.", h1: "Politique DMCA" },
   "/merge": { title: "Fusionner PDF en ligne gratuit et sécurisé | E-Pdf's", description: "Fusionnez plusieurs fichiers PDF en un seul document. Traitement 100% local, sans téléversement, gratuit et sans filigrane.", h1: "Fusionner PDF" },
   "/split": { title: "Diviser PDF en ligne gratuit et sécurisé | E-Pdf's", description: "Divisez un PDF en plusieurs fichiers ou extrayez des pages. Traitement 100% local, gratuit et sans inscription.", h1: "Diviser PDF" },
   "/delete-pages": { title: "Supprimer des pages PDF gratuit | E-Pdf's", description: "Supprimez des pages d'un PDF facilement. Traitement 100% local dans votre navigateur, gratuit et sécurisé.", h1: "Supprimer des pages PDF" },

@@ -186,8 +186,12 @@ export const useCreatePost = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['blog-posts'] });
+      // Notify search engines only for published posts.
+      if (data?.is_published && data?.slug) {
+        pingIndexNow([`/blog/${data.slug}`, '/blog', '/sitemap.xml']);
+      }
     },
   });
 };
@@ -198,6 +202,14 @@ export const useUpdatePost = () => {
 
   return useMutation({
     mutationFn: async ({ id, ...rest }: Partial<BlogPost> & { id: string }) => {
+      // Snapshot the previous slug/published state so we can notify search
+      // engines for BOTH the old and new URLs (handles slug renames and
+      // unpublish transitions).
+      const { data: previous } = await supabase
+        .from('blog_posts')
+        .select('slug,is_published')
+        .eq('id', id)
+        .maybeSingle();
       const { category, ...post } = rest;
       const { data, error } = await supabase
         .from('blog_posts')
@@ -207,10 +219,14 @@ export const useUpdatePost = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return { data, previous };
     },
-    onSuccess: () => {
+    onSuccess: ({ data, previous }) => {
       queryClient.invalidateQueries({ queryKey: ['blog-posts'] });
+      const urls = new Set<string>(['/blog', '/sitemap.xml']);
+      if (previous?.slug) urls.add(`/blog/${previous.slug}`);
+      if (data?.slug) urls.add(`/blog/${data.slug}`);
+      pingIndexNow(Array.from(urls));
     },
   });
 };
@@ -221,15 +237,25 @@ export const useDeletePost = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
+      // Capture the slug BEFORE delete so we can still notify IndexNow.
+      const { data: previous } = await supabase
+        .from('blog_posts')
+        .select('slug')
+        .eq('id', id)
+        .maybeSingle();
       const { error } = await supabase
         .from('blog_posts')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
+      return previous;
     },
-    onSuccess: () => {
+    onSuccess: (previous) => {
       queryClient.invalidateQueries({ queryKey: ['blog-posts'] });
+      const urls: string[] = ['/blog', '/sitemap.xml'];
+      if (previous?.slug) urls.push(`/blog/${previous.slug}`);
+      pingIndexNow(urls);
     },
   });
 };

@@ -283,7 +283,7 @@ async function fetchPublishedList() {
 // ---- Renderers -------------------------------------------------------------
 function renderStatic(html, route) {
   const meta = STATIC_ROUTES[route];
-  const canonical = route === "/" ? `${SITE_URL}/` : `${SITE_URL}${route}`;
+  const canonical = safeCanonical(route, "/");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
   html = injectIntoRoot(html, `<h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>`);
   return html;

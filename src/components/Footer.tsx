@@ -64,6 +64,12 @@ const Footer = () => {
       name: t('footer.privacy'),
       href: '/privacy'
     }, {
+      name: lang === 'en' ? 'Cookies' : 'Cookies',
+      href: '/cookies'
+    }, {
+      name: lang === 'en' ? 'DMCA' : 'DMCA',
+      href: '/dmca'
+    }, {
       name: t('nav.contact'),
       href: '/contact'
     }]

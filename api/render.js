@@ -94,28 +94,33 @@ function safeCanonical(input, fallbackPath) {
   return SITE_URL + p;
 }
 
-// Strict canonical validator for blog posts. Rejects anything that isn't
-// EXACTLY https://www.e-pdfs.com/blog/{slug} with no query string and no
-// fragment. Any invalid, relative, or off-host value falls back to the
-// derived-from-slug URL — this is what prevents stored values like
-// "e-pdfs.com/blog/slug" (which URL parsing would resolve to
-// "https://www.e-pdfs.com/e-pdfs.com/blog/slug") from ever being emitted.
-function strictBlogCanonical(input, slug) {
-  const fallback = `${SITE_URL}/blog/${slug}`;
-  if (!input) return fallback;
-  const raw = String(input).trim();
-  if (!raw) return fallback;
-  // Must be an absolute URL — no relative paths, no scheme-less hosts.
-  if (!/^https?:\/\//i.test(raw)) return fallback;
-  let u;
-  try { u = new URL(raw); } catch { return fallback; }
-  if (u.origin !== SITE_URL) return fallback;
-  if (u.search || u.hash) return fallback;
-  if (u.pathname !== `/blog/${slug}`) return fallback;
+// Slug format for blog articles. Anything that doesn't match this pattern is
+// treated as a non-existent article (404), so the canonical URL derived from
+// a slug is always safe to embed in HTML / JSON-LD.
+const BLOG_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+function isValidBlogSlug(slug) {
+  return typeof slug === "string" && BLOG_SLUG_RE.test(slug);
+}
+
+// Strict canonical builder for blog posts. This function IGNORES any value
+// passed as the first argument — the canonical URL is derived purely from
+// the validated slug so that stale, external, malformed, or malicious values
+// stored in `blog_posts.canonical_url` can NEVER leak into the rendered
+// <link rel="canonical">. The first parameter is kept for signature
+// backwards-compatibility with regression tests that assert the historical
+// "input is silently discarded" behaviour.
+function strictBlogCanonical(_ignoredInput, slug) {
+  if (!isValidBlogSlug(slug)) {
+    // Callers that reach this branch have already resolved a real post from
+    // the DB, so an invalid slug here means upstream validation failed.
+    // Refuse to construct a URL rather than emit a broken canonical.
+    throw new Error("strictBlogCanonical: invalid slug");
+  }
   return `${SITE_URL}/blog/${slug}`;
 }
 
-export { safeCanonical, strictBlogCanonical, SITE_URL };
+export { safeCanonical, strictBlogCanonical, isValidBlogSlug, SITE_URL };
+
 
 // Public rendering uses ONLY the anon key. The service-role key MUST NEVER be
 // referenced here — it's reserved for privileged jobs (api/cleanup, protected
@@ -412,9 +417,11 @@ function renderBlogIndex(html, posts) {
 function renderPost(html, slug, post, related) {
   const title = post.meta_title || post.title;
   const description = post.meta_description || post.excerpt || DEFAULT_DESC;
-  // Strict validator: only accept the exact expected canonical URL for this
-  // slug, otherwise force the derived fallback.
-  const canonical = strictBlogCanonical(post.canonical_url, slug);
+  // Canonical URL is ALWAYS derived from the (already-validated) slug. The
+  // stored `post.canonical_url` value is intentionally ignored so bad data
+  // in the DB cannot leak into the rendered <link rel="canonical">.
+  const canonical = strictBlogCanonical(null, slug);
+
 
   const image = post.og_image || post.featured_image || DEFAULT_OG_IMAGE;
   const imageAlt = post.featured_image_alt || post.title;
@@ -545,6 +552,14 @@ export default async function handler(req, res) {
     const blogMatch = route.match(/^\/blog\/([^/]+)$/);
     if (blogMatch) {
       const slug = decodeURIComponent(blogMatch[1]);
+      // Slug shape gate — anything outside [a-z0-9-] cannot map to a real
+      // article and must never reach the DB or the canonical builder.
+      if (!isValidBlogSlug(slug)) {
+        res.statusCode = 404;
+        res.setHeader("X-Robots-Tag", "noindex, nofollow");
+        res.end(renderNotFound(template, route));
+        return;
+      }
       const post = await fetchPost(slug);
       if (post) {
         let related = [];

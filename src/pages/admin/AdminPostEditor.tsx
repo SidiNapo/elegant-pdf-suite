@@ -63,7 +63,6 @@ const AdminPostEditor = () => {
       meta_description: '',
       meta_keywords: '',
       og_image: '',
-      canonical_url: '',
       is_published: false,
       category_id: '',
     };
@@ -119,7 +118,6 @@ const AdminPostEditor = () => {
         meta_description: existingPost.meta_description || '',
         meta_keywords: existingPost.meta_keywords || '',
         og_image: existingPost.og_image || '',
-        canonical_url: existingPost.canonical_url || '',
         is_published: existingPost.is_published,
         category_id: existingPost.category_id || '',
       }));
@@ -207,29 +205,11 @@ const AdminPostEditor = () => {
       return;
     }
 
-    // Canonical URL must be empty OR exactly https://www.e-pdfs.com/blog/{slug}
-    // (no query string, no fragment, no other host). Anything else — including
-    // "e-pdfs.com/blog/slug" or a mismatched slug — is rejected here so we
-    // never persist a value that server rendering would have to discard.
-    const canonical = (formData.canonical_url || '').trim();
-    if (canonical) {
-      const expected = `https://www.e-pdfs.com/blog/${formData.slug}`;
-      let ok = false;
-      try {
-        const u = new URL(canonical);
-        ok =
-          u.origin === 'https://www.e-pdfs.com' &&
-          u.pathname === `/blog/${formData.slug}` &&
-          !u.search &&
-          !u.hash;
-      } catch {
-        ok = false;
-      }
-      if (!ok) {
-        toast.error(`URL canonique invalide. Laissez vide ou utilisez exactement: ${expected}`);
-        return;
-      }
-    }
+    // Canonical URL is no longer editable in the CMS. It is always derived at
+    // render time from the article slug (https://www.e-pdfs.com/blog/{slug}),
+    // so we persist NULL to keep the DB clean.
+
+
 
 
     setIsSaving(true);
@@ -244,6 +224,9 @@ const AdminPostEditor = () => {
           ? (formData.featured_image_alt || formData.title)
           : null,
         category_id: formData.category_id || null,
+        // Canonical is always derived from slug at render time — never store
+        // a value from the CMS.
+        canonical_url: null,
         published_at: formData.is_published 
           ? (existingPost?.published_at || new Date().toISOString())
           : null,
@@ -492,20 +475,16 @@ const AdminPostEditor = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="canonical_url">URL canonique</Label>
-                <Input
-                  id="canonical_url"
-                  value={formData.canonical_url}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, canonical_url: e.target.value }))
-                  }
-                  placeholder={`https://www.e-pdfs.com/blog/${formData.slug || 'slug'}`}
-                />
+                <Label>URL canonique</Label>
+                <p className="text-sm font-mono text-muted-foreground break-all">
+                  https://www.e-pdfs.com/blog/{formData.slug || 'slug'}
+                </p>
                 <p className="text-xs text-muted-foreground">
-                  Laissez vide pour utiliser l'URL automatique. Sinon, saisissez exactement{' '}
-                  <code>https://www.e-pdfs.com/blog/{formData.slug || 'slug'}</code> (sans paramètres ni ancre).
+                  Générée automatiquement à partir du slug — non modifiable.
                 </p>
               </div>
+
+
 
 
               {/* SEO Preview */}

@@ -1,40 +1,32 @@
 import { motion } from 'framer-motion';
-import { FileText, Eye, TrendingUp, Clock } from 'lucide-react';
+import { FileText, Eye, TrendingUp, Clock, Inbox } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { useAllPosts } from '@/hooks/useBlogPosts';
+import { useContactMessages, useUnreadContactCount } from '@/hooks/useContactMessages';
 import { Link } from 'react-router-dom';
 import { adminRoutes } from '@/config/adminRoutes';
 const AdminDashboard = () => {
   const { data: posts, isLoading } = useAllPosts();
+  const { data: unreadMessages = 0 } = useUnreadContactCount();
+  const { data: allMessages } = useContactMessages('all');
 
   const stats = {
     totalPosts: posts?.length || 0,
     publishedPosts: posts?.filter((p) => p.is_published).length || 0,
     draftPosts: posts?.filter((p) => !p.is_published).length || 0,
     totalViews: posts?.reduce((acc, p) => acc + p.views_count, 0) || 0,
+    unreadMessages,
+    totalMessages: allMessages?.length || 0,
   };
 
   const recentPosts = posts?.slice(0, 5) || [];
 
   const statCards = [
-    { 
-      label: 'Total articles', 
-      value: stats.totalPosts, 
-      icon: FileText, 
-      color: 'text-primary' 
-    },
-    { 
-      label: 'Publiés', 
-      value: stats.publishedPosts, 
-      icon: TrendingUp, 
-      color: 'text-green-500' 
-    },
-    { 
-      label: 'Brouillons', 
-      value: stats.draftPosts, 
-      icon: Clock, 
-      color: 'text-yellow-500' 
-    },
+    { label: 'Total articles', value: stats.totalPosts, icon: FileText, color: 'text-primary', href: adminRoutes.posts },
+    { label: 'Publiés', value: stats.publishedPosts, icon: TrendingUp, color: 'text-green-500', href: adminRoutes.posts },
+    { label: 'Brouillons', value: stats.draftPosts, icon: Clock, color: 'text-yellow-500', href: adminRoutes.posts },
+    { label: 'Vues totales', value: stats.totalViews, icon: Eye, color: 'text-blue-500', href: adminRoutes.posts },
+    { label: `Messages non lus${stats.totalMessages ? ` / ${stats.totalMessages}` : ''}`, value: stats.unreadMessages, icon: Inbox, color: 'text-pink-500', href: adminRoutes.messages },
   ];
 
   return (

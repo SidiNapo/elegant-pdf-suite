@@ -7,6 +7,7 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/feed.xml", "destination": "/api/feed" },
+    { "source": "/ads.txt", "destination": "/api/ads" },
     { "source": "/((?!api/|assets/|.*\\.).*)", "destination": "/api/render" }
   ],
   "redirects": [

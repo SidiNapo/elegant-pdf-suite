@@ -96,11 +96,14 @@ export const usePostBySlug = (slug: string) => {
         .single();
 
       if (error) throw error;
-      
-      // Increment view count (fire and forget)
+
+      // Record a deduplicated view via the server-only edge function.
+      // Fire-and-forget: never block the reader on analytics.
       try {
-        supabase.rpc('increment_post_views', { post_id: data.id });
+        void supabase.functions.invoke('record-view', { body: { post_id: data.id } });
       } catch { /* ignore view-count failures */ }
+
+      
       
       return data as BlogPost;
     },

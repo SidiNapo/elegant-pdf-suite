@@ -459,7 +459,7 @@ function renderAdmin(html, route) {
   html = applyHead(html, {
     title: "Administration | E-Pdf's",
     description: "Espace d'administration.",
-    canonical: `${SITE_URL}${route}`,
+    canonical: safeCanonical(route),
     robots: "noindex, nofollow, noarchive",
   });
   return html;

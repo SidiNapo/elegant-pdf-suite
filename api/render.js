@@ -92,16 +92,11 @@ function safeCanonical(input, fallbackPath) {
   return SITE_URL + p;
 }
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  "https://obetkqazuirhntzpjzou.supabase.co";
-// Prefer the service role key server-side; fall back to anon (RLS allows published reads).
-const SUPABASE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9iZXRrcWF6dWlyaG50enBqem91Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3MjE2NjcsImV4cCI6MjA4MzI5NzY2N30.IhL7av9GynEuMDTkVYV8g-yOUHYutySu3KcD_H8Vrzk";
+// Public rendering uses ONLY the anon key. The service-role key MUST NEVER be
+// referenced here — it's reserved for privileged jobs (api/cleanup, protected
+// Edge Functions). RLS on blog_posts allows public reads of published rows.
+const SUPABASE_URL = process.env.SUPABASE_URL || "";
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || "";
 
 // ---- HTML escaping helpers -------------------------------------------------
 function escapeHtml(value) {

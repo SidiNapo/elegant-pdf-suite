@@ -101,17 +101,19 @@ const SEOHead = ({
     setMetaTag('og:image:width', String(effectiveWidth), true);
     setMetaTag('og:image:height', String(effectiveHeight), true);
     setMetaTag('og:image:alt', ogImageAlt || (hasCustomImage ? title : "E-Pdf's Logo"), true);
-    if (canonicalUrl) {
-      setMetaTag('og:url', canonicalUrl, true);
-      // Update or create canonical link
-      let canonical = document.querySelector('link[rel="canonical"]');
-      if (!canonical) {
-        canonical = document.createElement('link');
-        canonical.setAttribute('rel', 'canonical');
-        document.head.appendChild(canonical);
-      }
-      canonical.setAttribute('href', canonicalUrl);
+    // Always render a same-origin, query/fragment-free canonical.
+    const safeCanonical = sanitizeCanonical(
+      canonicalUrl,
+      typeof window !== 'undefined' ? window.location.pathname : '/',
+    );
+    setMetaTag('og:url', safeCanonical, true);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
     }
+    canonical.setAttribute('href', safeCanonical);
 
     // Twitter Card tags
     setMetaTag('twitter:card', 'summary_large_image');

@@ -28,6 +28,11 @@ const BlogPost = () => {
   if (error || !post) {
     return (
       <div className="min-h-dvh bg-background">
+        <SEOHead
+          title={t('blog.notFound', { defaultValue: 'Article introuvable' }) + " — E-PDF's"}
+          description={t('blog.notFoundDescription', { defaultValue: "Cet article n'existe pas ou a été supprimé." })}
+          noIndex
+        />
         <Header />
         <main id="main-content" className="pt-24 pb-16">
           <div className="container mx-auto px-4 text-center">

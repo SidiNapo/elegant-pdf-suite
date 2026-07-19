@@ -110,6 +110,7 @@ export const usePostBySlug = (slug: string) => {
     },
     enabled: !!slug,
     staleTime: 2 * 60 * 1000, // 2 minutes cache
+    retry: false, // Missing slug should surface immediately as 404
   });
 };
 

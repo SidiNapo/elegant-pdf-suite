@@ -8,3 +8,5 @@ verify_jwt = false
 
 [functions.submit-url]
 verify_jwt = false
+[functions.record-view]
+verify_jwt = false

@@ -76,6 +76,22 @@ const SITE_NAME = "E-Pdf's";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const ADMIN_PATH = process.env.ADMIN_PATH || process.env.VITE_ADMIN_PATH || "ctrl-x9k7m2p4q8n1";
 
+// Canonical sanitizer — strips external hosts, query strings, and fragments.
+function safeCanonical(input, fallbackPath) {
+  let p = fallbackPath || "/";
+  if (input) {
+    try {
+      const u = new URL(String(input), SITE_URL);
+      p = u.pathname || "/";
+    } catch {
+      p = String(input).split("?")[0].split("#")[0] || p;
+    }
+  }
+  if (!p.startsWith("/")) p = "/" + p;
+  if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+  return SITE_URL + p;
+}
+
 const SUPABASE_URL =
   process.env.SUPABASE_URL ||
   process.env.VITE_SUPABASE_URL ||

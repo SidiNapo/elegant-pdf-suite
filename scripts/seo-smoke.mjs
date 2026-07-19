@@ -35,6 +35,15 @@ try {
       rw.includes("/indexnow-key.txt") &&
       rw.some((s) => s.includes("api/render") || s.includes("(?!api")),
   );
+  // Explicit homepage rewrite MUST exist and MUST come before the catch-all,
+  // otherwise Vercel's static filesystem step can serve dist/index.html at "/"
+  // and skip api/render entirely.
+  const rootIdx = rw.indexOf("/");
+  const catchAllIdx = rw.findIndex((s) => s.includes("(?!api"));
+  record(
+    "vercel.json has explicit '/' rewrite before the SPA catch-all",
+    rootIdx !== -1 && (catchAllIdx === -1 || rootIdx < catchAllIdx),
+  );
   const hasApex = (v.redirects || []).some((r) =>
     (r.has || []).some((h) => h.type === "host" && h.value === "e-pdfs.com"),
   );

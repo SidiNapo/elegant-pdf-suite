@@ -312,6 +312,27 @@ function renderStatic(html, route) {
   const meta = STATIC_ROUTES[route];
   const canonical = safeCanonical(route, "/");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
+  if (route === "/") {
+    // Homepage snapshot: single meaningful H1, short intro, and crawlable
+    // primary-nav links (/tools, /blog) so crawlers see the site graph
+    // before React hydrates.
+    const snapshot =
+      `<main>` +
+      `<h1>${escapeHtml(meta.h1)}</h1>` +
+      `<p>${escapeHtml(meta.description)}</p>` +
+      `<nav aria-label="Navigation principale"><ul>` +
+      `<li><a href="/tools">Tous les outils PDF</a></li>` +
+      `<li><a href="/blog">Blog E-Pdf's</a></li>` +
+      `<li><a href="/merge">Fusionner PDF</a></li>` +
+      `<li><a href="/split">Diviser PDF</a></li>` +
+      `<li><a href="/compress">Compresser PDF</a></li>` +
+      `<li><a href="/about">À propos</a></li>` +
+      `<li><a href="/contact">Contact</a></li>` +
+      `</ul></nav>` +
+      `</main>`;
+    html = injectIntoRoot(html, snapshot);
+    return html;
+  }
   html = injectIntoRoot(html, `<h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>`);
   return html;
 }

@@ -22,6 +22,7 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     const { signOut } = useAuth();
     const isMobile = useIsMobile();
     const [isOpen, setIsOpen] = useState(false);
+    const { data: unread = 0 } = useUnreadContactCount();
 
     const handleSignOut = async () => {
       await signOut();
@@ -30,9 +31,10 @@ const AdminLayout = React.forwardRef<HTMLDivElement, AdminLayoutProps>(
     };
 
     const navItems = [
-      { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard },
-      { name: 'Articles', href: adminRoutes.posts, icon: FileEdit },
-      { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen },
+      { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard, badge: 0 },
+      { name: 'Articles', href: adminRoutes.posts, icon: FileEdit, badge: 0 },
+      { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen, badge: 0 },
+      { name: 'Messages', href: adminRoutes.messages, icon: Inbox, badge: unread },
     ];
 
     const SidebarContent = () => (

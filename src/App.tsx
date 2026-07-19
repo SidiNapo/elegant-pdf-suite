@@ -78,6 +78,8 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cookies" element={<Cookies />} />
+            <Route path="/dmca" element={<DMCA />} />
             <Route path="/p/:slug" element={<ProgrammaticLanding />} />
             <Route path={`/${ADMIN_BASE_PATH}`} element={<AdminLogin />} />
             <Route path={`/${ADMIN_BASE_PATH}/dashboard`} element={

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen, Menu, X } from 'lucide-react';
+import { FileText, LayoutDashboard, FileEdit, LogOut, Plus, FolderOpen, Menu, X, Inbox } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { adminRoutes } from '@/config/adminRoutes';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useUnreadContactCount } from '@/hooks/useContactMessages';
 
 interface AdminLayoutProps {
   children: React.ReactNode;

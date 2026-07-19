@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { sanitizeCanonical } from '@/lib/canonical';
 
 interface SEOHeadProps {
   title: string;

@@ -6,8 +6,12 @@ import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useIsRTL } from '@/hooks/useDirection';
-
-const CONSENT_KEY = 'epdfs_cookie_consent';
+import {
+  acceptAll as acceptAllConsent,
+  declineAll as declineAllConsent,
+  getConsent,
+  setConsent,
+} from '@/lib/consent';
 
 interface CookiePreferences {
   essential: boolean;
@@ -19,38 +23,45 @@ const CookieConsent = () => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  // Analytics + advertising START OFF. They only turn on when the user
+  // explicitly toggles them and clicks accept — never pre-checked.
   const [preferences, setPreferences] = useState<CookiePreferences>({
     essential: true,
-    analytics: true,
-    advertising: true,
+    analytics: false,
+    advertising: false,
   });
   const isRTL = useIsRTL();
 
   useEffect(() => {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) {
+    const consent = getConsent();
+    if (!consent.decided) {
       const timer = setTimeout(() => setIsVisible(true), 1500);
       return () => clearTimeout(timer);
     }
+    // If already decided, hydrate the toggles with the stored choice so the
+    // "customize" view reflects the user's current selection when reopened.
+    setPreferences({
+      essential: true,
+      analytics: consent.analytics,
+      advertising: consent.advertising,
+    });
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ 
-      accepted: true, 
-      preferences,
-      timestamp: Date.now() 
-    }));
+  const handleAcceptAll = () => {
+    acceptAllConsent();
+    setIsVisible(false);
+  };
+
+  const handleSaveChoices = () => {
+    setConsent({ analytics: preferences.analytics, advertising: preferences.advertising });
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem(CONSENT_KEY, JSON.stringify({ 
-      accepted: false, 
-      preferences: { essential: true, analytics: false, advertising: false },
-      timestamp: Date.now() 
-    }));
+    declineAllConsent();
     setIsVisible(false);
   };
+
 
   const cookieOptions = [
     {

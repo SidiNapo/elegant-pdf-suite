@@ -146,7 +146,7 @@ const BlogPost = () => {
           opacity: 1
         }} className="relative h-[50vh] min-h-[400px] mb-12">
               <div className="absolute inset-0">
-                <img src={post.featured_image} alt={featuredAlt} width={1200} height={630} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
+                <img src={post.featured_image} alt={featuredAlt} width={imgWidth} height={imgHeight} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
               </div>
               

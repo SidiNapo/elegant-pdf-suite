@@ -222,7 +222,81 @@ try {
   record("local renderer / homepage snapshot", false, e.message);
 }
 
+// ---- Client must not destroy the server prerender -------------------------
+{
+  const seo = fs.readFileSync("src/components/SEOHead.tsx", "utf8");
+  const seoConst = fs.readFileSync("api/_seo.js", "utf8");
+  record(
+    "robots directive is a single shared constant (api/_seo.js)",
+    /ROBOTS_INDEX/.test(renderSrc) && /ROBOTS_INDEX/.test(seo) && /max-image-preview:large/.test(seoConst),
+  );
+  record(
+    "SEOHead never emits a bare 'index, follow'",
+    !/['"]index, follow['"]/.test(seo),
+  );
+
+  // Hydration data islands
+  record("api/render.js injects __BLOG_POST__ island", /__BLOG_POST__/.test(renderSrc));
+  record("api/render.js injects __BLOG_LIST__ island", /__BLOG_LIST__/.test(renderSrc));
+  const hooks = fs.readFileSync("src/hooks/useBlogPosts.ts", "utf8");
+  record(
+    "useBlogPosts seeds react-query from the SSR islands",
+    /readSsrJson<BlogPost>\('__BLOG_POST__'\)/.test(hooks) &&
+      /__BLOG_LIST__/.test(hooks) &&
+      /initialData/.test(hooks),
+  );
+  record(
+    "usePostBySlug retries transient errors but not 404s",
+    /isNotFoundError\(error\)/.test(hooks) && !/retry:\s*false/.test(hooks),
+  );
+
+  // JSON-LD must be reused, not duplicated, after hydration
+  record(
+    "server JSON-LD is tagged data-schema=article/breadcrumb",
+    /data-schema="article"/.test(renderSrc) && /data-schema="breadcrumb"/.test(renderSrc),
+  );
+  const article = fs.readFileSync("src/components/blog/ArticleSchema.tsx", "utf8");
+  const crumb = fs.readFileSync("src/components/blog/BreadcrumbSchema.tsx", "utf8");
+  record(
+    "client schema components reuse the existing data-schema scripts",
+    /data-schema="article"/.test(article) && /data-schema="breadcrumb"/.test(crumb),
+  );
+
+  // Client-side sanitization of stored HTML
+  const postPage = fs.readFileSync("src/pages/BlogPost.tsx", "utf8");
+  record(
+    "BlogPost sanitizes content before dangerouslySetInnerHTML",
+    /sanitizeBlogHtml\(post\.content/.test(postPage),
+  );
+  record(
+    "BlogPost only noindexes real 404s (transient errors preserved)",
+    /isNotFoundError\(error\)/.test(postPage),
+  );
+  record(
+    "BlogPost uses real featured image dimensions",
+    /width=\{imgWidth\} height=\{imgHeight\}/.test(postPage),
+  );
+
+  // Sitemap: images + loud failure
+  record(
+    "sitemap declares the Google image namespace",
+    /sitemap-image\/1\.1/.test(sitemapSrc) && /<image:image>/.test(sitemapSrc),
+  );
+  record(
+    "sitemap fails with 503 (never a silently truncated 200)",
+    /statusCode = 503/.test(sitemapSrc) && !/statusCode = 500/.test(sitemapSrc),
+  );
+
+  // robots.txt hygiene
+  const robots = fs.readFileSync("public/robots.txt", "utf8");
+  record("robots.txt has no Crawl-delay", !/Crawl-delay/i.test(robots));
+
+  // Language correctness
+  record("renderer sets <html lang> per article language", /setHtmlLang\(/.test(renderSrc));
+}
+
 // ---- Summary ---------------------------------------------------------------
+
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} passed`);
 if (failed.length) {

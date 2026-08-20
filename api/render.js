@@ -491,6 +491,7 @@ function renderBlogIndex(html, posts) {
 
   const snapshot = `<section><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>${cards}</section>`;
   html = injectIntoRoot(html, snapshot);
+  html = injectIntoBody(html, jsonIsland("__BLOG_LIST__", listIsland(posts)));
   return html;
 }
 

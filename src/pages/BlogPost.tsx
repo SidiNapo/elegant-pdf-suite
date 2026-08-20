@@ -106,9 +106,9 @@ const BlogPost = () => {
   // post.canonical_url is ignored so bad data cannot leak into <link rel="canonical">.
   const canonicalUrl = blogCanonicalFromSlug(post.slug) ?? `${window.location.origin}/blog/${post.slug}`;
 
-  // Content is now always stored as clean HTML from the rich-text editor,
-  // so render it directly.
-  const formattedContent = post.content;
+  // Content comes from the rich-text editor, but it is sanitized again on the
+  // client with the SAME allowlist used server-side before it is injected.
+  const formattedContent = sanitizeBlogHtml(post.content || '');
   const featuredAlt = post.featured_image_alt || post.title;
   const imgWidth = post.featured_image_width || 1200;
   const imgHeight = post.featured_image_height || 630;

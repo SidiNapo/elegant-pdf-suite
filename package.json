@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test:seo": "node scripts/seo-smoke.mjs",
     "test:canonical": "node scripts/canonical.test.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.mjs"
   },
   "packageManager": "npm@10.0.0",
   "dependencies": {

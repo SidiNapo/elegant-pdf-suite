@@ -103,6 +103,7 @@ const SEOHead = ({
     const effectiveWidth = ogImageWidth ?? (hasCustomImage ? 1200 : 512);
     const effectiveHeight = ogImageHeight ?? (hasCustomImage ? 630 : 512);
     setMetaTag('og:image', effectiveOgImage, true);
+    setMetaTag('og:image:secure_url', effectiveOgImage, true);
     setMetaTag('og:image:width', String(effectiveWidth), true);
     setMetaTag('og:image:height', String(effectiveHeight), true);
     setMetaTag('og:image:alt', ogImageAlt || (hasCustomImage ? title : "E-Pdf's Logo"), true);

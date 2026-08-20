@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { PROGRAMMATIC_PAGES } from "./_programmatic.js";
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from "./_seo.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -237,6 +238,20 @@ function injectHead(html, extraHead) {
 function injectIntoRoot(html, bodyHtml) {
   return html.replace(/(<div id="root"[^>]*>)/i, `$1${bodyHtml}`);
 }
+// Inject a <script type="application/json"> data island just before </body>.
+function injectIntoBody(html, markup) {
+  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${markup}\n</body>`);
+  return html + markup;
+}
+// Rewrite <html lang="..."> (and dir) to match the rendered document language.
+function setHtmlLang(html, lang, dir) {
+  return html.replace(/<html\b[^>]*>/i, `<html lang="${escapeHtml(lang)}"${dir ? ` dir="${escapeHtml(dir)}"` : ""}>`);
+}
+// Serialize an object into a JSON data island. escapeJsonLd() neutralises
+// "<" / ">" so the payload can never break out of the <script> element.
+function jsonIsland(id, data) {
+  return `  <script id="${id}" type="application/json">${escapeJsonLd(JSON.stringify(data))}</script>`;
+}
 
 /**
  * Apply a full, route-specific SEO head. `opts` may include article-only fields.
@@ -244,10 +259,10 @@ function injectIntoRoot(html, bodyHtml) {
  */
 function applyHead(html, opts) {
   const {
-    title, description, canonical, robots = "index, follow",
+    title, description, canonical, robots = ROBOTS_INDEX,
     ogType = "website", image = DEFAULT_OG_IMAGE, imageAlt = SITE_NAME,
     imageWidth = 1200, imageHeight = 630, keywords,
-    publishedTime, modifiedTime, author, isArticle = false,
+    publishedTime, modifiedTime, author, isArticle = false, ogLocale,
   } = opts;
 
   html = replaceOrInsertTitle(html, title);
@@ -263,6 +278,7 @@ function applyHead(html, opts) {
   html = replaceMetaByProperty(html, "og:description", description);
   html = replaceMetaByProperty(html, "og:url", canonical);
   html = replaceMetaByProperty(html, "og:image", image);
+  html = replaceMetaByProperty(html, "og:image:secure_url", image);
   html = replaceMetaByProperty(html, "og:image:width", String(imageWidth));
   html = replaceMetaByProperty(html, "og:image:height", String(imageHeight));
   html = replaceMetaByProperty(html, "og:image:alt", imageAlt);
@@ -275,6 +291,10 @@ function applyHead(html, opts) {
   html = replaceMetaByName(html, "twitter:image", image);
 
   if (isArticle) {
+    // Article pages declare a single, real locale — alternates would be false
+    // since translated URLs don't exist.
+    if (ogLocale) html = replaceMetaByProperty(html, "og:locale", ogLocale);
+    html = removeMetaByProperty(html, "og:locale:alternate");
     const extra = [
       publishedTime ? `  <meta property="article:published_time" content="${escapeHtml(publishedTime)}" />` : "",
       modifiedTime ? `  <meta property="article:modified_time" content="${escapeHtml(modifiedTime)}" />` : "",
@@ -289,6 +309,7 @@ function applyHead(html, opts) {
   return html;
 }
 
+
 // ---- Supabase fetch --------------------------------------------------------
 const SB_HEADERS = {
   apikey: SUPABASE_KEY,
@@ -302,15 +323,74 @@ async function sbFetch(query) {
 }
 async function fetchPost(slug) {
   const rows = await sbFetch(
-    `blog_posts?select=*,blog_categories(name,slug)&slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&limit=1`
+    `blog_posts?select=*,blog_categories(id,name,slug)&slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&limit=1`
   );
   return Array.isArray(rows) && rows.length ? rows[0] : null;
 }
 async function fetchPublishedList() {
   return sbFetch(
-    `blog_posts?select=id,slug,title,excerpt,featured_image,featured_image_alt,featured_image_width,featured_image_height,author_name,published_at,updated_at,category_id,blog_categories(name,slug)&is_published=eq.true&order=published_at.desc`
+    `blog_posts?select=id,slug,title,excerpt,featured_image,featured_image_alt,featured_image_width,featured_image_height,author_name,published_at,created_at,updated_at,views_count,category_id,blog_categories(id,name,slug)&is_published=eq.true&order=published_at.desc`
   );
 }
+
+// ---- Client hydration data islands -----------------------------------------
+// The SPA seeds react-query from these payloads (see src/lib/ssrData.ts) so the
+// article renders on the FIRST client paint with zero network calls — the
+// prerendered snapshot is never lost after hydration.
+function postIsland(post, safeContent) {
+  return {
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt ?? null,
+    // ALWAYS the sanitized server output, never raw post.content.
+    content: safeContent,
+    featured_image: post.featured_image ?? null,
+    featured_image_alt: post.featured_image_alt ?? null,
+    featured_image_width: post.featured_image_width ?? null,
+    featured_image_height: post.featured_image_height ?? null,
+    author_name: post.author_name ?? SITE_NAME,
+    language: post.language ?? "fr",
+    meta_title: post.meta_title ?? null,
+    meta_description: post.meta_description ?? null,
+    meta_keywords: post.meta_keywords ?? null,
+    og_image: post.og_image ?? null,
+    published_at: post.published_at ?? null,
+    created_at: post.created_at ?? null,
+    updated_at: post.updated_at ?? null,
+    views_count: post.views_count ?? 0,
+    category_id: post.category_id ?? null,
+    category: post.blog_categories
+      ? {
+          id: post.blog_categories.id ?? null,
+          name: post.blog_categories.name ?? null,
+          slug: post.blog_categories.slug ?? null,
+        }
+      : null,
+  };
+}
+function listIsland(posts) {
+  return (posts || []).map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt ?? null,
+    featured_image: p.featured_image ?? null,
+    author_name: p.author_name ?? SITE_NAME,
+    published_at: p.published_at ?? null,
+    created_at: p.created_at ?? null,
+    views_count: p.views_count ?? 0,
+    category_id: p.category_id ?? null,
+    category: p.blog_categories
+      ? {
+          id: p.blog_categories.id ?? null,
+          name: p.blog_categories.name ?? null,
+          slug: p.blog_categories.slug ?? null,
+        }
+      : null,
+  }));
+}
+
 
 // ---- Renderers -------------------------------------------------------------
 function renderStatic(html, route) {
@@ -411,6 +491,7 @@ function renderBlogIndex(html, posts) {
 
   const snapshot = `<section><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>${cards}</section>`;
   html = injectIntoRoot(html, snapshot);
+  html = injectIntoBody(html, jsonIsland("__BLOG_LIST__", listIsland(posts)));
   return html;
 }
 
@@ -432,11 +513,17 @@ function renderPost(html, slug, post, related) {
   const inLanguage = langName(post.language);
   const category = post.blog_categories && post.blog_categories.name ? post.blog_categories.name : "";
 
+  const ogLocale = inLanguage === "en" ? "en_US" : inLanguage === "ar" ? "ar_AR" : "fr_FR";
+
+  // The shell ships lang="fr" — rewrite it to the article's real language
+  // (and switch direction for Arabic).
+  html = setHtmlLang(html, inLanguage, inLanguage === "ar" ? "rtl" : undefined);
+
   html = applyHead(html, {
     title, description, canonical, keywords: post.meta_keywords, ogType: "article",
     image, imageAlt, imageWidth, imageHeight,
     publishedTime: published, modifiedTime: modified, author: post.author_name || SITE_NAME,
-    isArticle: true,
+    isArticle: true, ogLocale,
   });
 
   // BlogPosting JSON-LD (headline = post.title, not meta_title)
@@ -468,9 +555,11 @@ function renderPost(html, slug, post, related) {
       { "@type": "ListItem", position: 3, name: post.title, item: canonical },
     ],
   };
+  // data-schema attributes let the client REUSE these exact <script> nodes
+  // instead of appending a second copy of the same JSON-LD after hydration.
   html = injectHead(html,
-    `  <script type="application/ld+json">${escapeJsonLd(JSON.stringify(blogPosting))}</script>\n` +
-    `  <script type="application/ld+json">${escapeJsonLd(JSON.stringify(breadcrumb))}</script>`
+    `  <script type="application/ld+json" data-schema="article">${escapeJsonLd(JSON.stringify(blogPosting))}</script>\n` +
+    `  <script type="application/ld+json" data-schema="breadcrumb">${escapeJsonLd(JSON.stringify(breadcrumb))}</script>`
   );
 
   // Crawlable article snapshot
@@ -497,6 +586,10 @@ function renderPost(html, slug, post, related) {
     `</article>` +
     relatedHtml;
   html = injectIntoRoot(html, snapshot);
+  html = injectIntoBody(html, jsonIsland("__BLOG_POST__", postIsland(post, safeContent)));
+  if ((related || []).length) {
+    html = injectIntoBody(html, jsonIsland("__BLOG_RELATED__", listIsland(related)));
+  }
   return html;
 }
 
@@ -505,7 +598,7 @@ function renderNotFound(html, route) {
     title: "Page introuvable (404) | E-Pdf's",
     description: "La page que vous recherchez est introuvable.",
     canonical: safeCanonical(route),
-    robots: "noindex, nofollow",
+    robots: ROBOTS_NOINDEX,
   });
   html = injectIntoRoot(html, `<h1>Page introuvable</h1>`);
   return html;

@@ -1,18 +1,18 @@
 # E-PDF's Robots.txt
 # https://www.e-pdfs.com
+#
+# No Crawl-delay: Google ignores it and Bing/Yahoo would needlessly throttle
+# discovery of new articles. Admin routes are excluded via noindex headers and
+# a Disallow rule below (they are never linked publicly).
 
-# Allow Google to crawl favicon and branding assets
 User-agent: Googlebot
-Allow: /favicon.png
-Allow: /favicon.ico
-Allow: /site.webmanifest
-Allow: /browserconfig.xml
 Allow: /
-Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /
 
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -25,29 +25,14 @@ Allow: /
 
 User-agent: Slurp
 Allow: /
-Crawl-delay: 1
 
 User-agent: DuckDuckBot
 Allow: /
 
 User-agent: *
 Allow: /
-Crawl-delay: 2
+Disallow: /admin
+Disallow: /ctrl-x9k7m2p4q8n1
 
-# Sitemap and feed (dynamic — always include latest blog posts)
+# Sitemap (dynamic — always includes the latest blog posts)
 Sitemap: https://www.e-pdfs.com/sitemap.xml
-
-# Disallow admin pages
-Disallow: /admin/
-Disallow: /admin/*
-
-# Allow all public pages
-Allow: /tools
-Allow: /merge
-Allow: /split
-Allow: /compress
-Allow: /blog
-Allow: /about
-Allow: /contact
-Allow: /privacy
-Allow: /terms

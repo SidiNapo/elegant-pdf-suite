@@ -2,14 +2,16 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import ArticleSchema from '@/components/blog/ArticleSchema';
 import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
-import { usePostBySlug, usePublishedPosts } from '@/hooks/useBlogPosts';
+import { usePostBySlug, usePublishedPosts, isNotFoundError } from '@/hooks/useBlogPosts';
 import { blogCanonicalFromSlug } from '@/lib/canonical';
+import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { Loader2 } from 'lucide-react';
 
 const BlogPost = () => {
@@ -17,6 +19,18 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug || '');
   const { data: allPosts } = usePublishedPosts();
+
+  // Keep <html lang>/<dir> in sync with the article's own language so the
+  // rendered DOM Google sees matches the declared language.
+  const documentLang = post?.language || i18n.language || 'fr';
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.lang = documentLang;
+    document.documentElement.dir = documentLang === 'ar' ? 'rtl' : 'ltr';
+  }, [documentLang]);
+
+  // While loading we render NO SEOHead, so the server-prerendered head stays
+  // untouched (no transient noindex, no homepage title).
   if (isLoading) {
     return (
       <div className="min-h-dvh bg-background flex items-center justify-center">
@@ -24,8 +38,30 @@ const BlogPost = () => {
       </div>
     );
   }
-  
-  if (error || !post) {
+
+  // Transient failure (network/5xx): NEVER emit noindex and never destroy the
+  // server-rendered head — a fetch hiccup must not deindex a live article.
+  if (!post && error && !isNotFoundError(error)) {
+    return (
+      <div className="min-h-dvh bg-background">
+        <Header />
+        <main id="main-content" className="pt-24 pb-16">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-muted-foreground mb-6">
+              {t('blog.loadError', { defaultValue: 'Impossible de charger cet article pour le moment. Veuillez réessayer.' })}
+            </p>
+            <button onClick={() => window.location.reload()} className="btn-primary inline-block">
+              {t('common.retry', { defaultValue: 'Réessayer' })}
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Genuine 404 only.
+  if (!post) {
     return (
       <div className="min-h-dvh bg-background">
         <SEOHead
@@ -49,6 +85,7 @@ const BlogPost = () => {
       </div>
     );
   }
+
   
   const locale = i18n.language === 'ar' ? 'ar-SA' : i18n.language === 'en' ? 'en-US' : 'fr-FR';
   const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString(locale, {
@@ -69,9 +106,9 @@ const BlogPost = () => {
   // post.canonical_url is ignored so bad data cannot leak into <link rel="canonical">.
   const canonicalUrl = blogCanonicalFromSlug(post.slug) ?? `${window.location.origin}/blog/${post.slug}`;
 
-  // Content is now always stored as clean HTML from the rich-text editor,
-  // so render it directly.
-  const formattedContent = post.content;
+  // Content comes from the rich-text editor, but it is sanitized again on the
+  // client with the SAME allowlist used server-side before it is injected.
+  const formattedContent = sanitizeBlogHtml(post.content || '');
   const featuredAlt = post.featured_image_alt || post.title;
   const imgWidth = post.featured_image_width || 1200;
   const imgHeight = post.featured_image_height || 630;
@@ -109,7 +146,7 @@ const BlogPost = () => {
           opacity: 1
         }} className="relative h-[50vh] min-h-[400px] mb-12">
               <div className="absolute inset-0">
-                <img src={post.featured_image} alt={featuredAlt} width={1200} height={630} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
+                <img src={post.featured_image} alt={featuredAlt} width={imgWidth} height={imgHeight} loading="eager" fetchPriority="high" decoding="async" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
               </div>
               
@@ -141,7 +178,7 @@ const BlogPost = () => {
               </div>
             </motion.div>}
 
-          <article className="container mx-auto px-4 max-w-4xl">
+          <article lang={postLang} dir={postLang === 'ar' ? 'rtl' : undefined} className="container mx-auto px-4 max-w-4xl">
             {/* Back Link */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}

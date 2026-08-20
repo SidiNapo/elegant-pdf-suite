@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import { sanitizeCanonical } from '@/lib/canonical';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - plain JS ESM module shared with the Vercel serverless renderer
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from '../../api/_seo.js';
 
 interface SEOHeadProps {
   title: string;
@@ -82,9 +85,11 @@ const SEOHead = ({
     setMetaTag('description', description);
     if (keywords) setMetaTag('keywords', keywords);
     if (noIndex) {
-      setMetaTag('robots', 'noindex, nofollow');
+      setMetaTag('robots', ROBOTS_NOINDEX);
     } else {
-      setMetaTag('robots', 'index, follow');
+      // Same directive the server prerender emits — never downgrade it to a
+      // bare "index, follow" (that would drop max-image-preview:large).
+      setMetaTag('robots', ROBOTS_INDEX);
     }
 
     // Open Graph tags
@@ -98,6 +103,7 @@ const SEOHead = ({
     const effectiveWidth = ogImageWidth ?? (hasCustomImage ? 1200 : 512);
     const effectiveHeight = ogImageHeight ?? (hasCustomImage ? 630 : 512);
     setMetaTag('og:image', effectiveOgImage, true);
+    setMetaTag('og:image:secure_url', effectiveOgImage, true);
     setMetaTag('og:image:width', String(effectiveWidth), true);
     setMetaTag('og:image:height', String(effectiveHeight), true);
     setMetaTag('og:image:alt', ogImageAlt || (hasCustomImage ? title : "E-Pdf's Logo"), true);

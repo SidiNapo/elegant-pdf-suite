@@ -32,27 +32,46 @@ const PROGRAMMATIC_ROUTES = PROGRAMMATIC_PAGES.map((p) => ({
   path: `/p/${p.slug}`, priority: "0.7", changefreq: "monthly",
 }));
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 
-function urlEntry(path, priority, changefreq, lastmod) {
+function urlEntry(path, priority, changefreq, lastmod, image) {
   return `  <url>
     <loc>${esc(`${SITE_URL}${path}`)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
+    <priority>${priority}</priority>${image ? `
+    <image:image>
+      <image:loc>${esc(image.loc)}</image:loc>${image.title ? `\n      <image:title>${esc(image.title)}</image:title>` : ""}${image.caption ? `\n      <image:caption>${esc(image.caption)}</image:caption>` : ""}
+    </image:image>` : ""}
   </url>`;
 }
+
+const absolute = (u) => {
+  if (!u) return null;
+  const s = String(u).trim();
+  if (!s) return null;
+  if (/^https:\/\//i.test(s)) return s;
+  if (/^http:\/\//i.test(s)) return s.replace(/^http:/i, "https:");
+  return `${SITE_URL}${s.startsWith("/") ? s : `/${s}`}`;
+};
 
 export default async function handler(req, res) {
   res.setHeader("Content-Type", "application/xml; charset=utf-8");
   try {
-    let posts = [];
-    try {
-      const r = await fetch(
-        `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,updated_at,published_at&is_published=eq.true&order=published_at.desc`,
-        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-      );
-      if (r.ok) posts = await r.json();
-    } catch (_e) { /* posts best-effort */ }
+    // A failed post fetch must NOT silently emit a sitemap missing every
+    // article — that would look to Google like the articles were removed.
+    // Fail loudly with a 503 so the previous sitemap keeps its authority.
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+      res.statusCode = 503;
+      res.setHeader("Cache-Control", "no-store");
+      res.end(`<!-- sitemap unavailable: backend not configured -->`);
+      return;
+    }
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,title,excerpt,featured_image,featured_image_alt,updated_at,published_at&is_published=eq.true&order=published_at.desc`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!r.ok) throw new Error(`supabase ${r.status}`);
+    const posts = await r.json();
 
     const entries = [];
     for (const rt of [...STATIC_ROUTES, ...TOOL_ROUTES, ...PROGRAMMATIC_ROUTES]) {
@@ -60,11 +79,15 @@ export default async function handler(req, res) {
     }
     for (const p of posts || []) {
       const lastmod = (p.updated_at || p.published_at || "").slice(0, 10);
-      entries.push(urlEntry(`/blog/${p.slug}`, "0.7", "weekly", lastmod || undefined));
+      const loc = absolute(p.featured_image);
+      const image = loc
+        ? { loc, title: p.title || "", caption: p.featured_image_alt || p.excerpt || "" }
+        : null;
+      entries.push(urlEntry(`/blog/${p.slug}`, "0.7", "weekly", lastmod || undefined, image));
     }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${entries.join("\n")}
 </urlset>`;
 
@@ -72,7 +95,11 @@ ${entries.join("\n")}
     res.statusCode = 200;
     res.end(xml);
   } catch (e) {
-    res.statusCode = 500;
-    res.end(`<!-- error: ${String(e)} -->`);
+    // 503 (not 200 with a truncated list) so crawlers retry instead of
+    // treating missing URLs as deletions.
+    res.statusCode = 503;
+    res.setHeader("Cache-Control", "no-store");
+    res.end(`<!-- sitemap temporarily unavailable -->`);
   }
 }
+

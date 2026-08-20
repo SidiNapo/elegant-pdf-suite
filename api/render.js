@@ -238,6 +238,20 @@ function injectHead(html, extraHead) {
 function injectIntoRoot(html, bodyHtml) {
   return html.replace(/(<div id="root"[^>]*>)/i, `$1${bodyHtml}`);
 }
+// Inject a <script type="application/json"> data island just before </body>.
+function injectIntoBody(html, markup) {
+  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, `${markup}\n</body>`);
+  return html + markup;
+}
+// Rewrite <html lang="..."> (and dir) to match the rendered document language.
+function setHtmlLang(html, lang, dir) {
+  return html.replace(/<html\b[^>]*>/i, `<html lang="${escapeHtml(lang)}"${dir ? ` dir="${escapeHtml(dir)}"` : ""}>`);
+}
+// Serialize an object into a JSON data island. escapeJsonLd() neutralises
+// "<" / ">" so the payload can never break out of the <script> element.
+function jsonIsland(id, data) {
+  return `  <script id="${id}" type="application/json">${escapeJsonLd(JSON.stringify(data))}</script>`;
+}
 
 /**
  * Apply a full, route-specific SEO head. `opts` may include article-only fields.
@@ -245,10 +259,10 @@ function injectIntoRoot(html, bodyHtml) {
  */
 function applyHead(html, opts) {
   const {
-    title, description, canonical, robots = "index, follow",
+    title, description, canonical, robots = ROBOTS_INDEX,
     ogType = "website", image = DEFAULT_OG_IMAGE, imageAlt = SITE_NAME,
     imageWidth = 1200, imageHeight = 630, keywords,
-    publishedTime, modifiedTime, author, isArticle = false,
+    publishedTime, modifiedTime, author, isArticle = false, ogLocale,
   } = opts;
 
   html = replaceOrInsertTitle(html, title);
@@ -264,6 +278,7 @@ function applyHead(html, opts) {
   html = replaceMetaByProperty(html, "og:description", description);
   html = replaceMetaByProperty(html, "og:url", canonical);
   html = replaceMetaByProperty(html, "og:image", image);
+  html = replaceMetaByProperty(html, "og:image:secure_url", image);
   html = replaceMetaByProperty(html, "og:image:width", String(imageWidth));
   html = replaceMetaByProperty(html, "og:image:height", String(imageHeight));
   html = replaceMetaByProperty(html, "og:image:alt", imageAlt);
@@ -276,6 +291,10 @@ function applyHead(html, opts) {
   html = replaceMetaByName(html, "twitter:image", image);
 
   if (isArticle) {
+    // Article pages declare a single, real locale — alternates would be false
+    // since translated URLs don't exist.
+    if (ogLocale) html = replaceMetaByProperty(html, "og:locale", ogLocale);
+    html = removeMetaByProperty(html, "og:locale:alternate");
     const extra = [
       publishedTime ? `  <meta property="article:published_time" content="${escapeHtml(publishedTime)}" />` : "",
       modifiedTime ? `  <meta property="article:modified_time" content="${escapeHtml(modifiedTime)}" />` : "",
@@ -289,6 +308,7 @@ function applyHead(html, opts) {
   }
   return html;
 }
+
 
 // ---- Supabase fetch --------------------------------------------------------
 const SB_HEADERS = {

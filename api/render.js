@@ -586,6 +586,10 @@ function renderPost(html, slug, post, related) {
     `</article>` +
     relatedHtml;
   html = injectIntoRoot(html, snapshot);
+  html = injectIntoBody(html, jsonIsland("__BLOG_POST__", postIsland(post, safeContent)));
+  if ((related || []).length) {
+    html = injectIntoBody(html, jsonIsland("__BLOG_RELATED__", listIsland(related)));
+  }
   return html;
 }
 
@@ -594,7 +598,7 @@ function renderNotFound(html, route) {
     title: "Page introuvable (404) | E-Pdf's",
     description: "La page que vous recherchez est introuvable.",
     canonical: safeCanonical(route),
-    robots: "noindex, nofollow",
+    robots: ROBOTS_NOINDEX,
   });
   html = injectIntoRoot(html, `<h1>Page introuvable</h1>`);
   return html;

@@ -35,9 +35,7 @@ const BreadcrumbSchema = ({ items }: BreadcrumbSchemaProps) => {
     }
     script.textContent = JSON.stringify(schema);
 
-    return () => {
-      document.querySelector('script[data-schema="breadcrumb"]')?.remove();
-    };
+    // No cleanup: the node is reused (server prerender must survive).
   }, [items]);
 
   return null;

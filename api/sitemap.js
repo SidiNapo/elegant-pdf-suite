@@ -34,15 +34,38 @@ const PROGRAMMATIC_ROUTES = PROGRAMMATIC_PAGES.map((p) => ({
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 
-function urlEntry(path, priority, changefreq, lastmod, image) {
+function imageBlock(image) {
+  return `
+    <image:image>
+      <image:loc>${esc(image.loc)}</image:loc>${image.title ? `\n      <image:title>${esc(image.title)}</image:title>` : ""}${image.caption ? `\n      <image:caption>${esc(image.caption)}</image:caption>` : ""}
+    </image:image>`;
+}
+
+function urlEntry(path, priority, changefreq, lastmod, images) {
+  const list = Array.isArray(images) ? images : images ? [images] : [];
   return `  <url>
     <loc>${esc(`${SITE_URL}${path}`)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>${image ? `
-    <image:image>
-      <image:loc>${esc(image.loc)}</image:loc>${image.title ? `\n      <image:title>${esc(image.title)}</image:title>` : ""}${image.caption ? `\n      <image:caption>${esc(image.caption)}</image:caption>` : ""}
-    </image:image>` : ""}
+    <priority>${priority}</priority>${list.map(imageBlock).join("")}
   </url>`;
+}
+
+// Collect every distinct <img src> from sanitized post HTML.
+function contentImages(html) {
+  const out = [];
+  const seen = new Set();
+  const re = /<img\b[^>]*?\bsrc=["']([^"']+)["'][^>]*>/gi;
+  let m;
+  while ((m = re.exec(String(html || "")))) {
+    const raw = m[1].trim();
+    if (!/^https?:\/\//i.test(raw) && !raw.startsWith("/")) continue;
+    const loc = absolute(raw);
+    if (!loc || seen.has(loc)) continue;
+    seen.add(loc);
+    const alt = /\balt=["']([^"']*)["']/i.exec(m[0]);
+    out.push({ loc, title: alt && alt[1] ? alt[1] : "" });
+  }
+  return out;
 }
 
 const absolute = (u) => {
@@ -63,27 +86,43 @@ export default async function handler(req, res) {
     if (!SUPABASE_URL || !SUPABASE_KEY) {
       res.statusCode = 503;
       res.setHeader("Cache-Control", "no-store");
+      res.setHeader("Retry-After", "60");
       res.end(`<!-- sitemap unavailable: backend not configured -->`);
       return;
     }
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,title,excerpt,featured_image,featured_image_alt,updated_at,published_at&is_published=eq.true&order=published_at.desc`,
+      `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,title,excerpt,featured_image,featured_image_alt,updated_at,published_at,content&is_published=eq.true&order=published_at.desc`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     if (!r.ok) throw new Error(`supabase ${r.status}`);
     const posts = await r.json();
+    // A non-array payload means the query shape changed or an error object came
+    // back. Never degrade to a post-less 200.
+    if (!Array.isArray(posts)) throw new Error("supabase returned a non-array payload");
 
+    const buildDate = new Date().toISOString().slice(0, 10);
     const entries = [];
     for (const rt of [...STATIC_ROUTES, ...TOOL_ROUTES, ...PROGRAMMATIC_ROUTES]) {
-      entries.push(urlEntry(rt.path, rt.priority, rt.changefreq));
+      entries.push(urlEntry(rt.path, rt.priority, rt.changefreq, buildDate));
     }
-    for (const p of posts || []) {
+    for (const p of posts) {
       const lastmod = (p.updated_at || p.published_at || "").slice(0, 10);
-      const loc = absolute(p.featured_image);
-      const image = loc
-        ? { loc, title: p.title || "", caption: p.featured_image_alt || p.excerpt || "" }
-        : null;
-      entries.push(urlEntry(`/blog/${p.slug}`, "0.7", "weekly", lastmod || undefined, image));
+      const images = [];
+      const featured = absolute(p.featured_image);
+      if (featured) {
+        images.push({
+          loc: featured,
+          title: p.title || "",
+          caption: p.featured_image_alt || p.excerpt || "",
+        });
+      }
+      const seen = new Set(images.map((i) => i.loc));
+      for (const img of contentImages(p.content)) {
+        if (seen.has(img.loc)) continue;
+        seen.add(img.loc);
+        images.push({ loc: img.loc, title: img.title || p.title || "" });
+      }
+      entries.push(urlEntry(`/blog/${p.slug}`, "0.7", "weekly", lastmod || undefined, images));
     }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -99,6 +138,7 @@ ${entries.join("\n")}
     // treating missing URLs as deletions.
     res.statusCode = 503;
     res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Retry-After", "60");
     res.end(`<!-- sitemap temporarily unavailable -->`);
   }
 }

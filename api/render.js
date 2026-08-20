@@ -513,11 +513,17 @@ function renderPost(html, slug, post, related) {
   const inLanguage = langName(post.language);
   const category = post.blog_categories && post.blog_categories.name ? post.blog_categories.name : "";
 
+  const ogLocale = inLanguage === "en" ? "en_US" : inLanguage === "ar" ? "ar_AR" : "fr_FR";
+
+  // The shell ships lang="fr" — rewrite it to the article's real language
+  // (and switch direction for Arabic).
+  html = setHtmlLang(html, inLanguage, inLanguage === "ar" ? "rtl" : undefined);
+
   html = applyHead(html, {
     title, description, canonical, keywords: post.meta_keywords, ogType: "article",
     image, imageAlt, imageWidth, imageHeight,
     publishedTime: published, modifiedTime: modified, author: post.author_name || SITE_NAME,
-    isArticle: true,
+    isArticle: true, ogLocale,
   });
 
   // BlogPosting JSON-LD (headline = post.title, not meta_title)

@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { PROGRAMMATIC_PAGES } from "./_programmatic.js";
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from "./_seo.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

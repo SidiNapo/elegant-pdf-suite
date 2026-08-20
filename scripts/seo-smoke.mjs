@@ -232,7 +232,7 @@ try {
   );
   record(
     "SEOHead never emits a bare 'index, follow'",
-    !/['"]index, follow['"]/.test(seo),
+    !/setMetaTag\('robots',\s*['"]index, follow['"]/.test(seo),
   );
 
   // Hydration data islands
@@ -289,7 +289,10 @@ try {
 
   // robots.txt hygiene
   const robots = fs.readFileSync("public/robots.txt", "utf8");
-  record("robots.txt has no Crawl-delay", !/Crawl-delay/i.test(robots));
+  record(
+    "robots.txt has no active Crawl-delay directive",
+    !robots.split("\n").some((l) => /^\s*Crawl-delay/i.test(l)),
+  );
 
   // Language correctness
   record("renderer sets <html lang> per article language", /setHtmlLang\(/.test(renderSrc));

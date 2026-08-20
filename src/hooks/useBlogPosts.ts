@@ -50,8 +50,22 @@ export interface BlogPostSummary {
   category?: BlogCategory;
 }
 
+/** Thrown only when the slug genuinely does not exist (or is unpublished). */
+export class PostNotFoundError extends Error {
+  readonly notFound = true;
+  constructor(slug: string) {
+    super(`Post not found: ${slug}`);
+    this.name = 'PostNotFoundError';
+  }
+}
+export const isNotFoundError = (e: unknown): boolean =>
+  !!e && typeof e === 'object' && (e as { notFound?: boolean }).notFound === true;
+
 // Fetch all published posts (public) - OPTIMIZED: only select needed fields
 export const usePublishedPosts = () => {
+  // Seeded from the server-rendered data island so the list is visible on the
+  // very first client paint (no flash of empty content for crawlers).
+  const initialData = readSsrJson<BlogPostSummary[]>('__BLOG_LIST__');
   return useQuery({
     queryKey: ['blog-posts', 'published'],
     queryFn: async () => {
@@ -76,6 +90,7 @@ export const usePublishedPosts = () => {
       if (error) throw error;
       return data as BlogPostSummary[];
     },
+    initialData,
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
   });
@@ -83,6 +98,10 @@ export const usePublishedPosts = () => {
 
 // Fetch single post by slug (public)
 export const usePostBySlug = (slug: string) => {
+  // The prerendered article payload (already sanitized server-side).
+  const island = readSsrJson<BlogPost>('__BLOG_POST__');
+  const initialData = island && island.slug === slug ? island : undefined;
+
   return useQuery({
     queryKey: ['blog-posts', 'slug', slug],
     queryFn: async () => {
@@ -94,9 +113,11 @@ export const usePostBySlug = (slug: string) => {
         `)
         .eq('slug', slug)
         .eq('is_published', true)
-        .single();
+        .maybeSingle();
 
+      // A real transport/permission failure must NOT be mistaken for a 404.
       if (error) throw error;
+      if (!data) throw new PostNotFoundError(slug);
 
       // Record a deduplicated view via the server-only edge function.
       // Fire-and-forget: never block the reader on analytics.
@@ -104,15 +125,17 @@ export const usePostBySlug = (slug: string) => {
         void supabase.functions.invoke('record-view', { body: { post_id: data.id } });
       } catch { /* ignore view-count failures */ }
 
-      
-      
       return data as BlogPost;
     },
     enabled: !!slug,
+    initialData,
     staleTime: 2 * 60 * 1000, // 2 minutes cache
-    retry: false, // Missing slug should surface immediately as 404
+    // Missing slug surfaces immediately as 404; transient network/5xx errors
+    // get retried instead of nuking the server-rendered article.
+    retry: (count, error) => !isNotFoundError(error) && count < 2,
   });
 };
+
 
 // Fetch all posts (admin)
 export const useAllPosts = () => {

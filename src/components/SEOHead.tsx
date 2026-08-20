@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import { sanitizeCanonical } from '@/lib/canonical';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - plain JS ESM module shared with the Vercel serverless renderer
+import { ROBOTS_INDEX, ROBOTS_NOINDEX } from '../../api/_seo.js';
 
 interface SEOHeadProps {
   title: string;

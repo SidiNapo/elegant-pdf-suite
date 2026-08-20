@@ -329,9 +329,68 @@ async function fetchPost(slug) {
 }
 async function fetchPublishedList() {
   return sbFetch(
-    `blog_posts?select=id,slug,title,excerpt,featured_image,featured_image_alt,featured_image_width,featured_image_height,author_name,published_at,updated_at,category_id,blog_categories(name,slug)&is_published=eq.true&order=published_at.desc`
+    `blog_posts?select=id,slug,title,excerpt,featured_image,featured_image_alt,featured_image_width,featured_image_height,author_name,published_at,created_at,updated_at,views_count,category_id,blog_categories(id,name,slug)&is_published=eq.true&order=published_at.desc`
   );
 }
+
+// ---- Client hydration data islands -----------------------------------------
+// The SPA seeds react-query from these payloads (see src/lib/ssrData.ts) so the
+// article renders on the FIRST client paint with zero network calls — the
+// prerendered snapshot is never lost after hydration.
+function postIsland(post, safeContent) {
+  return {
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt ?? null,
+    // ALWAYS the sanitized server output, never raw post.content.
+    content: safeContent,
+    featured_image: post.featured_image ?? null,
+    featured_image_alt: post.featured_image_alt ?? null,
+    featured_image_width: post.featured_image_width ?? null,
+    featured_image_height: post.featured_image_height ?? null,
+    author_name: post.author_name ?? SITE_NAME,
+    language: post.language ?? "fr",
+    meta_title: post.meta_title ?? null,
+    meta_description: post.meta_description ?? null,
+    meta_keywords: post.meta_keywords ?? null,
+    og_image: post.og_image ?? null,
+    published_at: post.published_at ?? null,
+    created_at: post.created_at ?? null,
+    updated_at: post.updated_at ?? null,
+    views_count: post.views_count ?? 0,
+    category_id: post.category_id ?? null,
+    category: post.blog_categories
+      ? {
+          id: post.blog_categories.id ?? null,
+          name: post.blog_categories.name ?? null,
+          slug: post.blog_categories.slug ?? null,
+        }
+      : null,
+  };
+}
+function listIsland(posts) {
+  return (posts || []).map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt ?? null,
+    featured_image: p.featured_image ?? null,
+    author_name: p.author_name ?? SITE_NAME,
+    published_at: p.published_at ?? null,
+    created_at: p.created_at ?? null,
+    views_count: p.views_count ?? 0,
+    category_id: p.category_id ?? null,
+    category: p.blog_categories
+      ? {
+          id: p.blog_categories.id ?? null,
+          name: p.blog_categories.name ?? null,
+          slug: p.blog_categories.slug ?? null,
+        }
+      : null,
+  }));
+}
+
 
 // ---- Renderers -------------------------------------------------------------
 function renderStatic(html, route) {

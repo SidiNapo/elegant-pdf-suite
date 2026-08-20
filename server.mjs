@@ -86,6 +86,14 @@ app.use(wrap(render));
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => {
+  // express.static with fallthrough:false rejects missing files with a 404-
+  // shaped error — honour it so a missing asset is a plain-text 404, never HTML.
+  const status = Number(err && (err.statusCode || err.status)) || 500;
+  if (status === 404) {
+    if (res.headersSent) return;
+    res.status(404).type("text/plain").send("Not Found");
+    return;
+  }
   console.error("[server] unhandled error on", req.method, req.originalUrl, err);
   if (res.headersSent) return;
   res.status(500).type("text/plain").send("Internal Server Error");

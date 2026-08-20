@@ -720,3 +720,6 @@ export default async function handler(req, res) {
     res.end(template);
   }
 }
+
+// Exported for the SEO smoke test (data-island regression).
+export { renderPost, renderBlogIndex };

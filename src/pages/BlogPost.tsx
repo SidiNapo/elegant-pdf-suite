@@ -2,14 +2,16 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SEOHead from '@/components/SEOHead';
 import ArticleSchema from '@/components/blog/ArticleSchema';
 import BreadcrumbSchema from '@/components/blog/BreadcrumbSchema';
 import ShareButtons from '@/components/blog/ShareButtons';
-import { usePostBySlug, usePublishedPosts } from '@/hooks/useBlogPosts';
+import { usePostBySlug, usePublishedPosts, isNotFoundError } from '@/hooks/useBlogPosts';
 import { blogCanonicalFromSlug } from '@/lib/canonical';
+import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { Loader2 } from 'lucide-react';
 
 const BlogPost = () => {
@@ -17,6 +19,18 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = usePostBySlug(slug || '');
   const { data: allPosts } = usePublishedPosts();
+
+  // Keep <html lang>/<dir> in sync with the article's own language so the
+  // rendered DOM Google sees matches the declared language.
+  const documentLang = post?.language || i18n.language || 'fr';
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.documentElement.lang = documentLang;
+    document.documentElement.dir = documentLang === 'ar' ? 'rtl' : 'ltr';
+  }, [documentLang]);
+
+  // While loading we render NO SEOHead, so the server-prerendered head stays
+  // untouched (no transient noindex, no homepage title).
   if (isLoading) {
     return (
       <div className="min-h-dvh bg-background flex items-center justify-center">
@@ -24,8 +38,30 @@ const BlogPost = () => {
       </div>
     );
   }
-  
-  if (error || !post) {
+
+  // Transient failure (network/5xx): NEVER emit noindex and never destroy the
+  // server-rendered head — a fetch hiccup must not deindex a live article.
+  if (!post && error && !isNotFoundError(error)) {
+    return (
+      <div className="min-h-dvh bg-background">
+        <Header />
+        <main id="main-content" className="pt-24 pb-16">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-muted-foreground mb-6">
+              {t('blog.loadError', { defaultValue: 'Impossible de charger cet article pour le moment. Veuillez réessayer.' })}
+            </p>
+            <button onClick={() => window.location.reload()} className="btn-primary inline-block">
+              {t('common.retry', { defaultValue: 'Réessayer' })}
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Genuine 404 only.
+  if (!post) {
     return (
       <div className="min-h-dvh bg-background">
         <SEOHead
@@ -49,6 +85,7 @@ const BlogPost = () => {
       </div>
     );
   }
+
   
   const locale = i18n.language === 'ar' ? 'ar-SA' : i18n.language === 'en' ? 'en-US' : 'fr-FR';
   const formattedDate = new Date(post.published_at || post.created_at).toLocaleDateString(locale, {

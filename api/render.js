@@ -555,9 +555,11 @@ function renderPost(html, slug, post, related) {
       { "@type": "ListItem", position: 3, name: post.title, item: canonical },
     ],
   };
+  // data-schema attributes let the client REUSE these exact <script> nodes
+  // instead of appending a second copy of the same JSON-LD after hydration.
   html = injectHead(html,
-    `  <script type="application/ld+json">${escapeJsonLd(JSON.stringify(blogPosting))}</script>\n` +
-    `  <script type="application/ld+json">${escapeJsonLd(JSON.stringify(breadcrumb))}</script>`
+    `  <script type="application/ld+json" data-schema="article">${escapeJsonLd(JSON.stringify(blogPosting))}</script>\n` +
+    `  <script type="application/ld+json" data-schema="breadcrumb">${escapeJsonLd(JSON.stringify(breadcrumb))}</script>`
   );
 
   // Crawlable article snapshot

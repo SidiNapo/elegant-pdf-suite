@@ -77,13 +77,8 @@ const ArticleSchema = ({
     }
     script.textContent = JSON.stringify(schema);
 
-    // Cleanup
-    return () => {
-      const existingScript = document.querySelector('script[data-schema="article"]');
-      if (existingScript) {
-        existingScript.remove();
-      }
-    };
+    // No cleanup: the node is reused (and may have been server-rendered).
+    // Removing it on unmount would destroy the prerendered JSON-LD.
   }, [title, description, image, imageWidth, imageHeight, authorName, publishedAt, modifiedAt, url, inLanguage, section, keywords]);
 
   return null;

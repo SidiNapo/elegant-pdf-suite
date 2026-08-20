@@ -323,7 +323,7 @@ async function sbFetch(query) {
 }
 async function fetchPost(slug) {
   const rows = await sbFetch(
-    `blog_posts?select=*,blog_categories(name,slug)&slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&limit=1`
+    `blog_posts?select=*,blog_categories(id,name,slug)&slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&limit=1`
   );
   return Array.isArray(rows) && rows.length ? rows[0] : null;
 }

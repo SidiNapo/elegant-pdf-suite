@@ -11,8 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test:seo": "node scripts/seo-smoke.mjs",
     "test:canonical": "node scripts/canonical.test.mjs",
-    "preview": "vite preview",
-    "start": "node server.mjs"
+    "preview": "vite preview"
   },
   "packageManager": "npm@10.0.0",
   "dependencies": {
@@ -58,7 +57,6 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
-    "express": "^5.2.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.24.7",
     "html2canvas": "^1.4.1",

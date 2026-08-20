@@ -85,9 +85,11 @@ const SEOHead = ({
     setMetaTag('description', description);
     if (keywords) setMetaTag('keywords', keywords);
     if (noIndex) {
-      setMetaTag('robots', 'noindex, nofollow');
+      setMetaTag('robots', ROBOTS_NOINDEX);
     } else {
-      setMetaTag('robots', 'index, follow');
+      // Same directive the server prerender emits — never downgrade it to a
+      // bare "index, follow" (that would drop max-image-preview:large).
+      setMetaTag('robots', ROBOTS_INDEX);
     }
 
     // Open Graph tags

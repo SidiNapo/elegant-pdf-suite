@@ -298,6 +298,53 @@ try {
   record("renderer sets <html lang> per article language", /setHtmlLang\(/.test(renderSrc));
 }
 
+// ---- Data island regression (renderPost emits __BLOG_POST__) --------------
+try {
+  const mod = await import(pathToFileURL(path.resolve("api/render.js")).href);
+  const shell = `<!doctype html><html lang="fr"><head><title>x</title></head><body><div id="root"></div></body></html>`;
+  const fixture = {
+    id: "fixture-id",
+    slug: "how-to-convert-pdf-to-word",
+    title: "Fixture title",
+    excerpt: "Fixture excerpt",
+    content: "<p>Body <img src=\"/img.jpg\" alt=\"a\"></p>",
+    featured_image: "/og.jpg",
+    featured_image_alt: "alt",
+    featured_image_width: 1200,
+    featured_image_height: 630,
+    author_name: "E-Pdf's",
+    language: "fr",
+    published_at: "2026-01-01T00:00:00.000Z",
+    created_at: "2026-01-01T00:00:00.000Z",
+    updated_at: "2026-01-02T00:00:00.000Z",
+    views_count: 3,
+    category_id: "cat-1",
+    blog_categories: { id: "cat-1", name: "Guides", slug: "guides" },
+  };
+  const out = mod.renderPost(shell, fixture.slug, fixture, []);
+  const m = /<script id="__BLOG_POST__" type="application\/json">([\s\S]*?)<\/script>/.exec(out);
+  const island = m ? JSON.parse(m[1].replace(/\\u003c/g, "<").replace(/\\u003e/g, ">")) : null;
+  record(
+    "renderPost emits a parseable __BLOG_POST__ island",
+    !!island,
+  );
+  record(
+    "island slug matches the fixture",
+    !!island && island.slug === fixture.slug,
+    island ? String(island.slug) : "",
+  );
+  record(
+    "island exposes `category` (mapped from blog_categories)",
+    !!island && !!island.category && island.category.name === "Guides" && !("blog_categories" in island),
+  );
+  record(
+    "island content is sanitized (no raw post.content passthrough)",
+    !!island && typeof island.content === "string" && island.content.includes("<p>"),
+  );
+} catch (e) {
+  record("renderPost data island regression", false, e.message);
+}
+
 // ---- Summary ---------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

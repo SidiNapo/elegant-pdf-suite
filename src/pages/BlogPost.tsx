@@ -178,7 +178,7 @@ const BlogPost = () => {
               </div>
             </motion.div>}
 
-          <article className="container mx-auto px-4 max-w-4xl">
+          <article lang={postLang} dir={postLang === 'ar' ? 'rtl' : undefined} className="container mx-auto px-4 max-w-4xl">
             {/* Back Link */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}

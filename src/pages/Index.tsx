@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
 import StructuredData from '@/components/StructuredData';
 import SEOHead from '@/components/SEOHead';
+import { usePublishedPosts } from '@/hooks/useBlogPosts';
 
 // Import images
 import heroPdf from '@/assets/hero-pdf.jpg';
@@ -567,8 +568,30 @@ const Index = () => {
       </section>
       </main>
 
+      <LatestPosts />
       <Footer />
     </div>
   </LazyMotion>;
 };
 export default Index;
+function LatestPosts() {
+  const { data } = usePublishedPosts();
+  const posts = (data || []).slice(0, 6);
+  if (!posts.length) return null;
+  return (
+    <section aria-labelledby="latest-posts" className="container mx-auto px-4 py-12">
+      <h2 id="latest-posts" className="text-2xl font-bold mb-6 text-foreground">Derniers articles du blog</h2>
+      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p: any) => (
+          <li key={p.slug}>
+            <Link to={`/blog/${p.slug}`} className="block rounded-lg border border-border bg-card p-4 hover:border-primary transition-colors">
+              <span className="font-semibold text-foreground">{p.title}</span>
+              {p.excerpt && <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Link to="/blog" className="inline-block mt-6 text-primary font-medium">Voir tous les articles →</Link>
+    </section>
+  );
+}

@@ -393,7 +393,7 @@ function listIsland(posts) {
 
 
 // ---- Renderers -------------------------------------------------------------
-function renderStatic(html, route) {
+function renderStatic(html, route, latest = []) {
   const meta = STATIC_ROUTES[route];
   const canonical = safeCanonical(route, "/");
   html = applyHead(html, { title: meta.title, description: meta.description, canonical });
@@ -414,6 +414,12 @@ function renderStatic(html, route) {
       `<li><a href="/about">À propos</a></li>` +
       `<li><a href="/contact">Contact</a></li>` +
       `</ul></nav>` +
+      (Array.isArray(latest) && latest.length
+        ? `<section aria-label="Derniers articles"><h2>Derniers articles du blog</h2><ul>` +
+          latest.slice(0, 10).filter((p) => p && BLOG_SLUG_RE.test(String(p.slug || ""))).map((p) =>
+            `<li><a href="/blog/${p.slug}">${escapeHtml(p.title || p.slug)}</a></li>`).join("") +
+          `</ul></section>`
+        : "") +
       `</main>`;
     html = injectIntoRoot(html, snapshot);
     return html;
@@ -700,7 +706,9 @@ export default async function handler(req, res) {
     // Static / tool routes
     if (STATIC_ROUTES[route]) {
       res.statusCode = 200;
-      res.end(renderStatic(template, route));
+      let latest = [];
+      if (route === "/") { try { latest = (await fetchPublishedList()) || []; } catch { latest = []; } }
+      res.end(renderStatic(template, route, latest));
       return;
     }
 

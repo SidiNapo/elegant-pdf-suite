@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
-import StructuredData from '@/components/StructuredData';
 import SEOHead from '@/components/SEOHead';
 import { usePublishedPosts } from '@/hooks/useBlogPosts';
 
@@ -195,7 +194,6 @@ const Index = () => {
         canonicalUrl="https://www.e-pdfs.com"
         ogImage="https://www.e-pdfs.com/og-image.jpg"
       />
-      <StructuredData />
       <Header />
       <main id="main-content">
       

@@ -13,6 +13,8 @@ import { usePostBySlug, usePublishedPosts, isNotFoundError } from '@/hooks/useBl
 import { blogCanonicalFromSlug } from '@/lib/canonical';
 import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { Loader2 } from 'lucide-react';
+import { readSsrJson } from '@/lib/ssrData';
+import type { BlogPostSummary } from '@/hooks/useBlogPosts';
 
 const BlogPost = () => {
   const { t, i18n } = useTranslation();
@@ -116,7 +118,9 @@ const BlogPost = () => {
   const categoryName = post.category?.name;
 
   // Related posts: same category first, then fill with recent posts (max 6).
-  const otherPosts = (allPosts || []).filter((p) => p.slug !== post.slug);
+  // Until the full list loads, use the related posts the server already sent.
+  const relatedIsland = readSsrJson<BlogPostSummary[]>('__BLOG_RELATED__');
+  const otherPosts = (allPosts || relatedIsland || []).filter((p) => p.slug !== post.slug);
   const relatedPosts = [
     ...otherPosts.filter((p) => post.category_id && p.category_id === post.category_id),
     ...otherPosts.filter((p) => !post.category_id || p.category_id !== post.category_id),

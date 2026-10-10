@@ -580,7 +580,7 @@ function LatestPosts() {
     <section aria-labelledby="latest-posts" className="container mx-auto px-4 py-12">
       <h2 id="latest-posts" className="text-2xl font-bold mb-6 text-foreground">Derniers articles du blog</h2>
       <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((p: any) => (
+        {posts.map((p) => (
           <li key={p.slug}>
             <Link to={`/blog/${p.slug}`} className="block rounded-lg border border-border bg-card p-4 hover:border-primary transition-colors">
               <span className="font-semibold text-foreground">{p.title}</span>

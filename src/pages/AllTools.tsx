@@ -259,8 +259,8 @@ const AllTools = () => {
   return (
     <>
       <SEOHead
-        title="All PDF Tools - E-PDF's | Free Online PDF Tools"
-        description="Complete collection of free online PDF tools. Merge, split, compress, convert, rotate, watermark and edit PDF files. 100% free, secure, and browser-based."
+        title="Tous les Outils PDF Gratuits en Ligne | E-Pdf's"
+        description="Découvrez tous nos outils PDF : fusionner, diviser, compresser, convertir et plus. 100% gratuit, sécurisé et sans inscription."
         keywords="PDF tools, all PDF tools, free PDF tools, online PDF, merge PDF, split PDF, compress PDF, convert PDF, PDF editor"
         canonicalUrl="https://www.e-pdfs.com/tools"
       />

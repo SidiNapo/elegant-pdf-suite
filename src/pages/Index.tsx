@@ -189,9 +189,9 @@ const Index = () => {
   return <LazyMotion features={domAnimation} strict>
     <div className="min-h-dvh flex flex-col">
       <SEOHead 
-        title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
-        description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
-        canonicalUrl="https://www.e-pdfs.com"
+        title="E-Pdf's - Outils PDF Gratuits en Ligne | Fusionner, Diviser, Compresser"
+        description="Outils PDF gratuits en ligne. Fusionnez, divisez, compressez et convertissez vos fichiers PDF. 100% sécurisé, rapide et sans inscription."
+        canonicalUrl="https://www.e-pdfs.com/"
         ogImage="https://www.e-pdfs.com/og-image.jpg"
       />
       <Header />

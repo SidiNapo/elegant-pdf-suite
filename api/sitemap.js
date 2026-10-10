@@ -100,10 +100,12 @@ export default async function handler(req, res) {
     // back. Never degrade to a post-less 200.
     if (!Array.isArray(posts)) throw new Error("supabase returned a non-array payload");
 
-    const buildDate = new Date().toISOString().slice(0, 10);
     const entries = [];
+    // No <lastmod> for static/tool/programmatic pages: there is no real
+    // per-page modification timestamp, and a request-date value would make
+    // Google distrust lastmod across the whole site. Posts keep real dates.
     for (const rt of [...STATIC_ROUTES, ...TOOL_ROUTES, ...PROGRAMMATIC_ROUTES]) {
-      entries.push(urlEntry(rt.path, rt.priority, rt.changefreq, buildDate));
+      entries.push(urlEntry(rt.path, rt.priority, rt.changefreq));
     }
     for (const p of posts) {
       const lastmod = (p.updated_at || p.published_at || "").slice(0, 10);

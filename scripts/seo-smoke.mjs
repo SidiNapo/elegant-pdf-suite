@@ -345,6 +345,45 @@ try {
   record("renderPost data island regression", false, e.message);
 }
 
+// ---- Indexing-audit regressions (2026-10-10) -------------------------------
+try {
+  const mod = await import(pathToFileURL(path.resolve("api/render.js")).href);
+  const shell = `<!doctype html><html lang="fr"><head><title>x</title></head><body><div id="root"></div></body></html>`;
+  const home = mod.renderStatic(shell, "/", [{ slug: "how-to-convert-pdf-to-word", title: "How to" }]);
+  record(
+    "raw homepage links to at least one /blog/ article",
+    (home.match(/href="\/blog\/[a-z0-9-]+"/g) || []).length >= 1,
+  );
+  const tools = mod.renderStatic(shell, "/tools", []);
+  const toolLinks = (tools.match(/<a\b/g) || []).length;
+  record("raw /tools has at least 20 links", toolLinks >= 20, `links=${toolLinks}`);
+  const enPost = mod.renderPost(shell, "how-to-convert-pdf-to-word", {
+    slug: "how-to-convert-pdf-to-word", title: "How to", content: "<p>x</p>", language: "en",
+  }, []);
+  record("English post renders <html lang=\"en\">", /<html lang="en"/.test(enPost));
+  record("English post renders og:locale en_US", /og:locale" content="en_US"/.test(enPost));
+} catch (e) {
+  record("indexing-audit renderer regressions", false, e.message);
+}
+{
+  const sm = fs.readFileSync("api/sitemap.js", "utf8");
+  record(
+    "sitemap does not stamp static entries with the request date",
+    !/new Date\(\)\.toISOString\(\)/.test(sm),
+  );
+  const i18nSrc = fs.readFileSync("src/i18n/index.ts", "utf8");
+  record("i18n does not auto-detect language from the browser", !/['"]navigator['"]/.test(i18nSrc));
+}
+try {
+  const { detectLanguage } = await import(pathToFileURL(path.resolve("shared/detectLanguage.mjs")).href);
+  const en = "How to convert PDF to Word: the best tools for you. This guide shows how you can convert your files in the browser, and it is free for everyone who wants to edit the text.";
+  const fr = "Comment convertir un PDF en Word : les meilleurs outils pour vous. Ce guide montre comment convertir vos fichiers dans le navigateur, et c'est gratuit pour tous ceux qui veulent modifier le texte avec une méthode simple.";
+  record("detectLanguage flags English text as en", detectLanguage(en) === "en", String(detectLanguage(en)));
+  record("detectLanguage flags French text as fr", detectLanguage(fr) === "fr", String(detectLanguage(fr)));
+} catch (e) {
+  record("detectLanguage regression", false, e.message);
+}
+
 // ---- Summary ---------------------------------------------------------------
 
 const failed = results.filter((r) => !r.ok);

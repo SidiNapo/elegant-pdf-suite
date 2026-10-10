@@ -393,6 +393,23 @@ function listIsland(posts) {
 
 
 // ---- Renderers -------------------------------------------------------------
+// Non-tool static pages; every other STATIC_ROUTES key is a tool page.
+const NON_TOOL_ROUTES = new Set(["/", "/tools", "/blog", "/about", "/contact", "/privacy", "/terms", "/cookies", "/dmca"]);
+const TOOL_PATHS = Object.keys(STATIC_ROUTES).filter((p) => !NON_TOOL_ROUTES.has(p));
+
+// Site-wide crawlable navigation appended to every server snapshot so the raw
+// HTML of each page links to home, tools, blog, legal pages and every tool.
+function siteNav() {
+  const main = [
+    ["/", "Accueil"], ["/tools", "Tous les outils PDF"], ["/blog", "Blog"],
+    ["/about", "À propos"], ["/contact", "Contact"], ["/privacy", "Confidentialité"],
+    ["/terms", "Conditions d'utilisation"], ["/cookies", "Cookies"], ["/dmca", "DMCA"],
+  ];
+  const tools = TOOL_PATHS.map((p) => [p, STATIC_ROUTES[p].h1]);
+  const li = (items) => items.map(([href, label]) => `<li><a href="${href}">${escapeHtml(label)}</a></li>`).join("");
+  return `<footer><nav aria-label="Plan du site"><ul>${li(main)}</ul><ul>${li(tools)}</ul></nav></footer>`;
+}
+
 function renderStatic(html, route, latest = []) {
   const meta = STATIC_ROUTES[route];
   const canonical = safeCanonical(route, "/");
@@ -420,11 +437,19 @@ function renderStatic(html, route, latest = []) {
             `<li><a href="/blog/${p.slug}">${escapeHtml(p.title || p.slug)}</a></li>`).join("") +
           `</ul></section>`
         : "") +
-      `</main>`;
+      `</main>` + siteNav();
     html = injectIntoRoot(html, snapshot);
     return html;
   }
-  html = injectIntoRoot(html, `<h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>`);
+  if (route === "/tools") {
+    // Crawlable tool directory: every tool as a real link + one-line summary.
+    const list = TOOL_PATHS.map((p) =>
+      `<li><a href="${p}">${escapeHtml(STATIC_ROUTES[p].h1)}</a> — ${escapeHtml(STATIC_ROUTES[p].description)}</li>`).join("");
+    html = injectIntoRoot(html,
+      `<main><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p><ul>${list}</ul></main>` + siteNav());
+    return html;
+  }
+  html = injectIntoRoot(html, `<main><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p></main>` + siteNav());
   return html;
 }
 
@@ -495,7 +520,7 @@ function renderBlogIndex(html, posts) {
     );
   }).join("");
 
-  const snapshot = `<section><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>${cards}</section>`;
+  const snapshot = `<section><h1>${escapeHtml(meta.h1)}</h1><p>${escapeHtml(meta.description)}</p>${cards}</section>` + siteNav();
   html = injectIntoRoot(html, snapshot);
   html = injectIntoBody(html, jsonIsland("__BLOG_LIST__", listIsland(posts)));
   return html;
@@ -590,7 +615,7 @@ function renderPost(html, slug, post, related) {
     `<div>${safeContent}</div>` +
     (category ? `<p>${escapeHtml(category)}</p>` : "") +
     `</article>` +
-    relatedHtml;
+    relatedHtml + siteNav();
   html = injectIntoRoot(html, snapshot);
   html = injectIntoBody(html, jsonIsland("__BLOG_POST__", postIsland(post, safeContent)));
   if ((related || []).length) {
@@ -707,7 +732,18 @@ export default async function handler(req, res) {
     if (STATIC_ROUTES[route]) {
       res.statusCode = 200;
       let latest = [];
-      if (route === "/") { try { latest = (await fetchPublishedList()) || []; } catch { latest = []; } }
+      if (route === "/") {
+        try {
+          const list = await fetchPublishedList();
+          if (!Array.isArray(list)) throw new Error("non-array published list");
+          latest = list;
+        } catch (e) {
+          // Still serve the homepage, but make the degraded state visible.
+          console.error({ route, warn: "homepage latest-posts fetch failed", error: e?.message });
+          res.setHeader("X-Render-Warn", "latest-posts-unavailable");
+          latest = [];
+        }
+      }
       res.end(renderStatic(template, route, latest));
       return;
     }
@@ -730,4 +766,4 @@ export default async function handler(req, res) {
 }
 
 // Exported for the SEO smoke test (data-island regression).
-export { renderPost, renderBlogIndex };
+export { renderPost, renderBlogIndex, renderStatic };

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolCard from '@/components/ToolCard';
-import StructuredData from '@/components/StructuredData';
 import SEOHead from '@/components/SEOHead';
 import { usePublishedPosts } from '@/hooks/useBlogPosts';
 
@@ -190,12 +189,11 @@ const Index = () => {
   return <LazyMotion features={domAnimation} strict>
     <div className="min-h-dvh flex flex-col">
       <SEOHead 
-        title="E-PDF's - Free Online PDF Tools | Merge, Split, Compress PDF"
-        description="Free online PDF tools to merge, split, compress, and convert PDF files. 100% browser-based processing, no registration required. Secure and fast."
-        canonicalUrl="https://www.e-pdfs.com"
+        title="E-Pdf's - Outils PDF Gratuits en Ligne | Fusionner, Diviser, Compresser"
+        description="Outils PDF gratuits en ligne. Fusionnez, divisez, compressez et convertissez vos fichiers PDF. 100% sécurisé, rapide et sans inscription."
+        canonicalUrl="https://www.e-pdfs.com/"
         ogImage="https://www.e-pdfs.com/og-image.jpg"
       />
-      <StructuredData />
       <Header />
       <main id="main-content">
       
@@ -582,7 +580,7 @@ function LatestPosts() {
     <section aria-labelledby="latest-posts" className="container mx-auto px-4 py-12">
       <h2 id="latest-posts" className="text-2xl font-bold mb-6 text-foreground">Derniers articles du blog</h2>
       <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((p: any) => (
+        {posts.map((p) => (
           <li key={p.slug}>
             <Link to={`/blog/${p.slug}`} className="block rounded-lg border border-border bg-card p-4 hover:border-primary transition-colors">
               <span className="font-semibold text-foreground">{p.title}</span>

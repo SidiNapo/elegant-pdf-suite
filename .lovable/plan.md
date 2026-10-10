@@ -1,206 +1,141 @@
+# Indexing audit: e-pdfs.com (read-only), plus proposed fixes
 
-# Secure Admin Dashboard Plan
+Audit run on 2026-10-10, roughly 16:13 UTC. I fetched the live pages directly and also loaded them in headless Chromium against production. Nothing was changed. Git HEAD is `9eb01c7`, the same as the commit you named.
 
-## Current Issues Identified
+## A. Confirmed findings, with evidence
 
-1. **Hardcoded Admin Path** - The `/admin` route is easily guessable and can be targeted by bots
-2. **All internal links use hardcoded paths** - Dashboard, Posts, Categories, and Layout all use `/admin/*` paths
-3. **Console warning** - React components are missing forwardRef which causes warnings
+**1. The live deployment is older than the source code (`9eb01c7`).**
+- The source homepage has a "Derniers articles du blog" section, in two places:
+  - the server version: `api/render.js:417-419` and `:709-710`
+  - the browser version: `LatestPosts` in `src/pages/Index.tsx` (about line 578)
+- Live raw `/` has 1 h1, 207 words and 7 links. None of them point to `/blog/...`, and the "Derniers articles" text is missing.
+- Live main bundle `/assets/index-gxplsKKc.js` (287 KB):
+  - It contains Index code (the `seo.paragraph1` string is there).
+  - It has 0 matches for "Derniers articles" and 0 for the `blog-posts` query key. So the Index that is live does not call `usePublishedPosts`.
+- After JS runs in the browser, `/` still has no `/blog/` links.
+- Result: the homepage-to-article links from the last fix were never deployed. The articles are still linked only from `/blog`, from each other, and from the sitemap.
+- I can't see from here whether Vercel is failing to build or the GitHub link is disconnected. Check that in Vercel's deployments list.
 
-## Security Solution: Dynamic Admin Route with Environment Variable
+**2. Both articles are in English but are labelled French.**
+- In the database (public, published rows only), both posts have `language = 'fr'`.
+- The live raw HTML of both articles has `<html lang="fr">` and `og:locale fr_FR`. The rendered DOM also has `lang="fr"`.
+- The titles and bodies are English, e.g. "Best PDF to Word Converter: Top Picks Reviewed" and "How to Convert PDF to Word Free Online…".
+- `render.js:524-526` picks the language from the database field, so the cause is the data, not the code.
 
-### How It Works
+**3. The browser switches the page language from the visitor's browser setting, so the same address shows different languages.**
+- `src/i18n/index.ts:22-24` checks `localStorage` first, then the browser's language setting. The fallback is `fr`.
+- Raw `/` gives the title "E-Pdf's - Outils PDF Gratuits en Ligne…" (French).
+- After JS in an en-US Chromium, the title is "E-PDF's - Free Online PDF Tools…" and the H1 is "All your PDF tools in one place" (English), while `lang` stays `fr`.
+- `/blog` and `/tools` flip the same way.
+- So the raw HTML and the rendered page of one address disagree in language. Google's own renderer may or may not run with an en-US setting; I haven't confirmed that.
 
-Instead of `/admin`, we'll use a configurable secret path stored as an environment variable:
+**4. Sitemap `lastmod` dates are not real for most entries.**
+- `api/sitemap.js:103-106` uses the request date for every static, tool and programmatic entry.
+- Live: 35 of 37 `<lastmod>` values are `2026-10-10` (today). Only the 2 posts carry real dates (`2026-09-15`).
+- Google tends to stop trusting `lastmod` across a site when it keeps changing without real edits.
 
-```
-VITE_ADMIN_PATH="secure-panel-x7k9m2"
-```
+**5. The raw HTML of the pages that list content is thin.**
+- Raw `/tools`: 1 h1, 188 words, 0 `<a>` links.
+- Raw `/blog`: 289 words and only 2 `<a>` links (the two posts). There are no menu or footer links.
+- Raw `/`: 7 links.
+- After JS the pages are fuller (`/tools` about 764 words).
 
-This means the admin panel will be accessible at:
-- `/secure-panel-x7k9m2` (login)
-- `/secure-panel-x7k9m2/dashboard`
-- `/secure-panel-x7k9m2/posts`
-- etc.
+**6. The server sends related-article data that the browser never uses.**
+- `render.js:597` emits a `__BLOG_RELATED__` data block.
+- `useBlogPosts.ts` reads only `__BLOG_LIST__` and `__BLOG_POST__`.
+- Effect: one extra request. This is not an indexing blocker.
 
-The path is:
-- Not guessable by bots scanning for `/admin`
-- Configurable without code changes
-- Still protected by proper authentication
+**7. Errors fetching the homepage article list are hidden.**
+- Server side, `render.js:710` does `catch { latest = [] }` with no log.
+- Browser side, `LatestPosts` returns `null` on error or empty data.
+- If the list fetch fails, nothing is recorded. This makes problem 1 hard to see.
 
----
+**8. Company and site info appears twice on the homepage after JS.**
+- The rendered `/` has 4 JSON-LD blocks: Organization and WebSite, each twice. Articles have 4 distinct blocks.
+- This is minor.
 
-## Implementation Steps
+**9. The 404 page points its canonical at itself.**
+- `/blog/does-not-exist-xyz` returns 404 with `noindex` (meta tag and `X-Robots-Tag` header), plus a self-canonical.
+- This is harmless but untidy.
 
-### Step 1: Create Admin Routes Configuration
+## B. Things that are fine (checked, not assumed)
 
-Create a new configuration file that reads the admin path from environment:
+**Status codes, across several user-agents:**
 
-**File: `src/config/adminRoutes.ts`**
+| Fetched as | `/`, `/blog`, both articles, `/tools`, sitemap, robots.txt | Unknown slug |
+|---|---|---|
+| Googlebot UA (from this sandbox) | 200 | 404 |
+| Chrome UA | 200 | 404 |
+| `Python-urllib` UA | 403 (Cloudflare error 1010) | 403 |
 
-```typescript
-// Get admin base path from environment or use a secure default
-export const ADMIN_BASE_PATH = import.meta.env.VITE_ADMIN_PATH || 'secure-console-' + Math.random().toString(36).substring(2, 10);
+- The 403s come from Cloudflare (with a `cf-ray` header) and never reach Vercel. Error 1010 is Cloudflare blocking that client's browser signature.
+- A Googlebot user-agent sent from a non-Google IP was let through. So there is no user-agent rule blocking Googlebot.
+- This does not prove that real, verified Googlebot gets through (see C1).
 
-export const adminRoutes = {
-  login: `/${ADMIN_BASE_PATH}`,
-  dashboard: `/${ADMIN_BASE_PATH}/dashboard`,
-  posts: `/${ADMIN_BASE_PATH}/posts`,
-  postsNew: `/${ADMIN_BASE_PATH}/posts/new`,
-  postsEdit: (id: string) => `/${ADMIN_BASE_PATH}/posts/${id}/edit`,
-  categories: `/${ADMIN_BASE_PATH}/categories`,
-};
-```
+**Articles in the raw HTML:**
+- Each has the right title, its own `https://www.e-pdfs.com/blog/{slug}` canonical and `index, follow, max-image-preview:large`.
+- Each has 1 h1, the full body (2,682 and 3,422 words), and BlogPosting and BreadcrumbList data.
 
-### Step 2: Update App.tsx Routes
+**Articles after JS (headless Chromium, production):**
+- No page errors and no failed requests. The only console warning is a favicon preload.
+- Title, canonical and robots tag are unchanged, there is still exactly one H1, and the body stays full (2,834 and 3,582 words).
 
-Update all admin routes to use the dynamic configuration:
+**Leads you raised, where I found no harm in the final DOM:**
+- `createRoot` replacing the server snapshot, and the Suspense loading state on lazy routes.
+- The shared sanitizer working in the browser.
+- One unmeasured risk remains: the brief loading screen if a renderer takes its snapshot early.
 
-```typescript
-import { ADMIN_BASE_PATH, adminRoutes } from '@/config/adminRoutes';
+**Sitemap:** HTTP 200 with 37 URLs, including both posts.
 
-// In routes:
-<Route path={`/${ADMIN_BASE_PATH}`} element={<AdminLogin />} />
-<Route path={`/${ADMIN_BASE_PATH}/dashboard`} element={...} />
-<Route path={`/${ADMIN_BASE_PATH}/posts`} element={...} />
-<Route path={`/${ADMIN_BASE_PATH}/posts/new`} element={...} />
-<Route path={`/${ADMIN_BASE_PATH}/posts/:id/edit`} element={...} />
-<Route path={`/${ADMIN_BASE_PATH}/categories`} element={...} />
-```
+**robots.txt:** allows `/` and lists the sitemap.
 
-### Step 3: Update AdminGuard
+**Public database:** the anon key can read both posts as `is_published = true`.
 
-Change the redirect from `/admin` to use the dynamic path:
+## C. Open questions that need your Search Console or Cloudflare data
 
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
+1. **Is real Googlebot blocked or challenged?**
+   - Cloudflare, Security → Events: filter by Verified Bot = Googlebot and by Action = Block/Challenge/JS Challenge.
+   - Also check Bot Fight Mode / Super Bot Fight Mode settings, and whether Browser Integrity Check is causing the 1010 errors.
+2. **Crawl Stats in Search Console** (Settings → Crawl stats): host status (robots.txt fetch, DNS, server connection) and response-code breakdown.
+   - Failed robots.txt fetches or many 5xx or 403 responses would explain "Discovered – not indexed" with no crawl.
+3. **Has the sitemap been fetched?** In Search Console → Sitemaps, check the status, the last-read date and the discovered URL count.
+4. **Low priority from Google:** with no external links and few internal links, "Détectée, non indexée" can just mean Google hasn't prioritised crawling yet. Only Crawl Stats plus backlink data can tell this apart from C1. I can't confirm it from code.
+5. **Vercel deployment state:** why the live build is older than `9eb01c7` (failed build, wrong branch, or GitHub link disconnected).
 
-// Redirect to login if not authenticated
-if (!user) {
-  return <Navigate to={adminRoutes.login} replace />;
-}
-```
+## D. Proposed fixes (only after you approve)
 
-### Step 4: Update AdminLogin
+Ordered by likely impact. I will not promise any indexing outcome or timeline.
 
-Update navigation to use dynamic routes:
+1. **Redeploy the current source to Vercel.** Then re-check live `/` for article links in both the raw HTML and the rendered page.
+2. **Fix the language labels.**
+   - Set both posts to `language = 'en'`.
+   - Make the editor's language selector required and visible on save.
+   - Optionally, add a warning when the detected text language doesn't match the field.
+3. **Make each address show one language.**
+   - Stop detecting language from the browser setting (keep a saved user choice only).
+   - For French addresses, render French by default so the raw and rendered pages match.
+4. **Sitemap dates:** remove `lastmod` from static, tool and programmatic entries, and keep real dates for posts only.
+5. **Richer raw HTML:**
+   - Add crawlable menu and footer links (home, tools, blog, each tool) to every server snapshot.
+   - Make the `/tools` snapshot list every tool as a link with a one-line description.
+6. **Related articles:** have the browser use the `__BLOG_RELATED__` data the server already sends.
+7. **Visible errors:** log failures of the homepage article-list fetch on the server, and send an `X-Render-Warn` header so smoke tests catch them.
+8. **Remove the duplicate** Organization/WebSite data blocks after JS.
+9. **Add regression tests** to `scripts/seo-smoke.mjs`:
+   - homepage raw HTML must contain at least 1 `/blog/` link
+   - article `lang` must match the post's language
+   - static sitemap entries must not have `lastmod` equal to today
+   - raw `/tools` must have at least 20 links
 
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
+## Technical notes
 
-// Redirect if already logged in as admin
-useEffect(() => {
-  if (!loading && adminChecked && user && isAdmin) {
-    navigate(adminRoutes.dashboard, { replace: true });
-  }
-}, [user, isAdmin, loading, adminChecked, navigate]);
-```
-
-### Step 5: Update AdminLayout Navigation
-
-Fix all navigation links in the sidebar:
-
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
-
-const navItems = [
-  { name: 'Dashboard', href: adminRoutes.dashboard, icon: LayoutDashboard },
-  { name: 'Articles', href: adminRoutes.posts, icon: FileEdit },
-  { name: 'Catégories', href: adminRoutes.categories, icon: FolderOpen },
-];
-
-// Sign out redirect
-const handleSignOut = async () => {
-  await signOut();
-  toast.success('Déconnexion réussie');
-  navigate(adminRoutes.login);
-};
-
-// Quick action button
-<Link to={adminRoutes.postsNew} className="mb-4">
-```
-
-### Step 6: Update AdminDashboard Links
-
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
-
-<Link to={adminRoutes.posts} className="text-sm text-primary hover:underline">
-  Voir tout
-</Link>
-
-{recentPosts.map((post) => (
-  <Link key={post.id} to={adminRoutes.postsEdit(post.id)}>
-```
-
-### Step 7: Update AdminPosts Links
-
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
-
-<Link to={adminRoutes.postsNew}>
-  <Button>Nouvel article</Button>
-</Link>
-
-<Link to={adminRoutes.postsEdit(post.id)}>
-```
-
-### Step 8: Update AdminPostEditor Navigation
-
-```typescript
-import { adminRoutes } from '@/config/adminRoutes';
-
-// After save success
-navigate(adminRoutes.posts);
-```
-
-### Step 9: Add Environment Variable
-
-Add to your `.env` file (you'll need to set this manually or through deployment settings):
-
-```
-VITE_ADMIN_PATH=your-secret-path-here
-```
-
----
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/config/adminRoutes.ts` | **NEW** - Central admin route configuration |
-| `src/App.tsx` | Update all admin route paths to use config |
-| `src/components/admin/AdminGuard.tsx` | Update redirect path |
-| `src/components/admin/AdminLayout.tsx` | Update all navigation links |
-| `src/pages/admin/AdminLogin.tsx` | Update redirect path |
-| `src/pages/admin/AdminDashboard.tsx` | Update all links |
-| `src/pages/admin/AdminPosts.tsx` | Update all links |
-| `src/pages/admin/AdminPostEditor.tsx` | Update navigation |
-
----
-
-## Security Summary
-
-### What This Achieves:
-1. **Obscurity Layer** - Bots scanning for `/admin` won't find your panel
-2. **Configurable** - Change the path anytime via environment variable
-3. **No 404s** - All internal links use the same config, so they stay in sync
-4. **Existing Security Intact** - Still uses proper authentication with:
-   - Supabase Auth (email/password)
-   - Role-based access via `has_role()` database function
-   - Server-side validation (RLS policies)
-
-### After Implementation:
-- Access admin at: `https://e-pdfs.com/your-secret-path`
-- All navigation within admin works correctly
-- Bots scanning for `/admin` get 404
-- You can change the path anytime by updating the environment variable
-
----
-
-## Technical Notes
-
-- The environment variable `VITE_ADMIN_PATH` is read at build time (Vite prefix)
-- Default fallback generates a random path if not set
-- All admin components will use centralized routing config
-- This is a "security through obscurity" layer ON TOP OF proper authentication
+- Files involved:
+  - `api/render.js` (renderStatic, menu/footer snapshot, logging)
+  - `api/sitemap.js:103-106`
+  - `src/i18n/index.ts`
+  - `src/hooks/useBlogPosts.ts` (related-articles data; this file is touched only for that)
+  - `src/components/StructuredData.tsx` or `index.html` (duplicate data blocks)
+  - `src/pages/admin/AdminPostEditor.tsx` (language field)
+  - `scripts/seo-smoke.mjs`
+- One data update: set the language field on the 2 posts.
+- No credentials appear in this report.

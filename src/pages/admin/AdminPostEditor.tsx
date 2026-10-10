@@ -23,6 +23,9 @@ import { toast } from 'sonner';
 import { compressImage } from '@/lib/imageUtils';
 import { sanitizeBlogHtml } from '@/lib/htmlSanitize';
 import { adminRoutes } from '@/config/adminRoutes';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - plain JS module shared with node tests
+import { detectLanguage } from '../../../shared/detectLanguage.mjs';
 
 // Small helper: humanize "seconds ago" for the draft-saved indicator.
 function formatAgo(ms: number, now: number): string {
@@ -569,6 +572,16 @@ const AdminPostEditor = () => {
                     <SelectItem value="ar">العربية</SelectItem>
                   </SelectContent>
                 </Select>
+                {(() => {
+                  const detected = detectLanguage(`${formData.title} ${formData.content}`) as string | null;
+                  if (!detected || detected === formData.language) return null;
+                  const names: Record<string, string> = { fr: 'Français', en: 'English', ar: 'العربية' };
+                  return (
+                    <p className="text-sm text-destructive" role="alert">
+                      Le texte semble être en {names[detected]}, mais la langue choisie est {names[formData.language] || formData.language}. Google reçoit cette langue : corrigez-la si besoin.
+                    </p>
+                  );
+                })()}
               </div>
 
               <div className="space-y-2">

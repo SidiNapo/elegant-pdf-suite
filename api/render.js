@@ -766,4 +766,4 @@ export default async function handler(req, res) {
 }
 
 // Exported for the SEO smoke test (data-island regression).
-export { renderPost, renderBlogIndex };
+export { renderPost, renderBlogIndex, renderStatic };

@@ -20,7 +20,7 @@ i18n
       escapeValue: false,
     },
     detection: {
-      // No 'navigator' detection: every URL must render in the same language
+      // No browser-language detection: every URL must render in the same language
       // as its server HTML (French by default). Only an explicit choice made
       // with the language switcher (saved in localStorage) changes it.
       order: ['localStorage'],
